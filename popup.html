@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookHub</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup">
+    <header class="popup-header">
+      <img src="icons/icon48.png" alt="Icon" class="popup-icon">
+      <h1>BookHub</h1>
+    </header>
+
+    <!-- Not configured state -->
+    <div id="not-configured" class="state" style="display: none;">
+      <div class="status-box status-warning">
+        <span class="status-icon">⚙️</span>
+        <span>Bitte konfiguriere die Extension.</span>
+      </div>
+      <button id="open-settings-btn" class="btn btn-primary btn-full">Einstellungen öffnen</button>
+    </div>
+
+    <!-- Configured / main state -->
+    <div id="configured" class="state" style="display: none;">
+      <!-- Status -->
+      <div id="status-box" class="status-box status-ok">
+        <span id="status-icon" class="status-icon">✅</span>
+        <div class="status-text">
+          <span id="status-message">Bereit</span>
+          <span id="last-sync" class="last-sync"></span>
+        </div>
+      </div>
+
+      <!-- Conflict warning -->
+      <div id="conflict-box" class="conflict-box" style="display: none;">
+        <div class="conflict-header">
+          <span>⚠️</span>
+          <strong>Konflikt erkannt</strong>
+        </div>
+        <p>Lokal und remote wurden Bookmarks geändert. Wähle eine Auflösung:</p>
+        <div class="conflict-actions">
+          <button id="force-push-btn" class="btn btn-small btn-warning">Lokal → GitHub</button>
+          <button id="force-pull-btn" class="btn btn-small btn-secondary">GitHub → Lokal</button>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="actions">
+        <button id="sync-btn" class="btn btn-primary btn-full">
+          <span class="btn-content">
+            <span id="sync-spinner" class="spinner" style="display: none;"></span>
+            <span id="sync-text">Jetzt synchronisieren</span>
+          </span>
+        </button>
+        <div class="action-row">
+          <button id="push-btn" class="btn btn-secondary btn-half">Push ↑</button>
+          <button id="pull-btn" class="btn btn-secondary btn-half">Pull ↓</button>
+        </div>
+      </div>
+
+      <!-- Auto-sync indicator -->
+      <div id="auto-sync-status" class="auto-sync-status">
+        <span id="auto-sync-dot" class="dot dot-active"></span>
+        <span id="auto-sync-text">Auto-Sync aktiv</span>
+      </div>
+    </div>
+
+    <footer class="popup-footer">
+      <a id="settings-link" href="#">Einstellungen</a>
+    </footer>
+  </div>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>
