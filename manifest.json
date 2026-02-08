@@ -1,8 +1,10 @@
 {
   "manifest_version": 3,
   "name": "BookHub",
-  "version": "1.0.0",
+  "short_name": "BookHub",
+  "version": "1.2.0",
   "description": "Bidirectionally sync your bookmarks with a GitHub repository.",
+  "homepage_url": "https://github.com/d0dg3r/BookHub",
   "permissions": [
     "bookmarks",
     "storage",

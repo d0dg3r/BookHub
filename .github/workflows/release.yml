@@ -35,6 +35,7 @@ jobs:
             lib/ \
             icons/ \
             LICENSE \
+            PRIVACY.md \
             README.md
 
       - name: Create GitHub Release
