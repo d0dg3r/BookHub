@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,9 +17,9 @@
     <div id="not-configured" class="state" style="display: none;">
       <div class="status-box status-warning">
         <span class="status-icon">⚙️</span>
-        <span>Bitte konfiguriere die Extension.</span>
+        <span>Please configure the extension first.</span>
       </div>
-      <button id="open-settings-btn" class="btn btn-primary btn-full">Einstellungen öffnen</button>
+      <button id="open-settings-btn" class="btn btn-primary btn-full">Open Settings</button>
     </div>
 
     <!-- Configured / main state -->
@@ -28,7 +28,7 @@
       <div id="status-box" class="status-box status-ok">
         <span id="status-icon" class="status-icon">✅</span>
         <div class="status-text">
-          <span id="status-message">Bereit</span>
+          <span id="status-message">Ready</span>
           <span id="last-sync" class="last-sync"></span>
         </div>
       </div>
@@ -37,12 +37,12 @@
       <div id="conflict-box" class="conflict-box" style="display: none;">
         <div class="conflict-header">
           <span>⚠️</span>
-          <strong>Konflikt erkannt</strong>
+          <strong>Conflict detected</strong>
         </div>
-        <p>Lokal und remote wurden Bookmarks geändert. Wähle eine Auflösung:</p>
+        <p>Both local and remote bookmarks were modified. Choose a resolution:</p>
         <div class="conflict-actions">
-          <button id="force-push-btn" class="btn btn-small btn-warning">Lokal → GitHub</button>
-          <button id="force-pull-btn" class="btn btn-small btn-secondary">GitHub → Lokal</button>
+          <button id="force-push-btn" class="btn btn-small btn-warning">Local → GitHub</button>
+          <button id="force-pull-btn" class="btn btn-small btn-secondary">GitHub → Local</button>
         </div>
       </div>
 
@@ -51,7 +51,7 @@
         <button id="sync-btn" class="btn btn-primary btn-full">
           <span class="btn-content">
             <span id="sync-spinner" class="spinner" style="display: none;"></span>
-            <span id="sync-text">Jetzt synchronisieren</span>
+            <span id="sync-text">Sync Now</span>
           </span>
         </button>
         <div class="action-row">
@@ -63,12 +63,12 @@
       <!-- Auto-sync indicator -->
       <div id="auto-sync-status" class="auto-sync-status">
         <span id="auto-sync-dot" class="dot dot-active"></span>
-        <span id="auto-sync-text">Auto-Sync aktiv</span>
+        <span id="auto-sync-text">Auto-sync active</span>
       </div>
     </div>
 
     <footer class="popup-footer">
-      <a id="settings-link" href="#">Einstellungen</a>
+      <a id="settings-link" href="#">Settings</a>
     </footer>
   </div>
 

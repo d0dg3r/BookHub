@@ -71,11 +71,11 @@ validateBtn.addEventListener('click', async () => {
   const branch = branchInput.value.trim() || 'main';
 
   if (!token) {
-    showValidation('Bitte Token eingeben.', 'error');
+    showValidation('Please enter a token.', 'error');
     return;
   }
 
-  showValidation('Prüfe...', 'loading');
+  showValidation('Checking...', 'loading');
 
   try {
     const api = new GitHubAPI(token, owner, repo, branch);
@@ -83,13 +83,13 @@ validateBtn.addEventListener('click', async () => {
     // Validate token
     const tokenResult = await api.validateToken();
     if (!tokenResult.valid) {
-      showValidation('Token ungültig.', 'error');
+      showValidation('Invalid token.', 'error');
       return;
     }
 
     // Check scopes
     if (!tokenResult.scopes.includes('repo')) {
-      showValidation(`Token gültig (${tokenResult.username}), aber "repo"-Scope fehlt.`, 'error');
+      showValidation(`Token valid (${tokenResult.username}), but missing "repo" scope.`, 'error');
       return;
     }
 
@@ -97,15 +97,15 @@ validateBtn.addEventListener('click', async () => {
     if (owner && repo) {
       const repoExists = await api.checkRepo();
       if (!repoExists) {
-        showValidation(`Token gültig (${tokenResult.username}), aber Repository "${owner}/${repo}" nicht gefunden.`, 'error');
+        showValidation(`Token valid (${tokenResult.username}), but repository "${owner}/${repo}" not found.`, 'error');
         return;
       }
-      showValidation(`Verbindung OK! Benutzer: ${tokenResult.username}, Repo: ${owner}/${repo}`, 'success');
+      showValidation(`Connection OK! User: ${tokenResult.username}, Repo: ${owner}/${repo}`, 'success');
     } else {
-      showValidation(`Token gültig! Benutzer: ${tokenResult.username}. Bitte Repository angeben.`, 'success');
+      showValidation(`Token valid! User: ${tokenResult.username}. Please specify a repository.`, 'success');
     }
   } catch (err) {
-    showValidation(`Fehler: ${err.message}`, 'error');
+    showValidation(`Error: ${err.message}`, 'error');
   }
 });
 
@@ -132,12 +132,12 @@ saveBtn.addEventListener('click', async () => {
     // Notify background script that settings changed
     await chrome.runtime.sendMessage({ action: 'settingsChanged' });
 
-    showSaveResult('Einstellungen gespeichert!', 'success');
+    showSaveResult('Settings saved!', 'success');
     setTimeout(() => {
       saveResult.textContent = '';
     }, 3000);
   } catch (err) {
-    showSaveResult(`Fehler beim Speichern: ${err.message}`, 'error');
+    showSaveResult(`Error saving settings: ${err.message}`, 'error');
   }
 });
 

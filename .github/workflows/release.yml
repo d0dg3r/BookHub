@@ -34,6 +34,7 @@ jobs:
             options.css \
             lib/ \
             icons/ \
+            LICENSE \
             README.md
 
       - name: Create GitHub Release
@@ -45,14 +46,14 @@ jobs:
 
             ### Installation
 
-            1. `BookHub-${{ steps.version.outputs.VERSION }}.zip` herunterladen
-            2. ZIP entpacken
-            3. In Chromium/Chrome `chrome://extensions/` öffnen
-            4. **Entwicklermodus** aktivieren (Toggle oben rechts)
-            5. **Entpackte Erweiterung laden** klicken
-            6. Den entpackten Ordner auswählen
+            1. Download `BookHub-${{ steps.version.outputs.VERSION }}.zip`
+            2. Extract the ZIP
+            3. Open `chrome://extensions/` in Chromium/Chrome
+            4. Enable **Developer mode** (toggle in the top right)
+            5. Click **Load unpacked**
+            6. Select the extracted folder
 
-            Weitere Infos: [README](https://github.com/${{ github.repository }}/blob/main/README.md)
+            More info: [README](https://github.com/${{ github.repository }}/blob/main/README.md)
           files: build/BookHub-${{ steps.version.outputs.VERSION }}.zip
           draft: false
           prerelease: false

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BookHub – Einstellungen</title>
+  <title>BookHub – Settings</title>
   <link rel="stylesheet" href="options.css">
 </head>
 <body>
@@ -13,30 +13,30 @@
         <img src="icons/icon48.png" alt="Icon" class="header-icon">
         BookHub
       </h1>
-      <p class="subtitle">Einstellungen</p>
+      <p class="subtitle">Settings</p>
     </header>
 
     <section class="card">
-      <h2>GitHub-Verbindung</h2>
+      <h2>GitHub Connection</h2>
 
       <div class="form-group">
         <label for="token">Personal Access Token (PAT)</label>
         <div class="input-row">
           <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
-          <button id="toggle-token" class="btn-icon" title="Token anzeigen/verbergen">
+          <button id="toggle-token" class="btn-icon" title="Show/hide token">
             <span class="icon-eye">👁</span>
           </button>
         </div>
-        <small>Benötigt den Scope <code>repo</code>. <a href="https://github.com/settings/tokens/new?scopes=repo&description=Bookmark+Sync" target="_blank" rel="noopener">Token erstellen</a></small>
+        <small>Requires the <code>repo</code> scope. <a href="https://github.com/settings/tokens/new?scopes=repo&description=Bookmark+Sync" target="_blank" rel="noopener">Create token</a></small>
       </div>
 
       <div class="form-group">
-        <label for="owner">Repository-Besitzer</label>
-        <input type="text" id="owner" placeholder="dein-github-username">
+        <label for="owner">Repository Owner</label>
+        <input type="text" id="owner" placeholder="your-github-username">
       </div>
 
       <div class="form-group">
-        <label for="repo">Repository-Name</label>
+        <label for="repo">Repository Name</label>
         <input type="text" id="repo" placeholder="my-bookmarks">
       </div>
 
@@ -46,37 +46,37 @@
       </div>
 
       <div class="form-group">
-        <label for="filepath">Dateipfad im Repository</label>
+        <label for="filepath">File Path in Repository</label>
         <input type="text" id="filepath" placeholder="bookmarks" value="bookmarks">
-        <small>Ordner, in dem die Bookmark-Dateien gespeichert werden.</small>
+        <small>Folder where bookmark files will be stored.</small>
       </div>
 
       <div class="form-group">
-        <button id="validate-btn" class="btn btn-secondary">Verbindung testen</button>
+        <button id="validate-btn" class="btn btn-secondary">Test Connection</button>
         <span id="validation-result" class="validation-result"></span>
       </div>
     </section>
 
     <section class="card">
-      <h2>Synchronisation</h2>
+      <h2>Synchronization</h2>
 
       <div class="form-group toggle-group">
         <label for="auto-sync" class="toggle-label">
-          <span>Automatische Synchronisation</span>
+          <span>Automatic Synchronization</span>
           <input type="checkbox" id="auto-sync" checked>
           <span class="toggle-slider"></span>
         </label>
       </div>
 
       <div class="form-group">
-        <label for="sync-interval">Sync-Intervall (Minuten)</label>
+        <label for="sync-interval">Sync Interval (minutes)</label>
         <input type="number" id="sync-interval" min="1" max="120" value="15">
-        <small>Wie oft soll nach Remote-Änderungen geprüft werden?</small>
+        <small>How often to check for remote changes.</small>
       </div>
     </section>
 
     <div class="actions">
-      <button id="save-btn" class="btn btn-primary">Einstellungen speichern</button>
+      <button id="save-btn" class="btn btn-primary">Save Settings</button>
       <span id="save-result" class="save-result"></span>
     </div>
   </div>

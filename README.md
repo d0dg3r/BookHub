@@ -1,108 +1,108 @@
 # BookHub
 
-Chromium-Extension, die deine Bookmarks bidirektional mit einem GitHub-Repository synchronisiert.
+A Chromium extension that bidirectionally syncs your bookmarks with a GitHub repository.
 
 ## Features
 
-- **Bidirektionale Synchronisation**: Bookmarks werden zwischen Browser und GitHub abgeglichen
-- **Automatischer Sync**: Bei jeder Bookmark-Änderung wird automatisch gepusht (mit 5s Debounce)
-- **Periodischer Pull**: Alle 15 Minuten (konfigurierbar) wird nach Remote-Änderungen geprüft
-- **Manueller Sync**: Push, Pull und Full-Sync per Button im Popup
-- **Konflikt-Erkennung**: Wenn lokal und remote gleichzeitig geändert wird, wirst du informiert
-- **Dual-Format**: Bookmarks werden als JSON (für Sync) und Markdown (zum Lesen auf GitHub) gespeichert
-- **Kein Server nötig**: Alles läuft direkt über die GitHub REST API mit deinem Personal Access Token
+- **Bidirectional sync**: Bookmarks are synced between your browser and GitHub
+- **Auto-sync**: Automatically pushes on every bookmark change (with 5s debounce)
+- **Periodic pull**: Checks for remote changes every 15 minutes (configurable)
+- **Manual sync**: Push, Pull, and full Sync via popup buttons
+- **Conflict detection**: Notifies you when both local and remote bookmarks were modified
+- **Dual format**: Bookmarks are stored as JSON (for sync) and Markdown (human-readable on GitHub)
+- **No server needed**: Everything runs directly via the GitHub REST API with your Personal Access Token
 
 ## Installation
 
-### Option A: Fertiges Release herunterladen (empfohlen)
+### Option A: Download a release (recommended)
 
-1. Gehe zur [Releases-Seite](https://github.com/d0dg3r/BookHub/releases)
-2. Lade die neueste `BookHub-vX.X.X.zip` herunter
-3. Entpacke das ZIP in einen Ordner
-4. Öffne Chromium/Chrome und navigiere zu `chrome://extensions/`
-5. Aktiviere den **Entwicklermodus** (Toggle oben rechts)
-6. Klicke auf **Entpackte Erweiterung laden**
-7. Wähle den entpackten Ordner aus
+1. Go to the [Releases page](https://github.com/d0dg3r/BookHub/releases)
+2. Download the latest `BookHub-vX.X.X.zip`
+3. Extract the ZIP to a folder
+4. Open Chromium/Chrome and navigate to `chrome://extensions/`
+5. Enable **Developer mode** (toggle in the top right)
+6. Click **Load unpacked**
+7. Select the extracted folder
 
-### Option B: Repository klonen (für Entwickler)
+### Option B: Clone the repository (for developers)
 
 ```bash
 git clone git@github.com:d0dg3r/BookHub.git
 cd BookHub
 ```
 
-1. Öffne Chromium/Chrome und navigiere zu `chrome://extensions/`
-2. Aktiviere den **Entwicklermodus** (Toggle oben rechts)
-3. Klicke auf **Entpackte Erweiterung laden**
-4. Wähle den Ordner `BookHub` aus
+1. Open Chromium/Chrome and navigate to `chrome://extensions/`
+2. Enable **Developer mode** (toggle in the top right)
+3. Click **Load unpacked**
+4. Select the `BookHub` folder
 
-### 3. GitHub Personal Access Token erstellen
+### Create a GitHub Personal Access Token
 
-1. Gehe zu [GitHub Settings > Tokens](https://github.com/settings/tokens/new?scopes=repo&description=Bookmark+Sync)
-2. Erstelle einen Token mit dem Scope **`repo`**
-3. Kopiere den Token
+1. Go to [GitHub Settings > Tokens](https://github.com/settings/tokens/new?scopes=repo&description=BookHub+Sync)
+2. Create a token with the **`repo`** scope
+3. Copy the token
 
-### 4. Extension konfigurieren
+### Configure the extension
 
-1. Klicke auf das Extension-Icon in der Toolbar
-2. Gehe zu **Einstellungen**
-3. Gib deinen **Personal Access Token**, den **Repository-Besitzer** (dein GitHub-Username) und den **Repository-Namen** ein
-4. Klicke auf **Verbindung testen** um alles zu prüfen
-5. Speichere die Einstellungen
+1. Click the extension icon in the toolbar
+2. Go to **Settings**
+3. Enter your **Personal Access Token**, **Repository Owner** (your GitHub username), and **Repository Name**
+4. Click **Test Connection** to verify everything works
+5. Save the settings
 
-### 5. Erstmalige Synchronisation
+### First sync
 
-1. Klicke auf das Extension-Icon
-2. Klicke auf **Jetzt synchronisieren**
-3. Deine Bookmarks werden als `bookmarks/bookmarks.json` und `bookmarks/bookmarks.md` in dein GitHub-Repository gepusht
+1. Click the extension icon
+2. Click **Sync Now**
+3. Your bookmarks will be pushed to your GitHub repository as `bookmarks/bookmarks.json` and `bookmarks/bookmarks.md`
 
-## Dateien im GitHub-Repository
+## Files in the GitHub Repository
 
-Nach dem ersten Sync findest du folgende Dateien in deinem Repository:
+After the first sync, you'll find the following files in your repository:
 
 ```
 bookmarks/
-  bookmarks.json     # Strukturiertes JSON aller Bookmarks
-  bookmarks.md       # Menschenlesbare Markdown-Übersicht
-  sync_meta.json     # Sync-Metadaten (Zeitstempel, Gerät)
+  bookmarks.json     # Structured JSON of all bookmarks
+  bookmarks.md       # Human-readable Markdown overview
+  sync_meta.json     # Sync metadata (timestamp, device)
 ```
 
-## Konfiguration
+## Configuration
 
-| Einstellung | Standard | Beschreibung |
-|-------------|----------|--------------|
-| Personal Access Token | – | GitHub PAT mit `repo`-Scope |
-| Repository-Besitzer | – | Dein GitHub-Username oder Organisation |
-| Repository-Name | – | Name des Ziel-Repositories |
-| Branch | `main` | Ziel-Branch für die Sync-Dateien |
-| Dateipfad | `bookmarks` | Ordner im Repository |
-| Auto-Sync | An | Automatisch bei Bookmark-Änderungen pushen |
-| Sync-Intervall | 15 Min | Wie oft nach Remote-Änderungen geprüft wird |
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Personal Access Token | – | GitHub PAT with `repo` scope |
+| Repository Owner | – | Your GitHub username or organization |
+| Repository Name | – | Name of the target repository |
+| Branch | `main` | Target branch for sync files |
+| File Path | `bookmarks` | Folder in the repository |
+| Auto-Sync | On | Automatically push on bookmark changes |
+| Sync Interval | 15 min | How often to check for remote changes |
 
-## Konfliktauflösung
+## Conflict Resolution
 
-Wenn du Bookmarks auf zwei Geräten gleichzeitig änderst, kann ein Konflikt entstehen:
+If you modify bookmarks on two devices simultaneously, a conflict may occur:
 
-1. Das Extension-Icon zeigt ein **!** Badge
-2. Öffne das Popup
-3. Wähle:
-   - **Lokal → GitHub**: Deine lokalen Bookmarks überschreiben die Remote-Version
-   - **GitHub → Lokal**: Die Remote-Version überschreibt deine lokalen Bookmarks
+1. The extension icon shows a **!** badge
+2. Open the popup
+3. Choose:
+   - **Local → GitHub**: Your local bookmarks overwrite the remote version
+   - **GitHub → Local**: The remote version overwrites your local bookmarks
 
-## Technische Details
+## Technical Details
 
 - **Manifest V3** Chrome Extension
-- **Service Worker** für Background-Sync
-- **GitHub Contents API** für Datei-Operationen
-- **SHA-basierte Konflikterkennung**: Stimmt der SHA beim Push nicht überein, wurde remote geändert
-- **Debounce**: Mehrere schnelle Bookmark-Änderungen werden zu einem Sync zusammengefasst (5s)
+- **Service Worker** for background sync
+- **GitHub Contents API** for file operations
+- **SHA-based conflict detection**: If the SHA doesn't match on push, remote was modified
+- **Debounce**: Multiple rapid bookmark changes are bundled into a single sync (5s)
 
-## Voraussetzungen
+## Requirements
 
-- Chromium-basierter Browser (Chrome, Chromium, Brave, Edge, etc.)
-- GitHub-Account mit einem Repository für die Bookmarks
-- Personal Access Token mit `repo`-Scope
+- Chromium-based browser (Chrome, Chromium, Brave, Edge, etc.)
+- GitHub account with a repository for bookmarks
+- Personal Access Token with `repo` scope
 
-## Lizenz
+## License
 
-MIT
+[MIT](LICENSE)

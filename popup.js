@@ -51,20 +51,20 @@ function updateUI(status) {
 
   // Status message
   if (status.hasConflict) {
-    setStatus('⚠️', 'Konflikt erkannt', 'status-warning');
+    setStatus('⚠️', 'Conflict detected', 'status-warning');
     conflictBox.style.display = 'block';
   } else if (status.lastSyncTime) {
-    setStatus('✅', 'Synchronisiert', 'status-ok');
+    setStatus('✅', 'Synced', 'status-ok');
     conflictBox.style.display = 'none';
   } else {
-    setStatus('📋', 'Noch nicht synchronisiert', 'status-ok');
+    setStatus('📋', 'Not synced yet', 'status-ok');
     conflictBox.style.display = 'none';
   }
 
   // Last sync time
   if (status.lastSyncTime) {
     const date = new Date(status.lastSyncTime);
-    lastSyncEl.textContent = `Letzter Sync: ${formatRelativeTime(date)}`;
+    lastSyncEl.textContent = `Last sync: ${formatRelativeTime(date)}`;
   } else {
     lastSyncEl.textContent = '';
   }
@@ -72,10 +72,10 @@ function updateUI(status) {
   // Auto-sync status
   if (status.autoSync) {
     autoSyncDot.className = 'dot dot-active';
-    autoSyncText.textContent = 'Auto-Sync aktiv';
+    autoSyncText.textContent = 'Auto-sync active';
   } else {
     autoSyncDot.className = 'dot dot-inactive';
-    autoSyncText.textContent = 'Auto-Sync deaktiviert';
+    autoSyncText.textContent = 'Auto-sync disabled';
   }
 }
 
@@ -96,10 +96,10 @@ function formatRelativeTime(date) {
   const diffMin = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMin / 60);
 
-  if (diffMin < 1) return 'gerade eben';
-  if (diffMin < 60) return `vor ${diffMin} Min.`;
-  if (diffHours < 24) return `vor ${diffHours} Std.`;
-  return date.toLocaleDateString('de-DE', {
+  if (diffMin < 1) return 'just now';
+  if (diffMin < 60) return `${diffMin} min ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  return date.toLocaleDateString('en-US', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -116,7 +116,7 @@ function setLoading(loading) {
   pushBtn.disabled = loading;
   pullBtn.disabled = loading;
   syncSpinner.style.display = loading ? 'inline-block' : 'none';
-  syncText.textContent = loading ? 'Synchronisiere...' : 'Jetzt synchronisieren';
+  syncText.textContent = loading ? 'Syncing...' : 'Sync Now';
 }
 
 async function handleAction(action) {
@@ -129,9 +129,9 @@ async function handleAction(action) {
     if (result.success) {
       setStatus('✅', result.message, 'status-ok');
       conflictBox.style.display = 'none';
-      lastSyncEl.textContent = 'Letzter Sync: gerade eben';
+      lastSyncEl.textContent = 'Last sync: just now';
     } else {
-      if (result.message.includes('Konflikt')) {
+      if (result.message.includes('Conflict')) {
         setStatus('⚠️', result.message, 'status-warning');
         conflictBox.style.display = 'block';
       } else {
@@ -139,7 +139,7 @@ async function handleAction(action) {
       }
     }
   } catch (err) {
-    setStatus('❌', `Fehler: ${err.message}`, 'status-error');
+    setStatus('❌', `Error: ${err.message}`, 'status-error');
   } finally {
     setLoading(false);
   }
