@@ -306,5 +306,54 @@
   },
   "options_importError": {
     "message": "Import failed: $1"
+  },
+
+  "options_tabAutomation": {
+    "message": "Automation"
+  },
+  "options_automationTitle": {
+    "message": "Add Bookmarks via Git"
+  },
+  "options_automationIntro": {
+    "message": "You can add bookmarks directly in your Git repository. The extension will pick them up on the next sync and normalize them automatically."
+  },
+  "options_automationFormatTitle": {
+    "message": "File Format"
+  },
+  "options_automationFormatDesc": {
+    "message": "Create a JSON file with any name in one of the bookmark folders:"
+  },
+  "options_automationFolders": {
+    "message": "Available root folders in the repository:"
+  },
+  "options_automationFolderToolbar": {
+    "message": "Bookmarks Bar"
+  },
+  "options_automationFolderOther": {
+    "message": "Other Bookmarks"
+  },
+  "options_automationFolderMenu": {
+    "message": "Bookmarks Menu (Firefox)"
+  },
+  "options_automationFolderMobile": {
+    "message": "Mobile Bookmarks"
+  },
+  "options_automationNormalize": {
+    "message": "On the next sync, the extension will rename the file to its canonical format and add it to the folder's ordering."
+  },
+  "options_automationGithubActionTitle": {
+    "message": "GitHub Action"
+  },
+  "options_automationGithubActionDesc": {
+    "message": "A GitHub Action workflow is included to add bookmarks via the GitHub UI or CLI. Copy <code>.github/workflows/add-bookmark.yml</code> to your bookmark repository."
+  },
+  "options_automationGithubActionUsage": {
+    "message": "Usage via GitHub CLI"
+  },
+  "options_automationGithubActionWeb": {
+    "message": "Usage via GitHub Web UI"
+  },
+  "options_automationGithubActionWebDesc": {
+    "message": "Go to your repository → Actions → \"Add Bookmark\" → Run workflow. Fill in the URL, title, and target folder."
   }
 }

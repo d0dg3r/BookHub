@@ -2,7 +2,7 @@
 
 ## Overview
 
-BookHub converts browser bookmarks into two file formats (JSON and Markdown), stores them on GitHub, and manages synchronization state locally. This document describes every data format and how data flows through the system.
+BookHub stores each bookmark as an individual JSON file in a Git repository. The directory structure mirrors the bookmark folder hierarchy. Synchronization uses the GitHub Git Data API for atomic multi-file commits.
 
 ## Data Flow: Push
 
@@ -13,125 +13,114 @@ flowchart LR
     end
 
     subgraph Serialization
-        JSON["serializeToJson()\n→ bookmarks.json"]
-        MD["serializeToMarkdown()\n→ bookmarks.md"]
-        META["sync_meta.json"]
+        FM["bookmarkTreeToFileMap()"]
+        MD["fileMapToMarkdown()"]
     end
 
-    subgraph GitHub["GitHub Repository"]
-        GJ["bookmarks/bookmarks.json"]
-        GM["bookmarks/bookmarks.md"]
-        GS["bookmarks/sync_meta.json"]
+    subgraph GitDataAPI["GitHub Git Data API"]
+        Blobs["POST /git/blobs"]
+        Tree["POST /git/trees"]
+        Commit["POST /git/commits"]
+        Ref["PATCH /git/refs"]
     end
 
-    BM --> JSON
-    JSON --> MD
-    JSON --> META
-    JSON -->|"PUT Contents API"| GJ
-    MD -->|"PUT Contents API"| GM
-    META -->|"PUT Contents API"| GS
+    subgraph Repo["GitHub Repository"]
+        Files["bookmarks/toolbar/*.json\nbookmarks/other/*.json\nbookmarks/README.md"]
+    end
+
+    BM --> FM
+    FM --> MD
+    FM --> Blobs
+    MD --> Blobs
+    Blobs --> Tree
+    Tree --> Commit
+    Commit --> Ref
+    Ref --> Files
 ```
 
 ## Data Flow: Pull
 
 ```mermaid
 flowchart RL
-    subgraph GitHub["GitHub Repository"]
-        GJ["bookmarks/bookmarks.json"]
+    subgraph Repo["GitHub Repository"]
+        Files["Per-file bookmarks"]
     end
 
-    subgraph Deserialization
-        DS["deserializeFromJson()"]
+    subgraph GitDataAPI["GitHub Git Data API"]
+        TreeGet["GET /git/trees\n(recursive)"]
+        BlobGet["GET /git/blobs"]
+    end
+
+    subgraph Conversion
+        FMT["fileMapToBookmarkTree()"]
     end
 
     subgraph Browser
-        BM["chrome.bookmarks\n.create() / .removeTree()"]
+        BM["replaceLocalBookmarks()\nchrome.bookmarks API"]
     end
 
-    GJ -->|"GET Contents API"| DS
-    DS -->|"replaceLocalBookmarks()"| BM
+    Files --> TreeGet
+    TreeGet --> BlobGet
+    BlobGet --> FMT
+    FMT --> BM
 ```
 
 ## File Formats
 
-### `bookmarks.json` — Machine-Readable Bookmark Data
+### Bookmark File (e.g. `github_a1b2.json`)
 
-This is the **primary data file** used for synchronization. It contains the full bookmark tree with metadata.
+Each bookmark is a minimal JSON file:
 
 ```json
 {
-  "version": 1,
-  "exportedAt": "2026-02-08T15:30:00.000Z",
-  "deviceId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "bookmarks": [
-    {
-      "title": "Bookmarks Bar",
-      "dateAdded": 1700000000000,
-      "type": "folder",
-      "children": [
-        {
-          "title": "GitHub",
-          "dateAdded": 1700000001000,
-          "type": "bookmark",
-          "url": "https://github.com"
-        },
-        {
-          "title": "Dev Tools",
-          "dateAdded": 1700000002000,
-          "type": "folder",
-          "children": [
-            {
-              "title": "MDN Web Docs",
-              "dateAdded": 1700000003000,
-              "type": "bookmark",
-              "url": "https://developer.mozilla.org"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Other Bookmarks",
-      "dateAdded": 1700000000000,
-      "type": "folder",
-      "children": []
-    }
-  ]
+  "title": "GitHub",
+  "url": "https://github.com"
 }
 ```
 
-#### Schema
+Filename format: `{slug-from-title}_{4-char-hash-from-url}.json`
 
-| Field | Type | Description |
-|---|---|---|
-| `version` | `number` | Data format version (currently `1`) |
-| `exportedAt` | `string` (ISO 8601) | Timestamp of export |
-| `deviceId` | `string` (UUID) | Unique device identifier |
-| `bookmarks` | `array` | Top-level bookmark folders |
+The hash (FNV-1a of the URL, base-36) ensures uniqueness. The slug makes files human-readable.
 
-#### Bookmark Node Schema
+### `_order.json` — Folder Ordering
 
-| Field | Type | Present in | Description |
-|---|---|---|---|
-| `title` | `string` | Both | Display name |
-| `dateAdded` | `number` | Both | Chrome's `dateAdded` timestamp (ms since epoch) |
-| `type` | `string` | Both | `"bookmark"` or `"folder"` |
-| `url` | `string` | Bookmarks only | The URL |
-| `children` | `array` | Folders only | Nested bookmark nodes |
+Each folder contains an `_order.json` that defines the order of its children:
 
-### `bookmarks.md` — Human-Readable Markdown
+```json
+[
+  "github_a1b2.json",
+  "stackoverflow_c3d4.json",
+  {"dir": "dev-tools", "title": "Dev Tools"}
+]
+```
 
-Generated alongside the JSON for easy browsing on GitHub. **Not used for synchronization** — purely informational.
+Entries are either:
+- **String**: A bookmark filename
+- **Object**: A subfolder with `dir` (directory name) and `title` (original display name)
+
+Files not listed in `_order.json` (e.g., manually created) are picked up automatically and appended at the end.
+
+### `_index.json` — Metadata
+
+```json
+{
+  "version": 2
+}
+```
+
+### `README.md` — Human-Readable Overview
+
+Auto-generated on every push. Shows all bookmarks as Markdown with folder headings. Not used for sync — purely informational.
 
 ```markdown
 # Bookmarks
 
-> Last synced: 2026-02-08T15:30:00.000Z
-> Device: `a1b2c3d4-e5f6-7890-abcd-ef1234567890`
+> Last synced: 2026-02-09T15:30:00.000Z
 
 ## Bookmarks Bar
 
 - [GitHub](https://github.com)
+- [Stack Overflow](https://stackoverflow.com)
 
 ### Dev Tools
 
@@ -140,33 +129,41 @@ Generated alongside the JSON for easy browsing on GitHub. **Not used for synchro
 ## Other Bookmarks
 ```
 
-#### Formatting rules
+### Complete Repository Structure
 
-- Top-level folders → `## Heading`
-- Subfolders → `###`, `####`, etc. (up to `######`)
-- Bookmarks → `- [title](url)` list items
-- Bookmarks are rendered before subfolders within each folder
-- Untitled folders show as `(Untitled)`
-
-### `sync_meta.json` — Sync Metadata
-
-Lightweight metadata file for quick reference.
-
-```json
-{
-  "lastSync": "2026-02-08T15:30:00.000Z",
-  "deviceId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "version": 1
-}
 ```
+bookmarks/
+  _index.json
+  README.md
+  toolbar/
+    _order.json
+    github_a1b2.json
+    stackoverflow_c3d4.json
+    dev-tools/
+      _order.json
+      mdn-web-docs_e5f6.json
+  other/
+    _order.json
+    ...
+  menu/                          (Firefox only)
+    _order.json
+    ...
+  mobile/
+    _order.json
+    ...
+```
+
+Root folders are mapped by role:
+| Role | Chrome | Firefox |
+|---|---|---|
+| `toolbar` | Bookmarks Bar (ID: `1`) | Bookmarks Toolbar (`toolbar_____`) |
+| `other` | Other Bookmarks (ID: `2`) | Unfiled Bookmarks (`unfiled_____`) |
+| `menu` | — | Bookmarks Menu (`menu________`) |
+| `mobile` | Mobile Bookmarks (ID: `3`) | Mobile Bookmarks (`mobile______`) |
 
 ## Local Storage
 
-BookHub uses two Chrome storage areas:
-
 ### `chrome.storage.sync` — User Settings
-
-Synced across the user's Chrome instances. Contains:
 
 | Key | Type | Default | Description |
 |---|---|---|---|
@@ -175,99 +172,61 @@ Synced across the user's Chrome instances. Contains:
 | `branch` | `string` | `"main"` | Git branch |
 | `filePath` | `string` | `"bookmarks"` | Base path in repo |
 | `autoSync` | `boolean` | `true` | Auto-sync enabled |
-| `syncInterval` | `number` | `15` | Sync interval in minutes |
-| `language` | `string` | `"auto"` | UI language (`"auto"`, `"en"`, `"de"`, ...) |
+| `syncInterval` | `number` | `15` | Sync interval (minutes) |
+| `language` | `string` | `"auto"` | UI language |
 
-**Note**: The GitHub token is **not** stored here. It was moved to `chrome.storage.local` (encrypted) in v1.5.0 for security. A migration function (`migrateTokenIfNeeded()`) automatically encrypts and moves any legacy plain-text token found in sync storage.
-
-### `chrome.storage.local` — Sync State + Encrypted Token
-
-Device-local, not synced. Contains:
+### `chrome.storage.local` — Sync State + Token
 
 | Key | Type | Description |
 |---|---|---|
-| `githubToken` | `string` | **Encrypted** GitHub PAT (format: `enc:v1:<iv>:<ciphertext>`) |
-| `deviceId` | `string` (UUID) | Unique identifier for this device |
-| `lastRemoteShaJson` | `string` \| `null` | SHA of `bookmarks.json` on GitHub |
-| `lastRemoteShaMd` | `string` \| `null` | SHA of `bookmarks.md` on GitHub |
-| `lastRemoteShaMeta` | `string` \| `null` | SHA of `sync_meta.json` on GitHub |
-| `lastSyncTime` | `string` (ISO 8601) \| `null` | Timestamp of last successful sync |
-| `lastSyncData` | `string` (JSON) \| `null` | Serialized bookmark JSON from last sync |
+| `githubToken` | `string` | Encrypted PAT (`enc:v1:<iv>:<ciphertext>`) |
+| `deviceId` | `string` | UUID for this device |
+| `lastSyncFiles` | `object` | `{ [path]: { sha, content } }` — snapshot at last sync |
+| `lastCommitSha` | `string` | Git commit SHA at last sync |
+| `lastSyncTime` | `string` | ISO 8601 timestamp of last sync |
 | `hasConflict` | `boolean` | Whether a conflict was detected |
 
-The `lastSyncData` field is critical for **change detection**: it stores the JSON-serialized bookmarks as they were at the last successful sync. Both local and remote states are compared against this snapshot.
+The `lastSyncFiles` object is the **base state** for three-way merge. It maps each file path to its blob SHA (for remote change detection) and content (for local change detection).
 
-### Token Encryption
+## GitHub Git Data API Interaction
 
-The GitHub PAT is encrypted at rest using **AES-256-GCM**:
+All sync operations use the **Git Data API** for atomic multi-file commits:
 
-1. A **non-extractable** `CryptoKey` is generated once per device via `crypto.subtle.generateKey()` and stored in IndexedDB (`bookhub-keys`).
-2. On save, the token is encrypted with a random 12-byte IV and stored as `"enc:v1:<base64-iv>:<base64-ciphertext>"` in `chrome.storage.local`.
-3. On load, the token is decrypted transparently. Legacy plain-text tokens (without the `enc:` prefix) are recognized and returned as-is, then migrated on next save.
-
-The token never leaves the device in encrypted or plain form via `chrome.storage.sync`. On a new device, the user must re-enter the token. Settings export/import handles the token by decrypting it for export and re-encrypting on import.
-
-## GitHub Contents API Interaction
-
-All file operations use the **GitHub Contents API**:
-
-### Reading a file
+### Reading the Remote State
 
 ```
-GET /repos/{owner}/{repo}/contents/{path}?ref={branch}
+GET /repos/{owner}/{repo}/git/ref/heads/{branch}     → commitSha
+GET /repos/{owner}/{repo}/git/commits/{commitSha}     → treeSha
+GET /repos/{owner}/{repo}/git/trees/{treeSha}?recursive=1  → all files + SHAs
+GET /repos/{owner}/{repo}/git/blobs/{blobSha}         → file content (base64)
 ```
 
-Response includes:
-- `content` — Base64-encoded file content
-- `sha` — Git blob SHA (needed for updates)
-
-### Creating or updating a file
+### Writing (Atomic Multi-File Commit)
 
 ```
-PUT /repos/{owner}/{repo}/contents/{path}
+POST /repos/{owner}/{repo}/git/blobs                  → create file blob
+POST /repos/{owner}/{repo}/git/trees                  → create new tree (incremental)
+POST /repos/{owner}/{repo}/git/commits                → create commit
+PATCH /repos/{owner}/{repo}/git/refs/heads/{branch}   → update branch
 ```
 
-Request body:
-```json
-{
-  "message": "Bookmark sync from device a1b2c3d4 - 2026-02-08T15:30:00.000Z",
-  "content": "<base64-encoded content>",
-  "branch": "main",
-  "sha": "<current file SHA, required for updates>"
-}
-```
+For empty repos (no branch yet), `POST /git/refs` creates the initial branch.
 
-The `sha` field is **required** when updating an existing file. If the SHA doesn't match the current file on GitHub (someone else updated it), the API returns **409 Conflict**.
+### Efficiency
 
-### Base64 Encoding
+A typical sync with few changes:
+- 3 API calls to read (ref + commit + tree)
+- N calls to fetch changed blob contents
+- M calls to create new blobs
+- 3 calls to write (tree + commit + ref update)
 
-The GitHub API requires content in Base64. BookHub uses Unicode-safe encoding/decoding:
+Total: ~6 + N + M calls, regardless of total bookmark count.
 
-- **Encode**: `TextEncoder` → byte array → `String.fromCharCode` → `btoa()`
-- **Decode**: `atob()` → byte array → `TextDecoder`
+## Token Encryption
 
-This correctly handles non-ASCII characters (e.g., bookmark titles in German, Japanese, etc.).
+The GitHub PAT is encrypted at rest using AES-256-GCM:
 
-### Authentication
-
-All requests include:
-```
-Authorization: token {PAT}
-Accept: application/vnd.github.v3+json
-```
-
-The PAT requires the `repo` scope for read/write access to repository contents.
-
-## Data Comparison
-
-The `bookmarksEqual(a, b)` function compares two serialized bookmark objects:
-
-```javascript
-JSON.stringify(a.bookmarks) === JSON.stringify(b.bookmarks)
-```
-
-This comparison:
-- **Includes**: All bookmark titles, URLs, folder structures, ordering, `dateAdded`
-- **Ignores**: `exportedAt`, `deviceId`, `version` (metadata)
-
-This means a sync won't be triggered just because the timestamp or device ID changed — only actual bookmark content changes matter.
+1. Non-extractable `CryptoKey` generated once and stored in IndexedDB
+2. Encrypted as `"enc:v1:<base64-iv>:<base64-ciphertext>"` in `chrome.storage.local`
+3. Decrypted transparently on load; legacy plain-text tokens handled gracefully
+4. Token never stored in `chrome.storage.sync`

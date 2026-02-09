@@ -26,6 +26,7 @@ The version is declared in `manifest.json` → `"version"`.
 | `1.3.0` | Multilanguage support (i18n) with manual language selection |
 | `1.4.0` | Tabbed options page, import/export, GitHub project links, improved description |
 | `1.5.0` | Token encryption at rest (AES-256-GCM), token moved to local storage |
+| `2.0.0` | Per-file bookmark storage, three-way merge sync, Firefox support, automation (GitHub Actions), cross-browser build system |
 
 ## How to Create a New Release
 
@@ -89,30 +90,36 @@ It runs **only** when a tag matching `v*` (e.g., `v1.3.0`) is pushed.
 
 ### What it does
 
+The build script (`scripts/build.sh`) generates **separate packages** for Chrome and Firefox:
+
 ```mermaid
 flowchart LR
     Tag["Push tag v*"] --> Checkout["Checkout code"]
-    Checkout --> Version["Extract version\nfrom tag name"]
-    Version --> Zip["Create ZIP:\nBookHub-vX.Y.Z.zip"]
-    Zip --> Release["Create GitHub Release\nwith ZIP asset"]
+    Checkout --> Build["Run build.sh"]
+    Build --> ChromeZIP["BookHub-vX.Y.Z-chrome.zip"]
+    Build --> FirefoxZIP["BookHub-vX.Y.Z-firefox.zip"]
+    ChromeZIP --> Release["Create GitHub Release\nwith both ZIPs"]
+    FirefoxZIP --> Release
 ```
 
-### Files included in the ZIP
+The Chrome package uses `manifest.json`, the Firefox package uses `manifest.firefox.json` (renamed to `manifest.json` during build).
+
+### Files included in the ZIPs
 
 ```
-manifest.json
+manifest.json        (browser-specific)
 background.js
 popup.html / popup.js / popup.css
 options.html / options.js / options.css
-lib/                (all JS modules)
-icons/              (all icon sizes)
-_locales/           (all language files)
+lib/                 (all JS modules)
+icons/               (all icon sizes)
+_locales/            (all language files)
 LICENSE
 PRIVACY.md
 README.md
 ```
 
-**Excluded** from the ZIP: `docs/`, `store-assets/`, `.github/`, `.gitignore`, `.git/`
+**Excluded** from the ZIP: `docs/`, `store-assets/`, `.github/`, `.gitignore`, `.git/`, `manifest.firefox.json`, `scripts/`, `package.json`
 
 ### Required permissions
 

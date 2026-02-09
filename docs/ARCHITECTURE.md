@@ -2,18 +2,18 @@
 
 ## High-Level Architecture
 
-BookHub is a Chromium browser extension (Manifest V3) that bidirectionally synchronizes bookmarks with a GitHub repository. It uses a **Service Worker** as its background process, communicates via **Chrome messaging**, and interacts with the **GitHub REST API** for remote storage.
+BookHub is a browser extension (Manifest V3, Chrome + Firefox) that bidirectionally synchronizes bookmarks with a GitHub repository. It stores each bookmark as an individual JSON file and uses a three-way merge algorithm for conflict-free synchronization.
 
 ```mermaid
 flowchart TB
-    subgraph Browser["Chromium Browser"]
+    subgraph Browser["Browser (Chrome / Firefox)"]
         BM["Bookmarks API"]
         Storage["chrome.storage"]
         Alarms["chrome.alarms"]
     end
 
     subgraph Extension["BookHub Extension"]
-        BG["background.js\n(Service Worker)"]
+        BG["background.js"]
         Popup["popup.html / popup.js"]
         Options["options.html / options.js"]
         subgraph Lib["lib/"]
@@ -21,12 +21,14 @@ flowchart TB
             GH["github-api.js"]
             BS["bookmark-serializer.js"]
             I18N["i18n.js"]
+            Crypto["crypto.js"]
+            Polyfill["browser-polyfill.js"]
         end
     end
 
     subgraph Remote["GitHub"]
-        API["REST API\n/repos/.../contents/"]
-        Repo["Repository\nbookmarks.json\nbookmarks.md\nsync_meta.json"]
+        GitAPI["Git Data API"]
+        Repo["Repository\n(per-file bookmarks)"]
     end
 
     Popup -- "sendMessage()" --> BG
@@ -34,171 +36,155 @@ flowchart TB
     BG -- "import" --> SE
     SE -- "import" --> GH
     SE -- "import" --> BS
-    SE -- "import" --> I18N
-    GH -- "import" --> I18N
-    BS -- "import" --> I18N
-    BG -- "import" --> I18N
     BG --> BM
     BG --> Storage
     BG --> Alarms
     SE --> Storage
-    GH -- "fetch()" --> API
-    API --> Repo
+    GH -- "fetch()" --> GitAPI
+    GitAPI --> Repo
 ```
 
 ## Component Descriptions
 
-### `manifest.json`
+### `manifest.json` / `manifest.firefox.json`
 
-Extension metadata and configuration. Declares:
+Extension metadata. Two manifests for browser-specific differences:
 
-| Field | Value |
-|---|---|
-| Manifest Version | 3 |
-| Permissions | `bookmarks`, `storage`, `alarms` |
-| Host Permissions | `https://api.github.com/*` |
-| Background | Service Worker (`background.js`, ES module) |
-| UI | Popup (`popup.html`), Options page (`options.html`, opens in tab) |
-| i18n | `default_locale: "en"`, name/description via `__MSG_` placeholders |
+| Field | Chrome | Firefox |
+|---|---|---|
+| Background | `service_worker: "background.js"` | `scripts: ["background.js"]` |
+| Browser-specific | — | `browser_specific_settings.gecko` |
 
-### `background.js` — Service Worker
+Shared: Manifest V3, permissions (`bookmarks`, `storage`, `alarms`), host permissions (`api.github.com`).
 
-The central coordinator. Responsibilities:
+### `background.js` — Background Script
 
-- **Bookmark event listeners** — Listens to `onCreated`, `onRemoved`, `onChanged`, `onMoved` and triggers a debounced auto-push.
-- **Periodic sync alarm** — Creates a `chrome.alarms` alarm to periodically run a full bidirectional sync.
-- **Message handler** — Receives `sync`, `push`, `pull`, `getStatus`, `settingsChanged` actions from popup/options and delegates to the sync engine.
-- **i18n initialization** — Calls `initI18n()` at startup and on install/update events.
+The central coordinator:
+
+- **Bookmark event listeners** — `onCreated`, `onRemoved`, `onChanged`, `onMoved` trigger debounced auto-sync
+- **Periodic sync alarm** — `chrome.alarms` for periodic three-way merge sync
+- **Message handler** — Receives `sync`, `push`, `pull`, `getStatus`, `settingsChanged` from popup/options
+- **Migration** — Checks for and migrates legacy `bookmarks.json` format on startup
 
 ### `popup.html` / `popup.js` — Popup UI
 
-The extension's toolbar popup. Shows:
-
-- Current sync status (synced, not synced, conflict)
-- Last sync time (relative)
+Toolbar popup showing:
+- Sync status, last sync time, conflict warnings
 - Manual action buttons: Sync Now, Push, Pull
-- Conflict resolution UI (force push / force pull)
+- Conflict resolution (force push / force pull)
 - Auto-sync status indicator
-- Link to settings
-
-All text is translated via `data-i18n` attributes and `getMessage()`.
 
 ### `options.html` / `options.js` — Settings Page
 
-Full-page settings UI (opens in a tab) with three tabs:
+Full-page settings (opens in tab) with four tabs:
 
-1. **Settings Tab**
-   - **Language** — Dropdown for manual language selection (Auto / English / Deutsch)
-   - **GitHub Connection** — Token (PAT), owner, repo, branch, file path, connection test
-   - **Synchronization** — Auto-sync toggle, sync interval
-2. **Import/Export Tab**
-   - **Bookmarks** — Export current bookmarks as JSON; import bookmarks from JSON (replaces all local bookmarks)
-   - **Settings** — Export extension settings as JSON; import settings from JSON (reloads page)
-3. **About Tab** — Version info, links to GitHub repo, documentation, issues, privacy policy, and license
-
-Settings are stored in `chrome.storage.sync`. Language changes re-translate the page instantly without reload.
+1. **Settings** — Language, GitHub connection, sync options
+2. **Import/Export** — Bookmarks and settings as JSON files
+3. **Automation** — Guide for adding bookmarks via Git, CLI, or GitHub Actions
+4. **About** — Version, links, license
 
 ### `lib/sync-engine.js` — Sync Engine
 
-The core synchronization logic. Key exports:
+Core synchronization with three-way merge:
 
 | Function | Description |
 |---|---|
-| `push()` | Push local bookmarks to GitHub |
-| `pull()` | Pull remote bookmarks from GitHub and replace local |
-| `sync()` | Bidirectional sync: detect changes, push/pull/conflict |
-| `debouncedPush()` | Debounced auto-push (5s default delay) |
+| `sync()` | Three-way merge: base vs local vs remote, auto-merge or conflict |
+| `push()` | Full push of local bookmarks as individual files |
+| `pull()` | Full pull from remote, replace local bookmarks |
+| `computeDiff(base, current)` | Compute added/removed/modified files between two states |
+| `mergeDiffs(localDiff, remoteDiff)` | Merge two diffs into push/pull/conflict actions |
+| `debouncedSync()` | Debounced auto-sync (5s default) |
 | `getSyncStatus()` | Return current sync state for the popup |
-| `isSyncInProgress()` | Re-entrancy guard |
-| `getSettings()` | Load settings from `chrome.storage.sync` |
-| `isConfigured()` | Check if all required settings are present |
+| `migrateFromLegacyFormat()` | Migrate from old `bookmarks.json` to per-file format |
 
-Uses a module-level `isSyncing` flag to prevent concurrent sync operations.
+State is stored as `LAST_SYNC_FILES` (path → {sha, content}) and `LAST_COMMIT_SHA`.
 
 ### `lib/github-api.js` — GitHub API Wrapper
 
-Wraps the GitHub Contents API (`GET/PUT /repos/{owner}/{repo}/contents/{path}`).
+Wraps both the **Contents API** (legacy, used for migration/validation) and the **Git Data API** (for atomic multi-file commits):
 
-- Authenticates via Personal Access Token (PAT)
-- Handles base64 encoding/decoding (Unicode-safe)
-- Error handling for 401, 403 (rate limit), 409 (conflict), 404
-- Token validation via `GET /user`
-- Repository access check
+| Method | API | Description |
+|---|---|---|
+| `validateToken()` | REST | Check PAT validity |
+| `checkRepo()` | REST | Verify repository access |
+| `getFile()` / `createOrUpdateFile()` | Contents | Single-file operations (legacy) |
+| `getLatestCommitSha()` | Git Data | Get current branch HEAD |
+| `getCommit()` / `getTree()` / `getBlob()` | Git Data | Read commit, tree, file content |
+| `createBlob()` / `createTree()` / `createCommit()` | Git Data | Build new commit |
+| `updateRef()` / `createRef()` | Git Data | Update or create branch |
+| `atomicCommit(message, fileChanges)` | Git Data | All-in-one: atomic multi-file commit |
 
 ### `lib/bookmark-serializer.js` — Serializer
 
-Converts between Chrome's bookmark tree and storage formats:
+Converts between browser bookmark trees and the per-file format:
 
-- `serializeToJson()` — Chrome tree → JSON with metadata (version, deviceId, exportedAt)
-- `deserializeFromJson()` — JSON → bookmark node array for recreation
-- `serializeToMarkdown()` — JSON → human-readable Markdown
-- `bookmarksEqual()` — Content comparison ignoring metadata
+| Function | Description |
+|---|---|
+| `bookmarkTreeToFileMap(tree, basePath)` | Browser tree → file map (path → content) |
+| `fileMapToBookmarkTree(files, basePath)` | File map → bookmark tree (role → children) |
+| `fileMapToMarkdown(files, basePath)` | File map → human-readable Markdown |
+| `generateFilename(title, url)` | Deterministic filename: `{slug}_{hash}.json` |
+| `detectRootFolderRole(node)` | Detect toolbar/other/menu/mobile from browser IDs |
+| `gitTreeToShaMap(entries, basePath)` | Git tree → SHA map for remote change detection |
+| `serializeToJson()` / `deserializeFromJson()` | Legacy format (for import/export) |
 
 ### `lib/crypto.js` — Token Encryption
 
-Encrypts the GitHub PAT at rest using AES-256-GCM:
+AES-256-GCM encryption for the GitHub PAT at rest. Non-extractable CryptoKey in IndexedDB. Token stored only in `chrome.storage.local`.
 
-- `getOrCreateKey()` — generates a non-extractable CryptoKey and stores it in IndexedDB (`bookhub-keys`)
-- `encryptToken()` — encrypts a plain-text token, returns `"enc:v1:<iv>:<ciphertext>"`
-- `decryptToken()` — decrypts an encrypted token; handles legacy plain-text tokens transparently
-- `migrateTokenIfNeeded()` — migrates plain-text tokens from `chrome.storage.sync` to encrypted `chrome.storage.local`
+### `lib/i18n.js` — Internationalization
 
-The token is stored **only in `chrome.storage.local`** (device-local, encrypted) and never in `chrome.storage.sync`.
+Custom runtime i18n with manual language selection. Loads `_locales/{lang}/messages.json`, translates DOM via `data-i18n` attributes. English fallback.
 
-### `lib/i18n.js` — Internationalization Helper
+### `lib/browser-polyfill.js` — Browser Detection
 
-Custom i18n system for runtime language switching:
-
-- Loads `_locales/{lang}/messages.json` dynamically via `fetch()`
-- Supports "Auto (Browser)" detection and manual language selection
-- `applyI18n()` translates DOM elements via `data-i18n` attributes
-- `getMessage()` for dynamic strings with `$1`, `$2` substitutions
-- English fallback for missing keys
+Minimal shim: `isFirefox`, `isChrome`, `getBrowserName()`.
 
 ## File Structure
 
 ```
 BookHub/
-├── manifest.json                 # Extension configuration
-├── background.js                 # Service Worker (event handling, alarms)
-├── popup.html                    # Popup UI markup
-├── popup.js                      # Popup logic
-├── popup.css                     # Popup styles
-├── options.html                  # Settings page markup
-├── options.js                    # Settings logic
-├── options.css                   # Settings styles
+├── manifest.json                 # Chrome manifest
+├── manifest.firefox.json         # Firefox manifest
+├── background.js                 # Background script
+├── popup.html / popup.js / popup.css
+├── options.html / options.js / options.css
 ├── lib/
-│   ├── sync-engine.js            # Core sync logic
-│   ├── github-api.js             # GitHub REST API wrapper
-│   ├── bookmark-serializer.js    # Bookmark ↔ JSON/Markdown conversion
+│   ├── sync-engine.js            # Three-way merge sync
+│   ├── github-api.js             # GitHub REST + Git Data API
+│   ├── bookmark-serializer.js    # Per-file bookmark conversion
 │   ├── crypto.js                 # Token encryption (AES-256-GCM)
-│   └── i18n.js                   # Internationalization helper
+│   ├── i18n.js                   # Internationalization
+│   └── browser-polyfill.js       # Browser detection
 ├── _locales/
-│   ├── en/messages.json          # English strings
-│   └── de/messages.json          # German strings
+│   ├── en/messages.json
+│   └── de/messages.json
 ├── icons/
-│   ├── icon16.png
-│   ├── icon48.png
-│   └── icon128.png
+├── scripts/
+│   └── build.sh                  # Build Chrome + Firefox packages
+├── package.json                  # npm scripts for building
 ├── .github/workflows/
-│   └── release.yml               # CI: build ZIP + GitHub Release on tag
-├── store-assets/                 # Chrome Web Store listing assets
-├── docs/                         # Architecture documentation (this folder)
-├── LICENSE                       # MIT License
-├── PRIVACY.md                    # Privacy policy
-└── README.md                     # User-facing documentation
+│   ├── release.yml               # CI: build + release on tag
+│   └── add-bookmark.yml          # Automation: add bookmark via dispatch
+├── docs/                         # Architecture documentation
+├── store-assets/                 # Chrome Web Store assets
+├── LICENSE
+├── PRIVACY.md
+└── README.md
 ```
 
 ## Technology Stack
 
 | Layer | Technology |
 |---|---|
-| Extension Framework | Chrome Extension Manifest V3 |
-| Background Processing | Service Worker (ES modules) |
-| Chrome APIs | `chrome.bookmarks`, `chrome.storage`, `chrome.alarms`, `chrome.runtime` |
-| Remote Storage | GitHub REST API v3 (Contents API) |
+| Extension Framework | Manifest V3 (Chrome + Firefox) |
+| Background | Service Worker (Chrome) / Background Script (Firefox) |
+| Browser APIs | `chrome.bookmarks`, `chrome.storage`, `chrome.alarms` |
+| Remote Storage | GitHub Git Data API (atomic multi-file commits) |
 | Authentication | Personal Access Token (PAT) with `repo` scope |
-| i18n | Custom runtime system + Chrome `_locales/` for manifest strings |
-| CI/CD | GitHub Actions (`softprops/action-gh-release`) |
-| Styling | Plain CSS (no frameworks) |
-| JavaScript | Vanilla ES modules (no build step, no bundler) |
+| Sync Algorithm | Three-way merge (base vs local vs remote, per-file diff) |
+| i18n | Custom runtime system + Chrome `_locales/` |
+| Build | Shell script (`build.sh`), separate Chrome/Firefox packages |
+| CI/CD | GitHub Actions |
+| JavaScript | Vanilla ES modules (no bundler) |

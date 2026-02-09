@@ -2,212 +2,203 @@
 
 ## Overview
 
-BookHub implements **bidirectional bookmark synchronization** between the browser and a GitHub repository. The sync engine supports three operations: **Push**, **Pull**, and **Sync** (bidirectional). All operations are protected by a re-entrancy lock and communicate results back to the UI.
+BookHub implements **bidirectional bookmark synchronization** using a **three-way merge** algorithm. Each bookmark is stored as an individual JSON file. The sync engine compares three states — base (last sync), local (browser), and remote (GitHub) — to automatically merge non-conflicting changes.
+
+## Core Concept: Three-Way Merge
+
+```mermaid
+flowchart TD
+    subgraph inputs [Three States]
+        Base["Base: Last sync snapshot\n(stored in chrome.storage.local)"]
+        Local["Local: Current browser bookmarks\n(via chrome.bookmarks.getTree)"]
+        Remote["Remote: Current GitHub tree\n(via Git Data API)"]
+    end
+    subgraph diff [Compute Diffs]
+        LocalDiff["Local Diff:\nWhat changed locally since base?"]
+        RemoteDiff["Remote Diff:\nWhat changed remotely since base?"]
+    end
+    subgraph merge [Merge]
+        AutoMerge["Auto-merge non-conflicting changes"]
+        Conflict["True conflicts:\nsame file changed differently on both sides"]
+    end
+    Base --> LocalDiff
+    Local --> LocalDiff
+    Base --> RemoteDiff
+    Remote --> RemoteDiff
+    LocalDiff --> AutoMerge
+    RemoteDiff --> AutoMerge
+    AutoMerge --> Conflict
+```
 
 ## Sync Operations
 
 ### Push (Local → GitHub)
 
-Pushes the current local bookmarks to the GitHub repository.
+Full push of all local bookmarks as individual files using atomic commit.
 
 ```mermaid
 sequenceDiagram
-    participant UI as Popup / Auto-Sync
-    participant SE as sync-engine.js
-    participant Storage as chrome.storage
-    participant BM as chrome.bookmarks
-    participant GH as GitHub API
+    participant UI as Popup_or_AutoSync
+    participant SE as SyncEngine
+    participant BM as Bookmarks_API
+    participant GH as Git_Data_API
 
     UI->>SE: push()
-    SE->>SE: Check isSyncing lock
-    SE->>Storage: Load settings
     SE->>BM: getTree()
-    SE->>SE: serializeToJson(tree)
-    SE->>Storage: Load lastSyncData
-    SE->>SE: bookmarksEqual(local, lastSync)?
-    alt No changes
-        SE-->>UI: {success: true, "No changes"}
-    end
-    SE->>Storage: Load stored SHAs
-    alt No stored SHA
-        SE->>GH: getFile(bookmarks.json)
-        SE->>SE: Check for conflict (remote != lastSync?)
-        alt Conflict detected
-            SE->>Storage: Set hasConflict = true
-            SE-->>UI: {success: false, "Conflict"}
-        end
-    end
-    SE->>SE: Serialize JSON + Markdown + Meta
-    SE->>GH: createOrUpdateFile(bookmarks.json, sha)
-    SE->>GH: createOrUpdateFile(bookmarks.md, sha)
-    SE->>GH: createOrUpdateFile(sync_meta.json, sha)
-    SE->>Storage: Store new SHAs + lastSyncTime + lastSyncData
-    SE-->>UI: {success: true, "Push success"}
+    SE->>SE: bookmarkTreeToFileMap()
+    SE->>GH: fetchRemoteFileMap()
+    SE->>SE: Compute file changes
+    SE->>GH: atomicCommit(fileChanges)
+    Note over GH: Creates blobs, tree, commit, updates ref
+    SE->>SE: saveSyncState()
+    SE-->>UI: success
 ```
 
 ### Pull (GitHub → Local)
 
-Fetches bookmarks from GitHub and replaces all local bookmarks.
+Fetch remote file map, convert to bookmark tree, replace local bookmarks.
 
 ```mermaid
 sequenceDiagram
     participant UI as Popup
-    participant SE as sync-engine.js
-    participant Storage as chrome.storage
-    participant BM as chrome.bookmarks
-    participant GH as GitHub API
+    participant SE as SyncEngine
+    participant BM as Bookmarks_API
+    participant GH as Git_Data_API
 
     UI->>SE: pull()
-    SE->>SE: Check isSyncing lock
-    SE->>Storage: Load settings
-    SE->>GH: getFile(bookmarks.json)
-    alt File not found
-        SE-->>UI: {success: false, "No bookmarks on GitHub"}
-    end
-    SE->>SE: deserializeFromJson(remote)
-    SE->>BM: getTree() (current local)
-    SE->>SE: bookmarksEqual(local, remote)?
-    alt Already equal
-        SE->>GH: updateRemoteShas()
-        SE-->>UI: {success: true, "Already up to date"}
-    end
-    SE->>SE: replaceLocalBookmarks(remote)
-    Note over SE,BM: For each root folder:<br/>1. Remove all children (reverse order)<br/>2. Recreate from remote data
-    SE->>GH: updateRemoteShas()
-    SE->>Storage: Store lastSyncTime + lastSyncData
-    SE-->>UI: {success: true, "Pull success"}
+    SE->>GH: fetchRemoteFileMap()
+    SE->>SE: fileMapToBookmarkTree()
+    SE->>BM: replaceLocalBookmarks(roleMap)
+    Note over BM: Remove all children per role folder, recreate from remote
+    SE->>BM: getTree() for fresh state
+    SE->>SE: saveSyncState()
+    SE-->>UI: success
 ```
 
-### Sync (Bidirectional)
-
-Compares both sides and decides the appropriate action.
+### Sync (Bidirectional Three-Way Merge)
 
 ```mermaid
 sequenceDiagram
-    participant UI as Popup / Alarm
-    participant SE as sync-engine.js
-    participant Storage as chrome.storage
-    participant BM as chrome.bookmarks
-    participant GH as GitHub API
+    participant UI as Popup_or_Alarm
+    participant SE as SyncEngine
+    participant BM as Bookmarks_API
+    participant GH as Git_Data_API
+    participant Storage as chrome_storage
 
     UI->>SE: sync()
-    SE->>SE: Check isSyncing lock
-    SE->>Storage: Load settings + lastSyncData
-    SE->>BM: getTree() → serialize
-    SE->>GH: getFile(bookmarks.json)
+    SE->>Storage: Load base state (LAST_SYNC_FILES)
+    SE->>BM: getTree() → bookmarkTreeToFileMap()
+    SE->>GH: fetchRemoteFileMap()
 
-    SE->>SE: Compare local vs lastSync → localChanged?
-    SE->>SE: Compare remote vs lastSync → remoteChanged?
+    SE->>SE: computeDiff(base, local)
+    SE->>SE: computeDiff(base, remote)
 
-    alt Neither changed
-        SE-->>UI: {success: true, "All in sync"}
-    else Only local changed
-        SE->>SE: push()
-    else Only remote changed
-        SE->>SE: pull()
+    alt No changes on either side
+        SE-->>UI: "All in sync"
+    else Only local changes
+        SE->>GH: atomicCommit(localChanges)
+    else Only remote changes
+        SE->>BM: replaceLocalBookmarks()
     else Both changed
-        SE->>Storage: Set hasConflict = true
-        SE-->>UI: {success: false, "Conflict: both modified"}
+        SE->>SE: mergeDiffs(localDiff, remoteDiff)
+        alt No conflicts
+            SE->>BM: Apply remote changes locally
+            SE->>GH: Push local changes
+        else Conflicts found
+            SE->>Storage: Set hasConflict = true
+            SE-->>UI: "Conflict: both modified"
+        end
     end
 ```
 
-## Conflict Detection
+## Diff Computation
 
-Conflicts are detected by comparing **three states**:
+`computeDiff(base, current)` compares two file maps (path → content) and produces:
 
-| State | Source | Description |
+| Category | Meaning |
+|---|---|
+| **added** | Files in `current` but not in `base` |
+| **removed** | Files in `base` but not in `current` |
+| **modified** | Files in both but with different content |
+
+Generated/meta files (`README.md`, `_index.json`) are excluded from diff via `filterForDiff()`.
+
+## Merge Rules
+
+`mergeDiffs(localDiff, remoteDiff)` applies these rules per file path:
+
+| Local | Remote | Action |
 |---|---|---|
-| **Local** | `chrome.bookmarks.getTree()` | Current browser bookmarks |
-| **Remote** | GitHub `bookmarks.json` | Latest version on GitHub |
-| **Last Sync** | `chrome.storage.local` (`lastSyncData`) | Snapshot from the last successful sync |
+| Added | — | Push to GitHub |
+| — | Added | Create locally |
+| Modified | — | Push to GitHub |
+| — | Modified | Apply locally |
+| Removed | — | Delete on GitHub |
+| — | Removed | Delete locally |
+| Same change | Same change | No action needed |
+| Different change | Different change | **Conflict** |
+| Removed | Removed | No action needed |
 
-**Conflict decision matrix:**
+## Conflict Detection and Resolution
 
-| Local vs LastSync | Remote vs LastSync | Action |
+When `mergeDiffs` finds conflicts (same file changed differently on both sides):
+
+1. `hasConflict` flag is set in `chrome.storage.local`
+2. Popup shows conflict warning with resolution buttons:
+   - **Local → GitHub** (force push) — overwrites remote
+   - **GitHub → Local** (force pull) — overwrites local
+3. The chosen operation clears the conflict flag
+
+### First Sync Special Cases
+
+When no base state exists (first sync ever):
+
+| Local | Remote | Action |
 |---|---|---|
-| Same | Same | Nothing to do |
-| Changed | Same | Push |
-| Same | Changed | Pull |
-| Changed | Changed | **Conflict** — user must choose |
+| Has bookmarks | Empty repo | Push |
+| Empty | Has data | Pull |
+| Has bookmarks | Has data | Conflict (user must choose) |
+| Empty | Empty | Nothing to do |
 
-### SHA-based Conflict Prevention
-
-When pushing files, the GitHub Contents API requires the current file SHA for updates. If the SHA doesn't match (someone else modified the file), the API returns **HTTP 409 Conflict**. This is caught as a `GitHubError` and reported to the user.
-
-Additionally, before pushing, the engine fetches the remote file to compare its content against `lastSyncData`. If the remote content differs from what was last synced, a conflict is raised *before* attempting the push.
-
-### Conflict Resolution
-
-When a conflict is detected:
-
-1. The `hasConflict` flag is set in `chrome.storage.local`
-2. The popup shows a conflict warning with two buttons:
-   - **Local → GitHub** (force push) — overwrites remote with local
-   - **GitHub → Local** (force pull) — overwrites local with remote
-3. The chosen operation clears the conflict flag on success
-
-## Debounce Mechanism
-
-When bookmarks change locally (create, edit, move, delete), an auto-push is triggered. To prevent excessive API calls during rapid changes (e.g., importing bookmarks, reorganizing folders), a **debounce** mechanism is used:
+## Auto-Sync and Debounce
 
 ```
-Bookmark event → triggerAutoSync() → debouncedPush(5000ms)
+Bookmark event → triggerAutoSync() → debouncedSync(5000ms)
                                           ↓
                                clearTimeout (if pending)
                                           ↓
-                               setTimeout(push, 5000ms)
+                               setTimeout(sync, 5000ms)
 ```
 
-- **Default delay**: 5 seconds
+- Default delay: 5 seconds
 - Each new event resets the timer
-- Only fires once all rapid changes have settled
-- Only fires if auto-sync is enabled and extension is configured
+- Uses `sync()` (three-way merge), not just push
+- Suppressed for 10 seconds after a pull (to ignore bookmark events from `replaceLocalBookmarks`)
 
 ### Re-Entrancy Guard
 
-A module-level `isSyncing` boolean prevents concurrent sync operations:
-
-```
-push() or pull() called
-    ↓
-if (isSyncing) → return early with "Sync already in progress"
-    ↓
-isSyncing = true
-    ↓
-... perform sync ...
-    ↓
-finally: isSyncing = false
-```
-
-The `background.js` also checks `isSyncInProgress()` before triggering auto-sync from bookmark events. This prevents a pull operation (which modifies bookmarks) from triggering a push via the bookmark event listeners.
-
-## Auto-Sync vs. Manual Sync
-
-| Trigger | Function | When |
-|---|---|---|
-| Bookmark event | `debouncedPush()` | Any bookmark create/edit/move/delete |
-| Periodic alarm | `sync()` | Every N minutes (configurable, default 15) |
-| "Sync Now" button | `sync()` | User clicks in popup |
-| "Push" button | `push()` | User clicks in popup |
-| "Pull" button | `pull()` | User clicks in popup |
-| Conflict resolution | `push()` or `pull()` | User chooses in popup |
+A module-level `isSyncing` boolean prevents concurrent operations. `background.js` also checks `isSyncInProgress()` and `isAutoSyncSuppressed()` before triggering auto-sync.
 
 ## The `replaceLocalBookmarks` Algorithm
 
-When pulling remote bookmarks, the local bookmark tree is fully replaced:
+Uses **role-based mapping** for cross-browser compatibility:
 
-1. Get the current local bookmark tree via `chrome.bookmarks.getTree()`
-2. Iterate over root-level folders (Bookmarks Bar, Other Bookmarks, Mobile Bookmarks)
-3. For each root folder:
-   a. Remove all existing children in **reverse order** (to avoid index shifting)
-   b. Recursively recreate children from the remote data
-4. Root folders themselves are never deleted (Chrome doesn't allow it)
+1. Get local bookmark tree via `chrome.bookmarks.getTree()`
+2. Detect each root folder's role via `detectRootFolderRole()` (uses browser-specific IDs with title fallback)
+3. For each role in the remote data (toolbar, other, menu, mobile):
+   a. Find the matching local root folder
+   b. Remove all existing children (reverse order)
+   c. Recursively recreate from remote data
+4. Roles not present locally are skipped (e.g., Chrome has no "menu")
 
-```mermaid
-flowchart TD
-    A["Get local tree"] --> B["For each root folder (by index)"]
-    B --> C["Remove all children\n(reverse order)"]
-    C --> D["Recreate children\nfrom remote data"]
-    D --> E["Next root folder"]
-    E --> B
-```
+## Optimized Remote Fetching
+
+`fetchRemoteFileMap()` minimizes API calls:
+
+1. `getLatestCommitSha()` — 1 call
+2. `getCommit()` + `getTree(recursive=1)` — 2 calls → full file list with SHAs
+3. For each file: compare blob SHA with stored base SHA
+   - **SHA matches** → use cached content from base state (0 calls)
+   - **SHA differs** → `getBlob()` (1 call per changed file)
+
+In the common case (few files changed), this is 3 + N calls where N is the number of changed files.

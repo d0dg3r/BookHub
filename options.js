@@ -278,8 +278,17 @@ importBookmarksBtn.addEventListener('click', async () => {
     const data = JSON.parse(text);
     const bookmarks = deserializeFromJson(data);
 
-    // Replace all local bookmarks
-    await replaceLocalBookmarks(bookmarks);
+    // Convert legacy format (array with role fields) to roleMap for replaceLocalBookmarks
+    const roleMap = {};
+    for (const node of bookmarks) {
+      const role = node.role || 'other';
+      roleMap[role] = {
+        title: role,
+        children: node.children || [],
+      };
+    }
+
+    await replaceLocalBookmarks(roleMap);
 
     showResult(importBookmarksResult, getMessage('options_importSuccess'), 'success');
     importBookmarksFile.value = '';
