@@ -3,6 +3,8 @@
  * Handles manual sync buttons, status display, and conflict resolution.
  */
 
+import { initI18n, applyI18n, getMessage } from './lib/i18n.js';
+
 // DOM elements
 const notConfiguredEl = document.getElementById('not-configured');
 const configuredEl = document.getElementById('configured');
@@ -28,7 +30,11 @@ const settingsLink = document.getElementById('settings-link');
 let isSyncing = false;
 
 // Initialize on load
-document.addEventListener('DOMContentLoaded', loadStatus);
+document.addEventListener('DOMContentLoaded', async () => {
+  await initI18n();
+  applyI18n();
+  await loadStatus();
+});
 
 async function loadStatus() {
   try {
@@ -51,20 +57,20 @@ function updateUI(status) {
 
   // Status message
   if (status.hasConflict) {
-    setStatus('⚠️', 'Conflict detected', 'status-warning');
+    setStatus('⚠️', getMessage('popup_conflictDetected'), 'status-warning');
     conflictBox.style.display = 'block';
   } else if (status.lastSyncTime) {
-    setStatus('✅', 'Synced', 'status-ok');
+    setStatus('✅', getMessage('popup_synced'), 'status-ok');
     conflictBox.style.display = 'none';
   } else {
-    setStatus('📋', 'Not synced yet', 'status-ok');
+    setStatus('📋', getMessage('popup_notSyncedYet'), 'status-ok');
     conflictBox.style.display = 'none';
   }
 
   // Last sync time
   if (status.lastSyncTime) {
     const date = new Date(status.lastSyncTime);
-    lastSyncEl.textContent = `Last sync: ${formatRelativeTime(date)}`;
+    lastSyncEl.textContent = getMessage('popup_lastSync', [formatRelativeTime(date)]);
   } else {
     lastSyncEl.textContent = '';
   }
@@ -72,10 +78,10 @@ function updateUI(status) {
   // Auto-sync status
   if (status.autoSync) {
     autoSyncDot.className = 'dot dot-active';
-    autoSyncText.textContent = 'Auto-sync active';
+    autoSyncText.textContent = getMessage('popup_autoSyncActive');
   } else {
     autoSyncDot.className = 'dot dot-inactive';
-    autoSyncText.textContent = 'Auto-sync disabled';
+    autoSyncText.textContent = getMessage('popup_autoSyncDisabled');
   }
 }
 
@@ -96,10 +102,10 @@ function formatRelativeTime(date) {
   const diffMin = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMin / 60);
 
-  if (diffMin < 1) return 'just now';
-  if (diffMin < 60) return `${diffMin} min ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  return date.toLocaleDateString('en-US', {
+  if (diffMin < 1) return getMessage('popup_justNow');
+  if (diffMin < 60) return getMessage('popup_minAgo', [diffMin]);
+  if (diffHours < 24) return getMessage('popup_hoursAgo', [diffHours]);
+  return date.toLocaleDateString(undefined, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -116,7 +122,7 @@ function setLoading(loading) {
   pushBtn.disabled = loading;
   pullBtn.disabled = loading;
   syncSpinner.style.display = loading ? 'inline-block' : 'none';
-  syncText.textContent = loading ? 'Syncing...' : 'Sync Now';
+  syncText.textContent = loading ? getMessage('popup_syncing') : getMessage('popup_syncNow');
 }
 
 async function handleAction(action) {
@@ -129,9 +135,9 @@ async function handleAction(action) {
     if (result.success) {
       setStatus('✅', result.message, 'status-ok');
       conflictBox.style.display = 'none';
-      lastSyncEl.textContent = 'Last sync: just now';
+      lastSyncEl.textContent = getMessage('popup_lastSync', [getMessage('popup_justNow')]);
     } else {
-      if (result.message.includes('Conflict')) {
+      if (result.message.includes('Conflict') || result.message.includes('Konflikt')) {
         setStatus('⚠️', result.message, 'status-warning');
         conflictBox.style.display = 'block';
       } else {
@@ -139,7 +145,7 @@ async function handleAction(action) {
       }
     }
   } catch (err) {
-    setStatus('❌', `Error: ${err.message}`, 'status-error');
+    setStatus('❌', getMessage('popup_error', [err.message]), 'status-error');
   } finally {
     setLoading(false);
   }

@@ -13,70 +13,80 @@
         <img src="icons/icon48.png" alt="Icon" class="header-icon">
         BookHub
       </h1>
-      <p class="subtitle">Settings</p>
+      <p class="subtitle" data-i18n="options_subtitle">Settings</p>
     </header>
 
     <section class="card">
-      <h2>GitHub Connection</h2>
+      <h2 data-i18n="options_language">Language</h2>
 
       <div class="form-group">
-        <label for="token">Personal Access Token (PAT)</label>
+        <select id="language-select">
+          <!-- Populated dynamically -->
+        </select>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="options_githubConnection">GitHub Connection</h2>
+
+      <div class="form-group">
+        <label for="token" data-i18n="options_patLabel">Personal Access Token (PAT)</label>
         <div class="input-row">
           <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
-          <button id="toggle-token" class="btn-icon" title="Show/hide token">
+          <button id="toggle-token" class="btn-icon" data-i18n-title="options_toggleToken" title="Show/hide token">
             <span class="icon-eye">👁</span>
           </button>
         </div>
-        <small>Requires the <code>repo</code> scope. <a href="https://github.com/settings/tokens/new?scopes=repo&description=Bookmark+Sync" target="_blank" rel="noopener">Create token</a></small>
+        <small data-i18n-html="options_tokenHint">Requires the <code>repo</code> scope. <a href="https://github.com/settings/tokens/new?scopes=repo&description=BookHub" target="_blank" rel="noopener">Create token</a></small>
       </div>
 
       <div class="form-group">
-        <label for="owner">Repository Owner</label>
-        <input type="text" id="owner" placeholder="your-github-username">
+        <label for="owner" data-i18n="options_repoOwner">Repository Owner</label>
+        <input type="text" id="owner" data-i18n-placeholder="options_ownerPlaceholder" placeholder="your-github-username">
       </div>
 
       <div class="form-group">
-        <label for="repo">Repository Name</label>
+        <label for="repo" data-i18n="options_repoName">Repository Name</label>
         <input type="text" id="repo" placeholder="my-bookmarks">
       </div>
 
       <div class="form-group">
-        <label for="branch">Branch</label>
+        <label for="branch" data-i18n="options_branch">Branch</label>
         <input type="text" id="branch" placeholder="main" value="main">
       </div>
 
       <div class="form-group">
-        <label for="filepath">File Path in Repository</label>
+        <label for="filepath" data-i18n="options_filePath">File Path in Repository</label>
         <input type="text" id="filepath" placeholder="bookmarks" value="bookmarks">
-        <small>Folder where bookmark files will be stored.</small>
+        <small data-i18n="options_filePathHint">Folder where bookmark files will be stored.</small>
       </div>
 
       <div class="form-group">
-        <button id="validate-btn" class="btn btn-secondary">Test Connection</button>
+        <button id="validate-btn" class="btn btn-secondary" data-i18n="options_testConnection">Test Connection</button>
         <span id="validation-result" class="validation-result"></span>
       </div>
     </section>
 
     <section class="card">
-      <h2>Synchronization</h2>
+      <h2 data-i18n="options_synchronization">Synchronization</h2>
 
       <div class="form-group toggle-group">
         <label for="auto-sync" class="toggle-label">
-          <span>Automatic Synchronization</span>
+          <span data-i18n="options_autoSync">Automatic Synchronization</span>
           <input type="checkbox" id="auto-sync" checked>
           <span class="toggle-slider"></span>
         </label>
       </div>
 
       <div class="form-group">
-        <label for="sync-interval">Sync Interval (minutes)</label>
+        <label for="sync-interval" data-i18n="options_syncInterval">Sync Interval (minutes)</label>
         <input type="number" id="sync-interval" min="1" max="120" value="15">
-        <small>How often to check for remote changes.</small>
+        <small data-i18n="options_syncIntervalHint">How often to check for remote changes.</small>
       </div>
     </section>
 
     <div class="actions">
-      <button id="save-btn" class="btn btn-primary">Save Settings</button>
+      <button id="save-btn" class="btn btn-primary" data-i18n="options_saveSettings">Save Settings</button>
       <span id="save-result" class="save-result"></span>
     </div>
   </div>

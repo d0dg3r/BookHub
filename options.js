@@ -1,9 +1,10 @@
 /**
  * Options Page Logic
- * Handles loading/saving settings and token validation.
+ * Handles loading/saving settings, token validation, and language selection.
  */
 
 import { GitHubAPI } from './lib/github-api.js';
+import { initI18n, applyI18n, getMessage, reloadI18n, getLanguage, SUPPORTED_LANGUAGES } from './lib/i18n.js';
 
 const STORAGE_KEYS = {
   GITHUB_TOKEN: 'githubToken',
@@ -13,6 +14,7 @@ const STORAGE_KEYS = {
   FILE_PATH: 'filePath',
   AUTO_SYNC: 'autoSync',
   SYNC_INTERVAL: 'syncInterval',
+  LANGUAGE: 'language',
 };
 
 // DOM elements
@@ -28,9 +30,36 @@ const validateBtn = document.getElementById('validate-btn');
 const validationResult = document.getElementById('validation-result');
 const saveBtn = document.getElementById('save-btn');
 const saveResult = document.getElementById('save-result');
+const languageSelect = document.getElementById('language-select');
 
 // Load settings on page open
-document.addEventListener('DOMContentLoaded', loadSettings);
+document.addEventListener('DOMContentLoaded', async () => {
+  await initI18n();
+  populateLanguageDropdown();
+  applyI18n();
+  await loadSettings();
+});
+
+/**
+ * Populate the language dropdown with supported languages.
+ */
+function populateLanguageDropdown() {
+  languageSelect.innerHTML = '';
+
+  // "Auto (Browser)" option
+  const autoOption = document.createElement('option');
+  autoOption.value = 'auto';
+  autoOption.textContent = getMessage('options_langAuto');
+  languageSelect.appendChild(autoOption);
+
+  // Each supported language
+  for (const lang of SUPPORTED_LANGUAGES) {
+    const option = document.createElement('option');
+    option.value = lang.code;
+    option.textContent = lang.name;
+    languageSelect.appendChild(option);
+  }
+}
 
 async function loadSettings() {
   const defaults = {
@@ -41,6 +70,7 @@ async function loadSettings() {
     [STORAGE_KEYS.FILE_PATH]: 'bookmarks',
     [STORAGE_KEYS.AUTO_SYNC]: true,
     [STORAGE_KEYS.SYNC_INTERVAL]: 15,
+    [STORAGE_KEYS.LANGUAGE]: 'auto',
   };
 
   const settings = await chrome.storage.sync.get(defaults);
@@ -52,7 +82,21 @@ async function loadSettings() {
   filepathInput.value = settings[STORAGE_KEYS.FILE_PATH];
   autoSyncInput.checked = settings[STORAGE_KEYS.AUTO_SYNC];
   syncIntervalInput.value = settings[STORAGE_KEYS.SYNC_INTERVAL];
+  languageSelect.value = settings[STORAGE_KEYS.LANGUAGE];
 }
+
+// Language change: re-translate the page instantly
+languageSelect.addEventListener('change', async () => {
+  const newLang = languageSelect.value;
+  await chrome.storage.sync.set({ [STORAGE_KEYS.LANGUAGE]: newLang });
+  await reloadI18n();
+  populateLanguageDropdown();
+  // Re-select the chosen value (dropdown was rebuilt)
+  languageSelect.value = newLang;
+  applyI18n();
+  // Update the page title
+  document.title = `BookHub – ${getMessage('options_subtitle')}`;
+});
 
 // Toggle token visibility
 toggleTokenBtn.addEventListener('click', () => {
@@ -71,11 +115,11 @@ validateBtn.addEventListener('click', async () => {
   const branch = branchInput.value.trim() || 'main';
 
   if (!token) {
-    showValidation('Please enter a token.', 'error');
+    showValidation(getMessage('options_pleaseEnterToken'), 'error');
     return;
   }
 
-  showValidation('Checking...', 'loading');
+  showValidation(getMessage('options_checking'), 'loading');
 
   try {
     const api = new GitHubAPI(token, owner, repo, branch);
@@ -83,13 +127,13 @@ validateBtn.addEventListener('click', async () => {
     // Validate token
     const tokenResult = await api.validateToken();
     if (!tokenResult.valid) {
-      showValidation('Invalid token.', 'error');
+      showValidation(getMessage('options_invalidToken'), 'error');
       return;
     }
 
     // Check scopes
     if (!tokenResult.scopes.includes('repo')) {
-      showValidation(`Token valid (${tokenResult.username}), but missing "repo" scope.`, 'error');
+      showValidation(getMessage('options_tokenValidMissingScope', [tokenResult.username]), 'error');
       return;
     }
 
@@ -97,15 +141,15 @@ validateBtn.addEventListener('click', async () => {
     if (owner && repo) {
       const repoExists = await api.checkRepo();
       if (!repoExists) {
-        showValidation(`Token valid (${tokenResult.username}), but repository "${owner}/${repo}" not found.`, 'error');
+        showValidation(getMessage('options_tokenValidRepoNotFound', [tokenResult.username, `${owner}/${repo}`]), 'error');
         return;
       }
-      showValidation(`Connection OK! User: ${tokenResult.username}, Repo: ${owner}/${repo}`, 'success');
+      showValidation(getMessage('options_connectionOk', [tokenResult.username, `${owner}/${repo}`]), 'success');
     } else {
-      showValidation(`Token valid! User: ${tokenResult.username}. Please specify a repository.`, 'success');
+      showValidation(getMessage('options_tokenValidSpecifyRepo', [tokenResult.username]), 'success');
     }
   } catch (err) {
-    showValidation(`Error: ${err.message}`, 'error');
+    showValidation(getMessage('options_error', [err.message]), 'error');
   }
 });
 
@@ -124,6 +168,7 @@ saveBtn.addEventListener('click', async () => {
     [STORAGE_KEYS.FILE_PATH]: filepathInput.value.trim() || 'bookmarks',
     [STORAGE_KEYS.AUTO_SYNC]: autoSyncInput.checked,
     [STORAGE_KEYS.SYNC_INTERVAL]: parseInt(syncIntervalInput.value, 10) || 15,
+    [STORAGE_KEYS.LANGUAGE]: languageSelect.value,
   };
 
   try {
@@ -132,12 +177,12 @@ saveBtn.addEventListener('click', async () => {
     // Notify background script that settings changed
     await chrome.runtime.sendMessage({ action: 'settingsChanged' });
 
-    showSaveResult('Settings saved!', 'success');
+    showSaveResult(getMessage('options_settingsSaved'), 'success');
     setTimeout(() => {
       saveResult.textContent = '';
     }, 3000);
   } catch (err) {
-    showSaveResult(`Error saving settings: ${err.message}`, 'error');
+    showSaveResult(getMessage('options_errorSaving', [err.message]), 'error');
   }
 });
 

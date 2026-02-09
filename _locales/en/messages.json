@@ -1,0 +1,238 @@
+{
+  "extName": {
+    "message": "BookHub"
+  },
+  "extDescription": {
+    "message": "Bidirectionally sync your bookmarks with a GitHub repository."
+  },
+
+  "popup_configureFirst": {
+    "message": "Please configure the extension first."
+  },
+  "popup_openSettings": {
+    "message": "Open Settings"
+  },
+  "popup_ready": {
+    "message": "Ready"
+  },
+  "popup_conflictDetected": {
+    "message": "Conflict detected"
+  },
+  "popup_conflictDescription": {
+    "message": "Both local and remote bookmarks were modified. Choose a resolution:"
+  },
+  "popup_localToGithub": {
+    "message": "Local → GitHub"
+  },
+  "popup_githubToLocal": {
+    "message": "GitHub → Local"
+  },
+  "popup_syncNow": {
+    "message": "Sync Now"
+  },
+  "popup_pushUp": {
+    "message": "Push ↑"
+  },
+  "popup_pullDown": {
+    "message": "Pull ↓"
+  },
+  "popup_autoSyncActive": {
+    "message": "Auto-sync active"
+  },
+  "popup_autoSyncDisabled": {
+    "message": "Auto-sync disabled"
+  },
+  "popup_settings": {
+    "message": "Settings"
+  },
+  "popup_synced": {
+    "message": "Synced"
+  },
+  "popup_notSyncedYet": {
+    "message": "Not synced yet"
+  },
+  "popup_lastSync": {
+    "message": "Last sync: $1"
+  },
+  "popup_justNow": {
+    "message": "just now"
+  },
+  "popup_minAgo": {
+    "message": "$1 min ago"
+  },
+  "popup_hoursAgo": {
+    "message": "$1h ago"
+  },
+  "popup_syncing": {
+    "message": "Syncing..."
+  },
+  "popup_error": {
+    "message": "Error: $1"
+  },
+
+  "options_subtitle": {
+    "message": "Settings"
+  },
+  "options_githubConnection": {
+    "message": "GitHub Connection"
+  },
+  "options_patLabel": {
+    "message": "Personal Access Token (PAT)"
+  },
+  "options_toggleToken": {
+    "message": "Show/hide token"
+  },
+  "options_tokenHint": {
+    "message": "Requires the <code>repo</code> scope. <a href=\"https://github.com/settings/tokens/new?scopes=repo&description=BookHub\" target=\"_blank\" rel=\"noopener\">Create token</a>"
+  },
+  "options_repoOwner": {
+    "message": "Repository Owner"
+  },
+  "options_ownerPlaceholder": {
+    "message": "your-github-username"
+  },
+  "options_repoName": {
+    "message": "Repository Name"
+  },
+  "options_branch": {
+    "message": "Branch"
+  },
+  "options_filePath": {
+    "message": "File Path in Repository"
+  },
+  "options_filePathHint": {
+    "message": "Folder where bookmark files will be stored."
+  },
+  "options_testConnection": {
+    "message": "Test Connection"
+  },
+  "options_synchronization": {
+    "message": "Synchronization"
+  },
+  "options_autoSync": {
+    "message": "Automatic Synchronization"
+  },
+  "options_syncInterval": {
+    "message": "Sync Interval (minutes)"
+  },
+  "options_syncIntervalHint": {
+    "message": "How often to check for remote changes."
+  },
+  "options_saveSettings": {
+    "message": "Save Settings"
+  },
+  "options_language": {
+    "message": "Language"
+  },
+  "options_langAuto": {
+    "message": "Auto (Browser)"
+  },
+  "options_pleaseEnterToken": {
+    "message": "Please enter a token."
+  },
+  "options_checking": {
+    "message": "Checking..."
+  },
+  "options_invalidToken": {
+    "message": "Invalid token."
+  },
+  "options_tokenValidMissingScope": {
+    "message": "Token valid ($1), but missing \"repo\" scope."
+  },
+  "options_tokenValidRepoNotFound": {
+    "message": "Token valid ($1), but repository \"$2\" not found."
+  },
+  "options_connectionOk": {
+    "message": "Connection OK! User: $1, Repo: $2"
+  },
+  "options_tokenValidSpecifyRepo": {
+    "message": "Token valid! User: $1. Please specify a repository."
+  },
+  "options_error": {
+    "message": "Error: $1"
+  },
+  "options_settingsSaved": {
+    "message": "Settings saved!"
+  },
+  "options_errorSaving": {
+    "message": "Error saving settings: $1"
+  },
+
+  "api_invalidToken": {
+    "message": "Invalid token. Please check your Personal Access Token."
+  },
+  "api_rateLimitExceeded": {
+    "message": "GitHub API rate limit exceeded. Please wait a moment."
+  },
+  "api_accessDenied": {
+    "message": "Access denied. Please check your token permissions."
+  },
+  "api_conflict": {
+    "message": "Conflict: The file was modified in the meantime."
+  },
+  "api_errorReading": {
+    "message": "Error reading file: $1"
+  },
+  "api_errorWriting": {
+    "message": "Error writing file: $1"
+  },
+  "api_branchNotFound": {
+    "message": "Branch '$1' not found."
+  },
+
+  "sync_alreadyInProgress": {
+    "message": "Sync already in progress."
+  },
+  "sync_notConfigured": {
+    "message": "Extension not configured. Please open settings."
+  },
+  "sync_noChanges": {
+    "message": "No changes since last sync."
+  },
+  "sync_conflictRemoteModified": {
+    "message": "Conflict detected: Remote was also modified."
+  },
+  "sync_pushSuccess": {
+    "message": "Bookmarks successfully pushed to GitHub."
+  },
+  "sync_conflictFileModified": {
+    "message": "Conflict: The file was modified in the meantime."
+  },
+  "sync_pushFailed": {
+    "message": "Push failed: $1"
+  },
+  "sync_noBookmarksOnGithub": {
+    "message": "No bookmarks found on GitHub."
+  },
+  "sync_alreadyUpToDate": {
+    "message": "Bookmarks are already up to date."
+  },
+  "sync_pullSuccess": {
+    "message": "Bookmarks successfully loaded from GitHub."
+  },
+  "sync_pullFailed": {
+    "message": "Pull failed: $1"
+  },
+  "sync_allInSync": {
+    "message": "Everything in sync. No changes."
+  },
+  "sync_conflictBothModified": {
+    "message": "Conflict: Both local and remote bookmarks were modified. Please choose Push or Pull."
+  },
+  "sync_syncFailed": {
+    "message": "Sync failed: $1"
+  },
+
+  "serializer_invalidFormat": {
+    "message": "Invalid bookmark data format."
+  },
+  "serializer_lastSynced": {
+    "message": "Last synced: $1"
+  },
+  "serializer_device": {
+    "message": "Device: $1"
+  },
+  "serializer_untitled": {
+    "message": "(Untitled)"
+  }
+}

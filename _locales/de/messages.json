@@ -1,0 +1,238 @@
+{
+  "extName": {
+    "message": "BookHub"
+  },
+  "extDescription": {
+    "message": "Synchronisiere deine Lesezeichen bidirektional mit einem GitHub-Repository."
+  },
+
+  "popup_configureFirst": {
+    "message": "Bitte konfiguriere zuerst die Erweiterung."
+  },
+  "popup_openSettings": {
+    "message": "Einstellungen öffnen"
+  },
+  "popup_ready": {
+    "message": "Bereit"
+  },
+  "popup_conflictDetected": {
+    "message": "Konflikt erkannt"
+  },
+  "popup_conflictDescription": {
+    "message": "Lokale und Remote-Lesezeichen wurden gleichzeitig geändert. Wähle eine Lösung:"
+  },
+  "popup_localToGithub": {
+    "message": "Lokal → GitHub"
+  },
+  "popup_githubToLocal": {
+    "message": "GitHub → Lokal"
+  },
+  "popup_syncNow": {
+    "message": "Jetzt synchronisieren"
+  },
+  "popup_pushUp": {
+    "message": "Push ↑"
+  },
+  "popup_pullDown": {
+    "message": "Pull ↓"
+  },
+  "popup_autoSyncActive": {
+    "message": "Auto-Sync aktiv"
+  },
+  "popup_autoSyncDisabled": {
+    "message": "Auto-Sync deaktiviert"
+  },
+  "popup_settings": {
+    "message": "Einstellungen"
+  },
+  "popup_synced": {
+    "message": "Synchronisiert"
+  },
+  "popup_notSyncedYet": {
+    "message": "Noch nicht synchronisiert"
+  },
+  "popup_lastSync": {
+    "message": "Letzte Sync: $1"
+  },
+  "popup_justNow": {
+    "message": "gerade eben"
+  },
+  "popup_minAgo": {
+    "message": "vor $1 Min."
+  },
+  "popup_hoursAgo": {
+    "message": "vor $1 Std."
+  },
+  "popup_syncing": {
+    "message": "Synchronisiere..."
+  },
+  "popup_error": {
+    "message": "Fehler: $1"
+  },
+
+  "options_subtitle": {
+    "message": "Einstellungen"
+  },
+  "options_githubConnection": {
+    "message": "GitHub-Verbindung"
+  },
+  "options_patLabel": {
+    "message": "Personal Access Token (PAT)"
+  },
+  "options_toggleToken": {
+    "message": "Token anzeigen/verbergen"
+  },
+  "options_tokenHint": {
+    "message": "Benötigt den <code>repo</code>-Scope. <a href=\"https://github.com/settings/tokens/new?scopes=repo&description=BookHub\" target=\"_blank\" rel=\"noopener\">Token erstellen</a>"
+  },
+  "options_repoOwner": {
+    "message": "Repository-Besitzer"
+  },
+  "options_ownerPlaceholder": {
+    "message": "dein-github-nutzername"
+  },
+  "options_repoName": {
+    "message": "Repository-Name"
+  },
+  "options_branch": {
+    "message": "Branch"
+  },
+  "options_filePath": {
+    "message": "Dateipfad im Repository"
+  },
+  "options_filePathHint": {
+    "message": "Ordner, in dem die Lesezeichen-Dateien gespeichert werden."
+  },
+  "options_testConnection": {
+    "message": "Verbindung testen"
+  },
+  "options_synchronization": {
+    "message": "Synchronisierung"
+  },
+  "options_autoSync": {
+    "message": "Automatische Synchronisierung"
+  },
+  "options_syncInterval": {
+    "message": "Sync-Intervall (Minuten)"
+  },
+  "options_syncIntervalHint": {
+    "message": "Wie oft auf Remote-Änderungen geprüft werden soll."
+  },
+  "options_saveSettings": {
+    "message": "Einstellungen speichern"
+  },
+  "options_language": {
+    "message": "Sprache"
+  },
+  "options_langAuto": {
+    "message": "Automatisch (Browser)"
+  },
+  "options_pleaseEnterToken": {
+    "message": "Bitte gib einen Token ein."
+  },
+  "options_checking": {
+    "message": "Prüfe..."
+  },
+  "options_invalidToken": {
+    "message": "Ungültiger Token."
+  },
+  "options_tokenValidMissingScope": {
+    "message": "Token gültig ($1), aber fehlender \"repo\"-Scope."
+  },
+  "options_tokenValidRepoNotFound": {
+    "message": "Token gültig ($1), aber Repository \"$2\" nicht gefunden."
+  },
+  "options_connectionOk": {
+    "message": "Verbindung OK! Benutzer: $1, Repo: $2"
+  },
+  "options_tokenValidSpecifyRepo": {
+    "message": "Token gültig! Benutzer: $1. Bitte gib ein Repository an."
+  },
+  "options_error": {
+    "message": "Fehler: $1"
+  },
+  "options_settingsSaved": {
+    "message": "Einstellungen gespeichert!"
+  },
+  "options_errorSaving": {
+    "message": "Fehler beim Speichern: $1"
+  },
+
+  "api_invalidToken": {
+    "message": "Ungültiger Token. Bitte überprüfe deinen Personal Access Token."
+  },
+  "api_rateLimitExceeded": {
+    "message": "GitHub-API-Ratenlimit überschritten. Bitte warte einen Moment."
+  },
+  "api_accessDenied": {
+    "message": "Zugriff verweigert. Bitte überprüfe deine Token-Berechtigungen."
+  },
+  "api_conflict": {
+    "message": "Konflikt: Die Datei wurde in der Zwischenzeit geändert."
+  },
+  "api_errorReading": {
+    "message": "Fehler beim Lesen der Datei: $1"
+  },
+  "api_errorWriting": {
+    "message": "Fehler beim Schreiben der Datei: $1"
+  },
+  "api_branchNotFound": {
+    "message": "Branch '$1' nicht gefunden."
+  },
+
+  "sync_alreadyInProgress": {
+    "message": "Synchronisierung läuft bereits."
+  },
+  "sync_notConfigured": {
+    "message": "Erweiterung nicht konfiguriert. Bitte öffne die Einstellungen."
+  },
+  "sync_noChanges": {
+    "message": "Keine Änderungen seit der letzten Synchronisierung."
+  },
+  "sync_conflictRemoteModified": {
+    "message": "Konflikt erkannt: Remote wurde ebenfalls geändert."
+  },
+  "sync_pushSuccess": {
+    "message": "Lesezeichen erfolgreich zu GitHub übertragen."
+  },
+  "sync_conflictFileModified": {
+    "message": "Konflikt: Die Datei wurde in der Zwischenzeit geändert."
+  },
+  "sync_pushFailed": {
+    "message": "Push fehlgeschlagen: $1"
+  },
+  "sync_noBookmarksOnGithub": {
+    "message": "Keine Lesezeichen auf GitHub gefunden."
+  },
+  "sync_alreadyUpToDate": {
+    "message": "Lesezeichen sind bereits aktuell."
+  },
+  "sync_pullSuccess": {
+    "message": "Lesezeichen erfolgreich von GitHub geladen."
+  },
+  "sync_pullFailed": {
+    "message": "Pull fehlgeschlagen: $1"
+  },
+  "sync_allInSync": {
+    "message": "Alles synchron. Keine Änderungen."
+  },
+  "sync_conflictBothModified": {
+    "message": "Konflikt: Lokale und Remote-Lesezeichen wurden geändert. Bitte wähle Push oder Pull."
+  },
+  "sync_syncFailed": {
+    "message": "Synchronisierung fehlgeschlagen: $1"
+  },
+
+  "serializer_invalidFormat": {
+    "message": "Ungültiges Lesezeichen-Datenformat."
+  },
+  "serializer_lastSynced": {
+    "message": "Zuletzt synchronisiert: $1"
+  },
+  "serializer_device": {
+    "message": "Gerät: $1"
+  },
+  "serializer_untitled": {
+    "message": "(Ohne Titel)"
+  }
+}
