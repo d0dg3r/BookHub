@@ -10,20 +10,23 @@ Use this file as a reference when filling out the Chrome Developer Dashboard.
 BookHub
 
 ### Summary (max 132 characters)
-Your bookmarks, safe on GitHub — always in sync, available everywhere. Auto-sync, import/export, and conflict detection included.
+Your bookmarks, safe on GitHub — per-file storage, three-way merge sync, works on Chrome & Firefox. No server needed.
 
 ### Detailed Description
 BookHub syncs your browser bookmarks with a GitHub repository — bidirectionally, automatically, and without any external server.
 
 Features:
-• Bidirectional sync between your browser and GitHub
+• Per-file storage: each bookmark is an individual JSON file — human-readable and diff-friendly
+• Three-way merge: automatic conflict-free sync when changes happen on both sides
+• Cross-browser: works with Chrome, Chromium, Brave, Edge, and Firefox
 • Auto-sync on every bookmark change (with 5-second debounce)
-• Periodic pull every 15 minutes to detect remote changes (configurable)
+• Periodic sync every 15 minutes to detect remote changes (configurable)
 • Manual Push, Pull, and full Sync via the popup
-• Conflict detection when both local and remote bookmarks were modified
-• Dual format: bookmarks stored as JSON (for sync) and Markdown (human-readable on GitHub)
-• Import/Export: back up and restore bookmarks or extension settings as JSON files
-• Multilanguage: English and German with manual language selection (more languages coming)
+• Conflict detection when automatic merge is not possible
+• A README.md with all bookmarks is generated in the repo for easy browsing
+• Automation: add bookmarks via Git, CLI, or GitHub Actions
+• Import/Export: back up and restore bookmarks or settings as JSON files
+• Multilanguage: English and German with manual language selection
 • No external server — communicates directly with the GitHub API using your Personal Access Token
 
 How it works:
@@ -32,7 +35,7 @@ How it works:
 3. Configure BookHub with your token and repository
 4. Click "Sync Now" — done!
 
-Your bookmarks are stored as bookmarks.json and bookmarks.md in your repository. The Markdown file gives you a clean, readable overview of all your bookmarks directly on GitHub.
+Each bookmark is stored as an individual JSON file in your repository, organized into folders that mirror your bookmark hierarchy. A README.md gives you a clean overview directly on GitHub. You can even add bookmarks by creating files in the repo — the extension picks them up automatically.
 
 BookHub is fully open source: https://github.com/d0dg3r/BookHub
 

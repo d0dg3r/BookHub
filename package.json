@@ -1,0 +1,11 @@
+{
+  "name": "bookhub",
+  "version": "1.5.0",
+  "private": true,
+  "description": "BookHub – Sync your bookmarks with GitHub",
+  "scripts": {
+    "build": "bash scripts/build.sh",
+    "build:chrome": "bash scripts/build.sh chrome",
+    "build:firefox": "bash scripts/build.sh firefox"
+  }
+}

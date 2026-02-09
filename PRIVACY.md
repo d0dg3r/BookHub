@@ -4,7 +4,7 @@
 
 ## Overview
 
-BookHub is an open-source Chromium extension that syncs your browser bookmarks with a GitHub repository. This privacy policy explains what data BookHub accesses, how it is used, and what is **not** collected.
+BookHub is an open-source browser extension (Chrome and Firefox) that syncs your browser bookmarks with a GitHub repository. This privacy policy explains what data BookHub accesses, how it is used, and what is **not** collected.
 
 ## Data Collected and Used
 
@@ -12,12 +12,12 @@ BookHub is an open-source Chromium extension that syncs your browser bookmarks w
 
 - BookHub reads your browser bookmarks using the Chrome Bookmarks API.
 - Your bookmarks are serialized and sent **directly** to your own GitHub repository via the GitHub REST API.
-- Bookmarks are stored as files (`bookmarks.json` and `bookmarks.md`) in a repository **you own and control**.
+- Bookmarks are stored as individual JSON files (one per bookmark) in a repository **you own and control**.
 
 ### GitHub Personal Access Token
 
 - You provide a GitHub Personal Access Token (PAT) to authenticate with the GitHub API.
-- The token is stored locally in your browser using the Chrome Storage API (`chrome.storage.sync`).
+- The token is encrypted and stored locally in your browser using `chrome.storage.local` (AES-256-GCM encryption at rest).
 - The token is **only** sent to `https://api.github.com` for authentication purposes.
 - The token is **never** sent to any other server or third party.
 

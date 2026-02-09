@@ -1,0 +1,83 @@
+name: Add Bookmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Bookmark URL'
+        required: true
+        type: string
+      title:
+        description: 'Bookmark title (leave empty to use URL)'
+        required: false
+        type: string
+        default: ''
+      folder:
+        description: 'Target folder (toolbar, other, menu, mobile)'
+        required: false
+        type: string
+        default: 'toolbar'
+      path:
+        description: 'Subfolder path within the target folder (e.g. "dev-tools")'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  add-bookmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add bookmark file
+        run: |
+          URL="${{ inputs.url }}"
+          TITLE="${{ inputs.title }}"
+          FOLDER="${{ inputs.folder }}"
+          SUBFOLDER="${{ inputs.path }}"
+
+          # Use URL as title if not provided
+          if [ -z "$TITLE" ]; then
+            TITLE="$URL"
+          fi
+
+          # Build target directory
+          TARGET_DIR="bookmarks/${FOLDER}"
+          if [ -n "$SUBFOLDER" ]; then
+            TARGET_DIR="${TARGET_DIR}/${SUBFOLDER}"
+          fi
+          mkdir -p "$TARGET_DIR"
+
+          # Generate a simple filename from the title
+          SLUG=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//;s/-$//' | cut -c1-40)
+          FILENAME="${SLUG}.json"
+
+          # Avoid overwriting existing files
+          if [ -f "${TARGET_DIR}/${FILENAME}" ]; then
+            FILENAME="${SLUG}-$(date +%s).json"
+          fi
+
+          # Create the bookmark file
+          cat > "${TARGET_DIR}/${FILENAME}" <<BEOF
+          {
+            "title": $(echo "$TITLE" | python3 -c "import sys,json; print(json.dumps(sys.stdin.read().strip()))"),
+            "url": $(echo "$URL" | python3 -c "import sys,json; print(json.dumps(sys.stdin.read().strip()))")
+          }
+          BEOF
+
+          # Clean up indentation from heredoc
+          sed -i 's/^          //' "${TARGET_DIR}/${FILENAME}"
+
+          echo "Created: ${TARGET_DIR}/${FILENAME}"
+          cat "${TARGET_DIR}/${FILENAME}"
+
+      - name: Commit and push
+        run: |
+          git config user.name "BookHub Bot"
+          git config user.email "bookhub-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "Add bookmark: ${{ inputs.title || inputs.url }}"
+          git push

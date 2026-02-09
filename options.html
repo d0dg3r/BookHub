@@ -18,6 +18,7 @@
     <nav class="tab-bar">
       <button class="tab-btn active" data-tab="settings" data-i18n="options_tabSettings">Settings</button>
       <button class="tab-btn" data-tab="import-export" data-i18n="options_tabImportExport">Import / Export</button>
+      <button class="tab-btn" data-tab="automation" data-i18n="options_tabAutomation">Automation</button>
       <button class="tab-btn" data-tab="about" data-i18n="options_tabAbout">About</button>
     </nav>
 
@@ -140,6 +141,47 @@
           </div>
           <span id="import-settings-result" class="ie-result"></span>
         </div>
+      </section>
+
+    </div>
+
+    <!-- ==================== Automation Tab ==================== -->
+    <div class="tab-content" id="tab-automation">
+
+      <section class="card">
+        <h2 data-i18n="options_automationTitle">Add Bookmarks via Git</h2>
+        <p data-i18n="options_automationIntro">You can add bookmarks directly in your Git repository. The extension will pick them up on the next sync and normalize them automatically.</p>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="options_automationFormatTitle">File Format</h2>
+        <p data-i18n="options_automationFormatDesc">Create a JSON file with any name in one of the bookmark folders:</p>
+        <pre class="code-block">{
+  "title": "Example Website",
+  "url": "https://example.com"
+}</pre>
+        <p data-i18n="options_automationFolders">Available root folders in the repository:</p>
+        <table class="info-table">
+          <tr><td><code>bookmarks/toolbar/</code></td><td data-i18n="options_automationFolderToolbar">Bookmarks Bar</td></tr>
+          <tr><td><code>bookmarks/other/</code></td><td data-i18n="options_automationFolderOther">Other Bookmarks</td></tr>
+          <tr><td><code>bookmarks/menu/</code></td><td data-i18n="options_automationFolderMenu">Bookmarks Menu (Firefox)</td></tr>
+          <tr><td><code>bookmarks/mobile/</code></td><td data-i18n="options_automationFolderMobile">Mobile Bookmarks</td></tr>
+        </table>
+        <p data-i18n="options_automationNormalize">On the next sync, the extension will rename the file to its canonical format and add it to the folder's ordering.</p>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="options_automationGithubActionTitle">GitHub Action</h2>
+        <p data-i18n-html="options_automationGithubActionDesc">A GitHub Action workflow is included to add bookmarks via the GitHub UI or CLI. Copy <code>.github/workflows/add-bookmark.yml</code> to your bookmark repository.</p>
+
+        <h3 data-i18n="options_automationGithubActionUsage">Usage via GitHub CLI</h3>
+        <pre class="code-block">gh workflow run add-bookmark.yml \
+  -f url="https://example.com" \
+  -f title="Example Website" \
+  -f folder="toolbar"</pre>
+
+        <h3 data-i18n="options_automationGithubActionWeb">Usage via GitHub Web UI</h3>
+        <p data-i18n="options_automationGithubActionWebDesc">Go to your repository → Actions → "Add Bookmark" → Run workflow. Fill in the URL, title, and target folder.</p>
       </section>
 
     </div>

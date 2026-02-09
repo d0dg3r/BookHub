@@ -6,6 +6,12 @@
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "homepage_url": "https://github.com/d0dg3r/BookHub",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "bookhub@d0dg3r",
+      "strict_min_version": "128.0"
+    }
+  },
   "permissions": [
     "bookmarks",
     "storage",
@@ -15,7 +21,7 @@
     "https://api.github.com/*"
   ],
   "background": {
-    "service_worker": "background.js",
+    "scripts": ["background.js"],
     "type": "module"
   },
   "action": {

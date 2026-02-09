@@ -402,3 +402,40 @@ input[type="checkbox"]:checked + .toggle-slider::after {
 .about-links a:hover {
   text-decoration: underline;
 }
+
+/* ---- Automation Tab ---- */
+
+.code-block {
+  background: var(--bg-tertiary, #f0f0f0);
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 8px 0 16px;
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 16px;
+}
+
+.info-table td {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border-color, #eee);
+  font-size: 14px;
+}
+
+.info-table td:first-child {
+  white-space: nowrap;
+}
+
+.info-table code {
+  background: var(--bg-tertiary, #f0f0f0);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 13px;
+}

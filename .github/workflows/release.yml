@@ -20,24 +20,8 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
 
-      - name: Build extension ZIP
-        run: |
-          mkdir -p build
-          zip -r "build/BookHub-${{ steps.version.outputs.VERSION }}.zip" \
-            manifest.json \
-            background.js \
-            popup.html \
-            popup.js \
-            popup.css \
-            options.html \
-            options.js \
-            options.css \
-            lib/ \
-            icons/ \
-            _locales/ \
-            LICENSE \
-            PRIVACY.md \
-            README.md
+      - name: Build extension packages
+        run: bash scripts/build.sh
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -46,16 +30,25 @@ jobs:
           body: |
             ## BookHub ${{ steps.version.outputs.VERSION }}
 
-            ### Installation
+            ### Chrome / Chromium / Edge / Brave
 
-            1. Download `BookHub-${{ steps.version.outputs.VERSION }}.zip`
+            1. Download `BookHub-${{ steps.version.outputs.VERSION }}-chrome.zip`
             2. Extract the ZIP
-            3. Open `chrome://extensions/` in Chromium/Chrome
+            3. Open `chrome://extensions/`
             4. Enable **Developer mode** (toggle in the top right)
             5. Click **Load unpacked**
             6. Select the extracted folder
 
+            ### Firefox
+
+            1. Download `BookHub-${{ steps.version.outputs.VERSION }}-firefox.zip`
+            2. Open `about:debugging#/runtime/this-firefox`
+            3. Click **Load Temporary Add-on...**
+            4. Select the ZIP file or the `manifest.json` inside the extracted folder
+
             More info: [README](https://github.com/${{ github.repository }}/blob/main/README.md)
-          files: build/BookHub-${{ steps.version.outputs.VERSION }}.zip
+          files: |
+            build/BookHub-${{ steps.version.outputs.VERSION }}-chrome.zip
+            build/BookHub-${{ steps.version.outputs.VERSION }}-firefox.zip
           draft: false
           prerelease: false
