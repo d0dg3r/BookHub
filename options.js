@@ -7,6 +7,7 @@
 import { GitHubAPI } from './lib/github-api.js';
 import { initI18n, applyI18n, getMessage, reloadI18n, getLanguage, SUPPORTED_LANGUAGES } from './lib/i18n.js';
 import { serializeToJson, deserializeFromJson } from './lib/bookmark-serializer.js';
+import { encryptToken, decryptToken, migrateTokenIfNeeded } from './lib/crypto.js';
 
 const STORAGE_KEYS = {
   GITHUB_TOKEN: 'githubToken',
@@ -102,8 +103,10 @@ function populateLanguageDropdown() {
 }
 
 async function loadSettings() {
-  const defaults = {
-    [STORAGE_KEYS.GITHUB_TOKEN]: '',
+  // Migrate legacy plain-text token from sync to encrypted local storage
+  await migrateTokenIfNeeded();
+
+  const syncDefaults = {
     [STORAGE_KEYS.REPO_OWNER]: '',
     [STORAGE_KEYS.REPO_NAME]: '',
     [STORAGE_KEYS.BRANCH]: 'main',
@@ -113,9 +116,13 @@ async function loadSettings() {
     [STORAGE_KEYS.LANGUAGE]: 'auto',
   };
 
-  const settings = await chrome.storage.sync.get(defaults);
+  const settings = await chrome.storage.sync.get(syncDefaults);
 
-  tokenInput.value = settings[STORAGE_KEYS.GITHUB_TOKEN];
+  // Load encrypted token from local storage
+  const localData = await chrome.storage.local.get({ [STORAGE_KEYS.GITHUB_TOKEN]: '' });
+  const token = await decryptToken(localData[STORAGE_KEYS.GITHUB_TOKEN]);
+
+  tokenInput.value = token;
   ownerInput.value = settings[STORAGE_KEYS.REPO_OWNER];
   repoInput.value = settings[STORAGE_KEYS.REPO_NAME];
   branchInput.value = settings[STORAGE_KEYS.BRANCH];
@@ -195,8 +202,7 @@ function showValidation(message, type) {
 // ==============================
 
 saveBtn.addEventListener('click', async () => {
-  const settings = {
-    [STORAGE_KEYS.GITHUB_TOKEN]: tokenInput.value.trim(),
+  const syncSettings = {
     [STORAGE_KEYS.REPO_OWNER]: ownerInput.value.trim(),
     [STORAGE_KEYS.REPO_NAME]: repoInput.value.trim(),
     [STORAGE_KEYS.BRANCH]: branchInput.value.trim() || 'main',
@@ -207,7 +213,12 @@ saveBtn.addEventListener('click', async () => {
   };
 
   try {
-    await chrome.storage.sync.set(settings);
+    // Encrypt token and store in local storage (never in sync)
+    const encryptedToken = await encryptToken(tokenInput.value.trim());
+    await chrome.storage.local.set({ [STORAGE_KEYS.GITHUB_TOKEN]: encryptedToken });
+
+    // Store other settings in sync storage
+    await chrome.storage.sync.set(syncSettings);
     await chrome.runtime.sendMessage({ action: 'settingsChanged' });
 
     showSaveResult(getMessage('options_settingsSaved'), 'success');
@@ -283,11 +294,18 @@ importBookmarksBtn.addEventListener('click', async () => {
 
 /**
  * Export current settings as a JSON file download.
+ * Includes the decrypted token so the export is complete and portable.
  */
 exportSettingsBtn.addEventListener('click', async () => {
   try {
-    const settings = await chrome.storage.sync.get(null);
-    const json = JSON.stringify(settings, null, 2);
+    const syncSettings = await chrome.storage.sync.get(null);
+
+    // Include decrypted token in the export
+    const localData = await chrome.storage.local.get({ [STORAGE_KEYS.GITHUB_TOKEN]: '' });
+    const token = await decryptToken(localData[STORAGE_KEYS.GITHUB_TOKEN]);
+    syncSettings[STORAGE_KEYS.GITHUB_TOKEN] = token;
+
+    const json = JSON.stringify(syncSettings, null, 2);
 
     const date = new Date().toISOString().slice(0, 10);
     downloadFile(`bookhub-settings-${date}.json`, json, 'application/json');
@@ -300,6 +318,7 @@ exportSettingsBtn.addEventListener('click', async () => {
 
 /**
  * Import settings from a JSON file, replacing all current settings.
+ * If the import contains a githubToken, it's encrypted and stored in local storage.
  */
 importSettingsBtn.addEventListener('click', async () => {
   const file = importSettingsFile.files[0];
@@ -312,6 +331,13 @@ importSettingsBtn.addEventListener('click', async () => {
     // Validate it's a plain object
     if (typeof settings !== 'object' || Array.isArray(settings)) {
       throw new Error('Invalid settings format.');
+    }
+
+    // Extract token if present, encrypt it, and store separately in local
+    if (settings[STORAGE_KEYS.GITHUB_TOKEN]) {
+      const encrypted = await encryptToken(settings[STORAGE_KEYS.GITHUB_TOKEN]);
+      await chrome.storage.local.set({ [STORAGE_KEYS.GITHUB_TOKEN]: encrypted });
+      delete settings[STORAGE_KEYS.GITHUB_TOKEN];
     }
 
     await chrome.storage.sync.set(settings);

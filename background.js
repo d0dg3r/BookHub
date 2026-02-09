@@ -6,6 +6,7 @@
 
 import { initI18n } from './lib/i18n.js';
 import { debouncedPush, sync, push, pull, getSyncStatus, getSettings, isConfigured, isSyncInProgress, STORAGE_KEYS } from './lib/sync-engine.js';
+import { migrateTokenIfNeeded } from './lib/crypto.js';
 
 const ALARM_NAME = 'bookmarkSyncPull';
 
@@ -111,16 +112,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 chrome.runtime.onInstalled.addListener(async (details) => {
   console.log('[BookHub] Extension installed/updated:', details.reason);
+  await migrateTokenIfNeeded();
   await initI18n();
   await setupAlarm();
 });
 
 chrome.runtime.onStartup.addListener(async () => {
   console.log('[BookHub] Browser started');
+  await migrateTokenIfNeeded();
   await initI18n();
   await setupAlarm();
 });
 
 // Initial setup
+migrateTokenIfNeeded();
 initI18n();
 setupAlarm();

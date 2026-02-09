@@ -170,7 +170,6 @@ Synced across the user's Chrome instances. Contains:
 
 | Key | Type | Default | Description |
 |---|---|---|---|
-| `githubToken` | `string` | `""` | GitHub Personal Access Token |
 | `repoOwner` | `string` | `""` | Repository owner |
 | `repoName` | `string` | `""` | Repository name |
 | `branch` | `string` | `"main"` | Git branch |
@@ -179,12 +178,15 @@ Synced across the user's Chrome instances. Contains:
 | `syncInterval` | `number` | `15` | Sync interval in minutes |
 | `language` | `string` | `"auto"` | UI language (`"auto"`, `"en"`, `"de"`, ...) |
 
-### `chrome.storage.local` — Sync State
+**Note**: The GitHub token is **not** stored here. It was moved to `chrome.storage.local` (encrypted) in v1.5.0 for security. A migration function (`migrateTokenIfNeeded()`) automatically encrypts and moves any legacy plain-text token found in sync storage.
+
+### `chrome.storage.local` — Sync State + Encrypted Token
 
 Device-local, not synced. Contains:
 
 | Key | Type | Description |
 |---|---|---|
+| `githubToken` | `string` | **Encrypted** GitHub PAT (format: `enc:v1:<iv>:<ciphertext>`) |
 | `deviceId` | `string` (UUID) | Unique identifier for this device |
 | `lastRemoteShaJson` | `string` \| `null` | SHA of `bookmarks.json` on GitHub |
 | `lastRemoteShaMd` | `string` \| `null` | SHA of `bookmarks.md` on GitHub |
@@ -194,6 +196,16 @@ Device-local, not synced. Contains:
 | `hasConflict` | `boolean` | Whether a conflict was detected |
 
 The `lastSyncData` field is critical for **change detection**: it stores the JSON-serialized bookmarks as they were at the last successful sync. Both local and remote states are compared against this snapshot.
+
+### Token Encryption
+
+The GitHub PAT is encrypted at rest using **AES-256-GCM**:
+
+1. A **non-extractable** `CryptoKey` is generated once per device via `crypto.subtle.generateKey()` and stored in IndexedDB (`bookhub-keys`).
+2. On save, the token is encrypted with a random 12-byte IV and stored as `"enc:v1:<base64-iv>:<base64-ciphertext>"` in `chrome.storage.local`.
+3. On load, the token is decrypted transparently. Legacy plain-text tokens (without the `enc:` prefix) are recognized and returned as-is, then migrated on next save.
+
+The token never leaves the device in encrypted or plain form via `chrome.storage.sync`. On a new device, the user must re-enter the token. Settings export/import handles the token by decrypting it for export and re-encrypting on import.
 
 ## GitHub Contents API Interaction
 

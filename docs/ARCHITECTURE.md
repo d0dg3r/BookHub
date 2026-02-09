@@ -134,6 +134,17 @@ Converts between Chrome's bookmark tree and storage formats:
 - `serializeToMarkdown()` — JSON → human-readable Markdown
 - `bookmarksEqual()` — Content comparison ignoring metadata
 
+### `lib/crypto.js` — Token Encryption
+
+Encrypts the GitHub PAT at rest using AES-256-GCM:
+
+- `getOrCreateKey()` — generates a non-extractable CryptoKey and stores it in IndexedDB (`bookhub-keys`)
+- `encryptToken()` — encrypts a plain-text token, returns `"enc:v1:<iv>:<ciphertext>"`
+- `decryptToken()` — decrypts an encrypted token; handles legacy plain-text tokens transparently
+- `migrateTokenIfNeeded()` — migrates plain-text tokens from `chrome.storage.sync` to encrypted `chrome.storage.local`
+
+The token is stored **only in `chrome.storage.local`** (device-local, encrypted) and never in `chrome.storage.sync`.
+
 ### `lib/i18n.js` — Internationalization Helper
 
 Custom i18n system for runtime language switching:
@@ -160,6 +171,7 @@ BookHub/
 │   ├── sync-engine.js            # Core sync logic
 │   ├── github-api.js             # GitHub REST API wrapper
 │   ├── bookmark-serializer.js    # Bookmark ↔ JSON/Markdown conversion
+│   ├── crypto.js                 # Token encryption (AES-256-GCM)
 │   └── i18n.js                   # Internationalization helper
 ├── _locales/
 │   ├── en/messages.json          # English strings
