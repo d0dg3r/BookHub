@@ -1,6 +1,13 @@
-# BookHub
+<p align="center">
+  <img src="icons/icon128.png" alt="BookHub Logo" width="128" height="128">
+</p>
 
-A browser extension that bidirectionally syncs your bookmarks with a GitHub repository. Supports Chrome and Firefox.
+<h1 align="center">BookHub</h1>
+
+<p align="center">
+  A browser extension that bidirectionally syncs your bookmarks with a GitHub repository.<br>
+  Supports Chrome and Firefox.
+</p>
 
 ## Features
 
