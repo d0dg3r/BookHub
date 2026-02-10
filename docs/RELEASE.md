@@ -27,6 +27,7 @@ The version is declared in `manifest.json` → `"version"`.
 | `1.4.0` | Tabbed options page, import/export, GitHub project links, improved description |
 | `1.5.0` | Token encryption at rest (AES-256-GCM), token moved to local storage |
 | `2.0.0` | Per-file bookmark storage, three-way merge sync, Firefox support, automation (GitHub Actions), cross-browser build system |
+| `2.0.1` | Fix: false merge conflicts when two devices edit the same folder concurrently (`_order.json` content-level merge); harden GitHub Action inputs; update Firefox manifest and i18n; update store screenshots |
 
 ## How to Create a New Release
 
