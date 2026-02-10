@@ -33,11 +33,16 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Add bookmark file
+        env:
+          INPUT_URL: ${{ inputs.url }}
+          INPUT_TITLE: ${{ inputs.title }}
+          INPUT_FOLDER: ${{ inputs.folder }}
+          INPUT_PATH: ${{ inputs.path }}
         run: |
-          URL="${{ inputs.url }}"
-          TITLE="${{ inputs.title }}"
-          FOLDER="${{ inputs.folder }}"
-          SUBFOLDER="${{ inputs.path }}"
+          URL="$INPUT_URL"
+          TITLE="$INPUT_TITLE"
+          FOLDER="$INPUT_FOLDER"
+          SUBFOLDER="$INPUT_PATH"
 
           # Use URL as title if not provided
           if [ -z "$TITLE" ]; then
@@ -75,9 +80,13 @@ jobs:
           cat "${TARGET_DIR}/${FILENAME}"
 
       - name: Commit and push
+        env:
+          INPUT_TITLE: ${{ inputs.title }}
+          INPUT_URL: ${{ inputs.url }}
         run: |
           git config user.name "BookHub Bot"
           git config user.email "bookhub-bot@users.noreply.github.com"
           git add -A
-          git commit -m "Add bookmark: ${{ inputs.title || inputs.url }}"
+          COMMIT_LABEL="${INPUT_TITLE:-$INPUT_URL}"
+          git commit -m "Add bookmark: ${COMMIT_LABEL}"
           git push

@@ -166,9 +166,11 @@ All regions
 
 ### Chrome Web Store
 - [ ] `store-assets/icon128-store.png` — 128x128px store icon
-- [ ] `store-assets/screenshot-1.png` — 1280x800px popup screenshot
-- [ ] `store-assets/screenshot-2.png` — 1280x800px settings screenshot
 - [ ] `store-assets/promo-small.png` — 440x280px small promo tile
+- [x] `store-assets/screenshot-chrome-settings.png` — "Settings: GitHub connection, sync options"
+- [x] `store-assets/screenshot-chrome-import-export.png` — "Import/Export: backup and restore bookmarks/settings"
+- [x] `store-assets/screenshot-chrome-automation.png` — "Automation: Git file format, GitHub Action, CLI usage"
+- [x] `store-assets/screenshot-chrome-about.png` — "About: version, links, license"
 
 ### Firefox AMO
 - [x] `store-assets/screenshot-firefox-settings.png` — "Settings: Configure your GitHub connection, Personal Access Token, repository, branch, and sync interval."
