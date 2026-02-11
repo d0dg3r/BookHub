@@ -88,7 +88,7 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
   if (windowId === chrome.windows.WINDOW_ID_NONE || windowId < 0) return;
 
   const settings = await getSettings();
-  if (!settings[STORAGE_KEYS.SYNC_ON_FOCUS] || !isConfigured(settings) || !settings[STORAGE_KEYS.AUTO_SYNC]) return;
+  if (!settings[STORAGE_KEYS.SYNC_ON_FOCUS] || !isConfigured(settings)) return;
 
   const stored = await chrome.storage.local.get(STORAGE_KEYS.LAST_SYNC_TIME);
   const lastSync = stored[STORAGE_KEYS.LAST_SYNC_TIME];
@@ -192,7 +192,7 @@ chrome.runtime.onStartup.addListener(async () => {
   await checkAndMigrate();
 
   const settings = await getSettings();
-  if (settings[STORAGE_KEYS.SYNC_ON_STARTUP] && isConfigured(settings) && settings[STORAGE_KEYS.AUTO_SYNC]) {
+  if (settings[STORAGE_KEYS.SYNC_ON_STARTUP] && isConfigured(settings)) {
     setTimeout(() => {
       sync().then((result) => {
         if (!result.success) {
