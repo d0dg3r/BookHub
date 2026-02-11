@@ -54,6 +54,56 @@ English
 
 ---
 
+## Chrome Web Store (German / Deutsch)
+
+### Name
+BookHub
+
+### Summary (max 132 characters)
+Deine Lesezeichen, sicher auf GitHub — Einzeldatei-Speicherung, Drei-Wege-Merge, funktioniert mit Chrome & Firefox. Kein Server nötig.
+
+### Detailed Description
+BookHub synchronisiert deine Browser-Lesezeichen mit einem GitHub-Repository — bidirektional, automatisch und ohne externen Server.
+
+Funktionen:
+• Einzeldatei-Speicherung: Jedes Lesezeichen ist eine eigene JSON-Datei — lesbar und diff-freundlich
+• Drei-Wege-Merge: automatische konfliktfreie Synchronisierung bei Änderungen auf beiden Seiten
+• Cross-Browser: funktioniert mit Chrome, Chromium, Brave, Edge und Firefox
+• Auto-Sync bei jeder Lesezeichen-Änderung (mit 5 Sekunden Verzögerung)
+• Periodischer Sync alle 15 Minuten zur Erkennung von Remote-Änderungen (konfigurierbar)
+• Manuelles Push, Pull und Sync über das Popup
+• Konflikterkennung, wenn automatisches Mergen nicht möglich ist
+• Eine README.md mit allen Lesezeichen wird im Repository generiert
+• Automatisierung: Lesezeichen über Git, CLI oder GitHub Actions hinzufügen — ohne Browser
+• Import/Export: Lesezeichen oder Einstellungen als JSON-Dateien sichern und wiederherstellen
+• Mehrsprachig: Englisch und Deutsch mit manueller Sprachauswahl
+• Kein externer Server — kommuniziert direkt mit der GitHub API über deinen Personal Access Token
+
+So funktioniert es:
+1. Erstelle ein GitHub-Repository für deine Lesezeichen
+2. Generiere einen Personal Access Token mit dem Scope „repo"
+3. Konfiguriere BookHub mit deinem Token und Repository
+4. Klicke auf „Jetzt synchronisieren" — fertig!
+
+Jedes Lesezeichen wird als einzelne JSON-Datei in deinem Repository gespeichert, organisiert in Ordnern, die deine Lesezeichen-Hierarchie widerspiegeln. Eine README.md bietet dir eine übersichtliche Darstellung direkt auf GitHub.
+
+Automatisierung:
+Du kannst Lesezeichen hinzufügen, ohne den Browser zu öffnen. BookHub enthält einen GitHub Actions Workflow (add-bookmark.yml), mit dem du Lesezeichen über die GitHub-Oberfläche oder die Kommandozeile hinzufügen kannst:
+
+  gh workflow run add-bookmark.yml -f url="https://example.com" -f title="Beispiel" -f folder="toolbar"
+
+Du kannst auch Lesezeichen-Dateien direkt im Repository erstellen — füge einfach eine JSON-Datei mit „title" und „url" in einen Lesezeichen-Ordner ein. Die Extension erkennt neue Dateien beim nächsten Sync automatisch und normalisiert sie in das kanonische Format.
+
+BookHub ist vollständig Open Source: https://github.com/d0dg3r/BookHub
+
+### Category
+Produktivität
+
+### Language
+Deutsch
+
+---
+
 ## Firefox AMO
 
 ### Name
@@ -171,6 +221,14 @@ All regions
 - [x] `store-assets/screenshot-chrome-import-export.png` — "Import/Export: backup and restore bookmarks/settings"
 - [x] `store-assets/screenshot-chrome-automation.png` — "Automation: Git file format, GitHub Action, CLI usage"
 - [x] `store-assets/screenshot-chrome-about.png` — "About: version, links, license"
+- [x] `store-assets/screenshot-chrome-dialog.png` — "Popup: browser toolbar popup dialog"
+
+### Chrome Web Store (German / Deutsch)
+- [x] `store-assets/screenshot-chrome-de-settings.png` — "Einstellungen: GitHub-Verbindung, Sync-Optionen"
+- [x] `store-assets/screenshot-chrome-de-import-export.png` — "Import/Export: Lesezeichen und Einstellungen sichern/wiederherstellen"
+- [x] `store-assets/screenshot-chrome-de-automation.png` — "Automatisierung: Git-Dateiformat, GitHub Action, CLI-Nutzung"
+- [x] `store-assets/screenshot-chrome-de-about.png` — "Über: Version, Links, Lizenz"
+- [x] `store-assets/screenshot-chrome-de-dialog.png` — "Popup: Browser-Toolbar Popup-Dialog"
 
 ### Firefox AMO
 - [x] `store-assets/screenshot-firefox-settings.png` — "Settings: Configure your GitHub connection, Personal Access Token, repository, branch, and sync interval."
