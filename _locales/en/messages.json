@@ -298,11 +298,14 @@
     "message": "License (MIT)"
   },
 
-  "options_tabSettings": {
-    "message": "Settings"
+  "options_tabGitHub": {
+    "message": "GitHub"
   },
-  "options_tabImportExport": {
-    "message": "Import / Export"
+  "options_tabSynchronization": {
+    "message": "Synchronization"
+  },
+  "options_tabBackup": {
+    "message": "Backup"
   },
   "options_tabAbout": {
     "message": "About"

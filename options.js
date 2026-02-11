@@ -41,8 +41,10 @@ const syncOnStartupInput = document.getElementById('sync-on-startup');
 const syncOnFocusInput = document.getElementById('sync-on-focus');
 const validateBtn = document.getElementById('validate-btn');
 const validationResult = document.getElementById('validation-result');
-const saveBtn = document.getElementById('save-btn');
-const saveResult = document.getElementById('save-result');
+const saveGitHubBtn = document.getElementById('save-github-btn');
+const saveSyncBtn = document.getElementById('save-sync-btn');
+const saveGitHubResult = document.getElementById('save-github-result');
+const saveSyncResult = document.getElementById('save-sync-result');
 const languageSelect = document.getElementById('language-select');
 
 // ---- DOM elements: Import/Export Tab ----
@@ -83,6 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initI18n();
   populateLanguageDropdown();
   applyI18n();
+  document.title = `BookHub – ${getMessage('options_subtitle')}`;
   await loadSettings();
 
   // Show version from manifest
@@ -198,7 +201,7 @@ languageSelect.addEventListener('change', async () => {
   populateLanguageDropdown();
   languageSelect.value = newLang;
   applyI18n();
-  document.title = `BookHub – ${getMessage('options_tabSettings')}`;
+  document.title = `BookHub – ${getMessage('options_subtitle')}`;
 });
 
 // ==============================
@@ -257,10 +260,10 @@ function showValidation(message, type) {
 }
 
 // ==============================
-// Settings Tab: Save
+// Save Settings (shared by GitHub and Sync tabs)
 // ==============================
 
-saveBtn.addEventListener('click', async () => {
+async function saveSettings() {
   const syncSettings = {
     [STORAGE_KEYS.REPO_OWNER]: ownerInput.value.trim(),
     [STORAGE_KEYS.REPO_NAME]: repoInput.value.trim(),
@@ -285,16 +288,24 @@ saveBtn.addEventListener('click', async () => {
     await chrome.runtime.sendMessage({ action: 'settingsChanged' });
 
     showSaveResult(getMessage('options_settingsSaved'), 'success');
-    setTimeout(() => { saveResult.textContent = ''; }, 3000);
+    setTimeout(() => {
+      saveGitHubResult.textContent = '';
+      saveSyncResult.textContent = '';
+    }, 3000);
   } catch (err) {
     showSaveResult(getMessage('options_errorSaving', [err.message]), 'error');
   }
-});
+}
 
 function showSaveResult(message, type) {
-  saveResult.textContent = message;
-  saveResult.className = `save-result ${type}`;
+  saveGitHubResult.textContent = message;
+  saveGitHubResult.className = `save-result ${type}`;
+  saveSyncResult.textContent = message;
+  saveSyncResult.className = `save-result ${type}`;
 }
+
+saveGitHubBtn.addEventListener('click', saveSettings);
+saveSyncBtn.addEventListener('click', saveSettings);
 
 // ==============================
 // Import/Export: Bookmarks

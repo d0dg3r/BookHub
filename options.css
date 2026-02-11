@@ -37,16 +37,37 @@ body {
   padding: 40px 24px;
 }
 
-header {
+/* Page Header with Language selector */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 24px;
 }
 
-header h1 {
+.page-header h1 {
   font-size: 28px;
   font-weight: 700;
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-language-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.header-actions select {
+  width: auto;
+  min-width: 140px;
 }
 
 .header-icon {

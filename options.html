@@ -8,31 +8,29 @@
 </head>
 <body>
   <div class="container">
-    <header>
+    <header class="page-header">
       <h1>
         <img src="icons/icon48.png" alt="Icon" class="header-icon">
         BookHub
       </h1>
+      <div class="header-actions">
+        <label for="language-select" class="header-language-label" data-i18n="options_language">Language</label>
+        <select id="language-select">
+          <!-- Populated dynamically -->
+        </select>
+      </div>
     </header>
 
     <nav class="tab-bar">
-      <button class="tab-btn active" data-tab="settings" data-i18n="options_tabSettings">Settings</button>
-      <button class="tab-btn" data-tab="import-export" data-i18n="options_tabImportExport">Import / Export</button>
+      <button class="tab-btn active" data-tab="github" data-i18n="options_tabGitHub">GitHub</button>
+      <button class="tab-btn" data-tab="sync" data-i18n="options_tabSynchronization">Synchronization</button>
+      <button class="tab-btn" data-tab="backup" data-i18n="options_tabBackup">Backup</button>
       <button class="tab-btn" data-tab="automation" data-i18n="options_tabAutomation">Automation</button>
       <button class="tab-btn" data-tab="about" data-i18n="options_tabAbout">About</button>
     </nav>
 
-    <!-- ==================== Settings Tab ==================== -->
-    <div class="tab-content active" id="tab-settings">
-
-      <section class="card">
-        <h2 data-i18n="options_language">Language</h2>
-        <div class="form-group">
-          <select id="language-select">
-            <!-- Populated dynamically -->
-          </select>
-        </div>
-      </section>
+    <!-- ==================== GitHub Tab ==================== -->
+    <div class="tab-content active" id="tab-github">
 
       <section class="card">
         <h2 data-i18n="options_githubConnection">GitHub Connection</h2>
@@ -74,6 +72,16 @@
           <span id="validation-result" class="validation-result"></span>
         </div>
       </section>
+
+      <div class="actions">
+        <button id="save-github-btn" class="btn btn-primary" data-i18n="options_saveSettings">Save Settings</button>
+        <span id="save-github-result" class="save-result"></span>
+      </div>
+
+    </div>
+
+    <!-- ==================== Synchronization Tab ==================== -->
+    <div class="tab-content" id="tab-sync">
 
       <section class="card">
         <h2 data-i18n="options_synchronization">Synchronization</h2>
@@ -128,14 +136,14 @@
       </section>
 
       <div class="actions">
-        <button id="save-btn" class="btn btn-primary" data-i18n="options_saveSettings">Save Settings</button>
-        <span id="save-result" class="save-result"></span>
+        <button id="save-sync-btn" class="btn btn-primary" data-i18n="options_saveSettings">Save Settings</button>
+        <span id="save-sync-result" class="save-result"></span>
       </div>
 
     </div>
 
-    <!-- ==================== Import/Export Tab ==================== -->
-    <div class="tab-content" id="tab-import-export">
+    <!-- ==================== Backup Tab ==================== -->
+    <div class="tab-content" id="tab-backup">
 
       <section class="card">
         <h2 data-i18n="options_bookmarksCard">Bookmarks</h2>
