@@ -69,6 +69,15 @@
   "popup_error": {
     "message": "Error: $1"
   },
+  "popup_nextSyncIn": {
+    "message": "Next sync in $1"
+  },
+  "popup_lastDataChange": {
+    "message": "Last data change: $1"
+  },
+  "popup_lastCommit": {
+    "message": "Last commit:"
+  },
 
   "options_subtitle": {
     "message": "Settings"
@@ -117,6 +126,36 @@
   },
   "options_syncIntervalHint": {
     "message": "How often to check for remote changes."
+  },
+  "options_syncProfile": {
+    "message": "Sync profile"
+  },
+  "options_syncProfileRealtime": {
+    "message": "Real-time (1 min, 2s debounce)"
+  },
+  "options_syncProfileFrequent": {
+    "message": "Frequent (5 min, 3s debounce)"
+  },
+  "options_syncProfileNormal": {
+    "message": "Normal (15 min, 5s debounce)"
+  },
+  "options_syncProfilePowersave": {
+    "message": "Power save (60 min, 10s debounce)"
+  },
+  "options_syncProfileCustom": {
+    "message": "Custom"
+  },
+  "options_debounceDelay": {
+    "message": "Debounce delay (seconds)"
+  },
+  "options_debounceDelayHint": {
+    "message": "Wait time before syncing after bookmark changes."
+  },
+  "options_syncOnStartup": {
+    "message": "Sync on browser start"
+  },
+  "options_syncOnFocus": {
+    "message": "Sync when browser gains focus"
   },
   "options_saveSettings": {
     "message": "Save Settings"
@@ -262,11 +301,14 @@
     "message": "License (MIT)"
   },
 
-  "options_tabSettings": {
-    "message": "Settings"
+  "options_tabGitHub": {
+    "message": "GitHub"
   },
-  "options_tabImportExport": {
-    "message": "Import / Export"
+  "options_tabSynchronization": {
+    "message": "Synchronization"
+  },
+  "options_tabBackup": {
+    "message": "Backup"
   },
   "options_tabAbout": {
     "message": "About"

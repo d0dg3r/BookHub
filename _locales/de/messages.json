@@ -69,6 +69,15 @@
   "popup_error": {
     "message": "Fehler: $1"
   },
+  "popup_nextSyncIn": {
+    "message": "Nächster Sync in $1"
+  },
+  "popup_lastDataChange": {
+    "message": "Letzte Datenänderung: $1"
+  },
+  "popup_lastCommit": {
+    "message": "Letzter Commit:"
+  },
 
   "options_subtitle": {
     "message": "Einstellungen"
@@ -117,6 +126,36 @@
   },
   "options_syncIntervalHint": {
     "message": "Wie oft auf Remote-Änderungen geprüft werden soll."
+  },
+  "options_syncProfile": {
+    "message": "Sync-Profil"
+  },
+  "options_syncProfileRealtime": {
+    "message": "Echtzeit (1 Min, 2s Verzögerung)"
+  },
+  "options_syncProfileFrequent": {
+    "message": "Häufig (5 Min, 3s Verzögerung)"
+  },
+  "options_syncProfileNormal": {
+    "message": "Normal (15 Min, 5s Verzögerung)"
+  },
+  "options_syncProfilePowersave": {
+    "message": "Energiesparmodus (60 Min, 10s Verzögerung)"
+  },
+  "options_syncProfileCustom": {
+    "message": "Benutzerdefiniert"
+  },
+  "options_debounceDelay": {
+    "message": "Verzögerung (Sekunden)"
+  },
+  "options_debounceDelayHint": {
+    "message": "Wartezeit vor dem Sync nach Lesezeichen-Änderungen."
+  },
+  "options_syncOnStartup": {
+    "message": "Sync beim Browser-Start"
+  },
+  "options_syncOnFocus": {
+    "message": "Sync bei Browser-Fokus"
   },
   "options_saveSettings": {
     "message": "Einstellungen speichern"
@@ -262,11 +301,14 @@
     "message": "Lizenz (MIT)"
   },
 
-  "options_tabSettings": {
-    "message": "Einstellungen"
+  "options_tabGitHub": {
+    "message": "GitHub"
   },
-  "options_tabImportExport": {
-    "message": "Import / Export"
+  "options_tabSynchronization": {
+    "message": "Synchronisierung"
+  },
+  "options_tabBackup": {
+    "message": "Backup"
   },
   "options_tabAbout": {
     "message": "Über"

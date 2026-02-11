@@ -23,10 +23,20 @@ jobs:
       - name: Build extension packages
         run: bash scripts/build.sh
 
+      - name: Detect prerelease
+        id: prerelease
+        run: |
+          if [[ "${{ steps.version.outputs.VERSION }}" =~ -(pre|alpha|beta|rc)[.-][0-9]+$ ]]; then
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "prerelease=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           name: "BookHub ${{ steps.version.outputs.VERSION }}"
+          prerelease: ${{ steps.prerelease.outputs.prerelease }}
           body: |
             ## BookHub ${{ steps.version.outputs.VERSION }}
 
@@ -51,4 +61,3 @@ jobs:
             build/BookHub-${{ steps.version.outputs.VERSION }}-chrome.zip
             build/BookHub-${{ steps.version.outputs.VERSION }}-firefox.zip
           draft: false
-          prerelease: false

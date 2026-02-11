@@ -252,6 +252,22 @@ body {
   background: #ccc;
 }
 
+.next-sync-countdown {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  padding: 2px 0 4px 0;
+}
+
+.last-commit-wrap {
+  margin-top: 2px;
+}
+
+.commit-link {
+  font-family: monospace;
+  font-size: inherit;
+  color: var(--color-primary);
+}
+
 /* Footer */
 
 .popup-footer {

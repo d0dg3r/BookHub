@@ -1,5 +1,7 @@
 # BookHub — Release Process
 
+For a detailed list of changes per version, see [CHANGELOG.md](../CHANGELOG.md).
+
 ## Versioning Strategy
 
 BookHub follows **Semantic Versioning** (SemVer):
@@ -14,7 +16,7 @@ MAJOR.MINOR.PATCH
 | **MINOR** | New features (e.g., i18n support, new sync mode) | 1.2.0 → 1.3.0 |
 | **PATCH** | Bug fixes, small improvements | 1.3.0 → 1.3.1 |
 
-The version is declared in `manifest.json` → `"version"`.
+The version is declared in `manifest.json` → `"version"`. It must match `manifest.firefox.json` and `package.json`.
 
 ### Version History
 
@@ -28,12 +30,13 @@ The version is declared in `manifest.json` → `"version"`.
 | `1.5.0` | Token encryption at rest (AES-256-GCM), token moved to local storage |
 | `2.0.0` | Per-file bookmark storage, three-way merge sync, Firefox support, automation (GitHub Actions), cross-browser build system |
 | `2.0.1` | Fix: false merge conflicts when two devices edit the same folder concurrently (`_order.json` content-level merge); harden GitHub Action inputs; update Firefox manifest and i18n; update store screenshots |
+| `2.1.0` | Sync profiles, sync on startup/focus, tabbed options (GitHub/Sync/Backup), commit link in popup, pre-release workflow — see [CHANGELOG.md](../CHANGELOG.md) |
 
 ## How to Create a New Release
 
 ### 1. Update the version
 
-Edit `manifest.json` and increment the `"version"` field:
+Edit `manifest.json`, `manifest.firefox.json`, and `package.json` — set the same `"version"` in all three files:
 
 ```json
 {
@@ -73,6 +76,19 @@ Go to `https://github.com/d0dg3r/BookHub/releases` and verify:
 - The release name is correct (e.g., "BookHub v1.4.0")
 - The ZIP file is attached and downloadable
 - Installation instructions are included in the release notes
+
+## Pre-Releases
+
+Tags with a pre-release suffix (`-pre.N`, `-alpha.N`, `-beta.N`, `-rc.N`) trigger the same build but are published as **Pre-releases** on GitHub — downloadable but not marked as the latest release.
+
+**Example workflow for `v2.1.0-pre.1`:**
+
+1. Set version to `2.1.0-pre.1` in `manifest.json`, `manifest.firefox.json`, and `package.json`
+2. Commit, push to main
+3. Create and push the tag: `git tag v2.1.0-pre.1 && git push origin v2.1.0-pre.1`
+4. The workflow runs and creates a Pre-release with both ZIPs attached
+
+Supported suffixes: `-pre.N`, `-alpha.N`, `-beta.N`, `-rc.N` (e.g. `v2.1.0-rc.3`).
 
 ## GitHub Actions Workflow
 

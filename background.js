@@ -55,7 +55,8 @@ async function triggerAutoSync() {
 
   const settings = await getSettings();
   if (settings[STORAGE_KEYS.AUTO_SYNC] && isConfigured(settings)) {
-    debouncedSync(5000);
+    const delayMs = settings[STORAGE_KEYS.DEBOUNCE_DELAY] ?? 5000;
+    debouncedSync(delayMs);
   }
 }
 
@@ -76,6 +77,35 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
         chrome.action.setBadgeText({ text: '' });
       }
     }
+  }
+});
+
+// ---- Sync on browser focus ----
+
+const FOCUS_SYNC_COOLDOWN_MS = 60000; // 60 seconds
+
+chrome.windows.onFocusChanged.addListener(async (windowId) => {
+  if (windowId === chrome.windows.WINDOW_ID_NONE || windowId < 0) return;
+
+  const settings = await getSettings();
+  if (!settings[STORAGE_KEYS.SYNC_ON_FOCUS] || !isConfigured(settings)) return;
+
+  const stored = await chrome.storage.local.get(STORAGE_KEYS.LAST_SYNC_TIME);
+  const lastSync = stored[STORAGE_KEYS.LAST_SYNC_TIME];
+  if (lastSync) {
+    const elapsed = Date.now() - new Date(lastSync).getTime();
+    if (elapsed < FOCUS_SYNC_COOLDOWN_MS) return;
+  }
+
+  if (isSyncInProgress()) return;
+
+  console.log('[BookHub] Sync on focus triggered');
+  const result = await sync();
+  if (!result.success) {
+    chrome.action.setBadgeText({ text: '!' });
+    chrome.action.setBadgeBackgroundColor({ color: '#F44336' });
+  } else {
+    chrome.action.setBadgeText({ text: '' });
   }
 });
 
@@ -160,6 +190,18 @@ chrome.runtime.onStartup.addListener(async () => {
   await initI18n();
   await setupAlarm();
   await checkAndMigrate();
+
+  const settings = await getSettings();
+  if (settings[STORAGE_KEYS.SYNC_ON_STARTUP] && isConfigured(settings)) {
+    setTimeout(() => {
+      sync().then((result) => {
+        if (!result.success) {
+          chrome.action.setBadgeText({ text: '!' });
+          chrome.action.setBadgeBackgroundColor({ color: '#F44336' });
+        }
+      });
+    }, 2000);
+  }
 });
 
 // Initial setup

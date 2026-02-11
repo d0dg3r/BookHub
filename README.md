@@ -9,13 +9,16 @@
   Supports Chrome and Firefox.
 </p>
 
+See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
+
 ## Features
 
 - **Per-file storage**: Each bookmark is stored as an individual JSON file in your Git repo — human-readable and diff-friendly
 - **Three-way merge**: Automatic conflict-free sync when changes happen on both sides simultaneously
 - **Cross-browser**: Works with Chrome, Chromium, Brave, Edge, and Firefox
-- **Auto-sync**: Automatically syncs on every bookmark change (with 5s debounce)
-- **Periodic sync**: Checks for remote changes every 15 minutes (configurable)
+- **Auto-sync**: Automatically syncs on every bookmark change (configurable debounce)
+- **Sync profiles**: Real-time, frequent, normal, or power-save presets; optional sync on browser start or focus
+- **Periodic sync**: Checks for remote changes at configurable intervals (1–120 minutes)
 - **Manual sync**: Push, Pull, and full Sync via popup buttons
 - **Conflict detection**: Notifies you when automatic merge is not possible
 - **Readable overview**: A `README.md` with all bookmarks is generated in the repo for easy browsing on GitHub
@@ -29,7 +32,7 @@
 ### Chrome / Chromium
 
 1. Go to the [Releases page](https://github.com/d0dg3r/BookHub/releases)
-2. Download `BookHub-vX.X.X-chrome.zip`
+2. Download `BookHub-vX.X.X-chrome.zip` (or a pre-release build like `v2.1.0-pre.1` for testing)
 3. Extract the ZIP to a folder
 4. Open `chrome://extensions/`, enable **Developer mode**
 5. Click **Load unpacked** and select the extracted folder
@@ -37,7 +40,7 @@
 ### Firefox
 
 1. Go to the [Releases page](https://github.com/d0dg3r/BookHub/releases)
-2. Download `BookHub-vX.X.X-firefox.zip`
+2. Download `BookHub-vX.X.X-firefox.zip` (or a pre-release build for testing)
 3. Open `about:debugging#/runtime/this-firefox`
 4. Click **Load Temporary Add-on** and select the ZIP file
 
@@ -50,7 +53,7 @@
 ### Configure the extension
 
 1. Click the extension icon in the toolbar
-2. Go to **Settings**
+2. Go to **Settings** (GitHub tab)
 3. Enter your **Personal Access Token**, **Repository Owner**, and **Repository Name**
 4. Click **Test Connection** to verify
 5. Save the settings
@@ -114,7 +117,10 @@ See the **Automation** tab in the extension settings for details.
 | Branch | `main` | Target branch for sync |
 | File Path | `bookmarks` | Base folder in the repository |
 | Auto-Sync | On | Automatically sync on bookmark changes |
-| Sync Interval | 15 min | How often to check for remote changes |
+| Sync Profile | Normal | Real-time / frequent / normal / power-save / custom |
+| Sync Interval | 15 min | How often to check for remote changes (custom profile) |
+| Sync on Start | Off | Sync when the browser starts |
+| Sync on Focus | Off | Sync when the browser gains focus |
 
 ## Conflict Resolution
 
@@ -133,7 +139,7 @@ If both local and remote bookmarks changed and cannot be merged automatically:
 - **GitHub Git Data API** for atomic multi-file commits (blobs, trees, commits, refs)
 - **Three-way merge**: Base vs Local vs Remote comparison with per-file diff
 - **Role-based folder mapping**: Cross-browser root folder detection (toolbar, other, menu, mobile)
-- **Debounced auto-sync**: Multiple rapid changes bundled into a single sync (5s)
+- **Debounced auto-sync**: Multiple rapid changes bundled into a single sync (configurable, 2–10s by profile)
 - **Token encryption**: AES-256-GCM at rest in `chrome.storage.local`
 - **Custom i18n**: Runtime language switching without page reload
 
