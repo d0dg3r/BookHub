@@ -18,6 +18,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
 - **Cross-browser**: Works with Chrome, Chromium, Brave, Edge, and Firefox
 - **Auto-sync**: Automatically syncs on every bookmark change (configurable debounce)
 - **Sync profiles**: Real-time, frequent, normal, or power-save presets; optional sync on browser start or focus
+- **Theme**: Light, dark, or auto (follow system) in options and popup
 - **Periodic sync**: Checks for remote changes at configurable intervals (1–120 minutes)
 - **Manual sync**: Push, Pull, and full Sync via popup buttons
 - **Conflict detection**: Notifies you when automatic merge is not possible
@@ -32,7 +33,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
 ### Chrome / Chromium
 
 1. Go to the [Releases page](https://github.com/d0dg3r/BookHub/releases)
-2. Download `BookHub-vX.X.X-chrome.zip` (or a pre-release build like `v2.1.0-pre.1` for testing)
+2. Download `BookHub-vX.X.X-chrome.zip` (or a pre-release build for testing)
 3. Extract the ZIP to a folder
 4. Open `chrome://extensions/`, enable **Developer mode**
 5. Click **Load unpacked** and select the extracted folder

@@ -21,6 +21,7 @@ flowchart TB
             GH["github-api.js"]
             BS["bookmark-serializer.js"]
             I18N["i18n.js"]
+            Theme["theme.js"]
             Crypto["crypto.js"]
             Polyfill["browser-polyfill.js"]
         end
@@ -76,12 +77,13 @@ Toolbar popup showing:
 
 ### `options.html` / `options.js` — Settings Page
 
-Full-page settings (opens in tab) with four tabs:
+Full-page settings (opens in tab) with five tabs. Header: language selector and theme (light/dark/auto).
 
-1. **Settings** — Language, GitHub connection, sync options
-2. **Import/Export** — Bookmarks and settings as JSON files
-3. **Automation** — Guide for adding bookmarks via Git, CLI, or GitHub Actions
-4. **About** — Version, links, license
+1. **GitHub** — Token, repository, connection test
+2. **Synchronization** — Sync profile, auto-sync, sync on start/focus, debounce
+3. **Backup** — Export/import bookmarks and settings as JSON (file picker with chosen filename)
+4. **Automation** — Guide for adding bookmarks via Git, CLI, or GitHub Actions
+5. **About** — Version, links, license
 
 ### `lib/sync-engine.js` — Sync Engine
 
@@ -137,6 +139,10 @@ AES-256-GCM encryption for the GitHub PAT at rest. Non-extractable CryptoKey in 
 
 Custom runtime i18n with manual language selection. Loads `_locales/{lang}/messages.json`, translates DOM via `data-i18n` attributes. English fallback.
 
+### `lib/theme.js` — Theme
+
+Light, dark, or auto (system) theme. Stores preference in `chrome.storage.sync`, applies `html.dark` class when dark mode is active. Used by options page and popup.
+
 ### `lib/browser-polyfill.js` — Browser Detection
 
 Minimal shim: `isFirefox`, `isChrome`, `getBrowserName()`.
@@ -156,6 +162,7 @@ BookHub/
 │   ├── bookmark-serializer.js    # Per-file bookmark conversion
 │   ├── crypto.js                 # Token encryption (AES-256-GCM)
 │   ├── i18n.js                   # Internationalization
+│   ├── theme.js                  # Light/dark/auto theme
 │   └── browser-polyfill.js       # Browser detection
 ├── _locales/
 │   ├── en/messages.json

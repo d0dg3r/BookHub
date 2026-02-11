@@ -160,6 +160,18 @@
   "options_saveSettings": {
     "message": "Save Settings"
   },
+  "options_theme": {
+    "message": "Theme"
+  },
+  "options_themeAuto": {
+    "message": "A Auto (system)"
+  },
+  "options_themeLight": {
+    "message": "☀ Light"
+  },
+  "options_themeDark": {
+    "message": "☽ Dark"
+  },
   "options_language": {
     "message": "Language"
   },
@@ -322,11 +334,26 @@
   "options_exportBookmarks": {
     "message": "Export Bookmarks"
   },
+  "options_exportBookmarksDesc": {
+    "message": "Save your bookmarks as a JSON file."
+  },
+  "options_exportBtn": {
+    "message": "Export"
+  },
+  "options_importBtn": {
+    "message": "Import"
+  },
+  "options_chooseFile": {
+    "message": "Choose file"
+  },
   "options_importBookmarks": {
     "message": "Import Bookmarks"
   },
   "options_exportSettings": {
     "message": "Export Settings"
+  },
+  "options_exportSettingsDesc": {
+    "message": "Backup GitHub connection and sync settings."
   },
   "options_importSettings": {
     "message": "Import Settings"

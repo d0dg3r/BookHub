@@ -6,6 +6,7 @@
 
 import { GitHubAPI } from './lib/github-api.js';
 import { initI18n, applyI18n, getMessage, reloadI18n, getLanguage, SUPPORTED_LANGUAGES } from './lib/i18n.js';
+import { initTheme, applyTheme } from './lib/theme.js';
 import { serializeToJson, deserializeFromJson } from './lib/bookmark-serializer.js';
 import { replaceLocalBookmarks, SYNC_PRESETS } from './lib/sync-engine.js';
 import { encryptToken, decryptToken, migrateTokenIfNeeded } from './lib/crypto.js';
@@ -23,6 +24,7 @@ const STORAGE_KEYS = {
   SYNC_PROFILE: 'syncProfile',
   DEBOUNCE_DELAY: 'debounceDelay',
   LANGUAGE: 'language',
+  THEME: 'theme',
 };
 
 // ---- DOM elements: Settings Tab ----
@@ -46,16 +48,21 @@ const saveSyncBtn = document.getElementById('save-sync-btn');
 const saveGitHubResult = document.getElementById('save-github-result');
 const saveSyncResult = document.getElementById('save-sync-result');
 const languageSelect = document.getElementById('language-select');
+const themeButtons = document.querySelectorAll('.theme-icon-btn');
 
 // ---- DOM elements: Import/Export Tab ----
 const exportBookmarksBtn = document.getElementById('export-bookmarks-btn');
 const importBookmarksFile = document.getElementById('import-bookmarks-file');
+const importBookmarksTrigger = document.getElementById('import-bookmarks-trigger');
+const importBookmarksFilename = document.getElementById('import-bookmarks-filename');
 const importBookmarksBtn = document.getElementById('import-bookmarks-btn');
 const exportBookmarksResult = document.getElementById('export-bookmarks-result');
 const importBookmarksResult = document.getElementById('import-bookmarks-result');
 
 const exportSettingsBtn = document.getElementById('export-settings-btn');
 const importSettingsFile = document.getElementById('import-settings-file');
+const importSettingsTrigger = document.getElementById('import-settings-trigger');
+const importSettingsFilename = document.getElementById('import-settings-filename');
 const importSettingsBtn = document.getElementById('import-settings-btn');
 const exportSettingsResult = document.getElementById('export-settings-result');
 const importSettingsResult = document.getElementById('import-settings-result');
@@ -82,6 +89,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 // ==============================
 
 document.addEventListener('DOMContentLoaded', async () => {
+  await initTheme();
   await initI18n();
   populateLanguageDropdown();
   applyI18n();
@@ -155,6 +163,7 @@ async function loadSettings() {
     [STORAGE_KEYS.SYNC_PROFILE]: 'normal',
     [STORAGE_KEYS.DEBOUNCE_DELAY]: 5000,
     [STORAGE_KEYS.LANGUAGE]: 'auto',
+    [STORAGE_KEYS.THEME]: 'auto',
   };
 
   const settings = await chrome.storage.sync.get(syncDefaults);
@@ -180,6 +189,10 @@ async function loadSettings() {
   syncOnStartupInput.checked = settings[STORAGE_KEYS.SYNC_ON_STARTUP] === true;
   syncOnFocusInput.checked = settings[STORAGE_KEYS.SYNC_ON_FOCUS] === true;
   languageSelect.value = settings[STORAGE_KEYS.LANGUAGE];
+  const theme = settings[STORAGE_KEYS.THEME] || 'auto';
+  themeButtons.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === theme);
+  });
 }
 
 syncProfileSelect.addEventListener('change', () => {
@@ -192,6 +205,15 @@ syncProfileSelect.addEventListener('change', () => {
       debounceDelayInput.value = Math.round(preset.debounceMs / 1000);
     }
   }
+});
+
+themeButtons.forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const newTheme = btn.dataset.theme;
+    await chrome.storage.sync.set({ [STORAGE_KEYS.THEME]: newTheme });
+    applyTheme(newTheme);
+    themeButtons.forEach(b => b.classList.toggle('active', b.dataset.theme === newTheme));
+  });
 });
 
 languageSelect.addEventListener('change', async () => {
@@ -311,13 +333,21 @@ saveSyncBtn.addEventListener('click', saveSettings);
 // Import/Export: Bookmarks
 // ==============================
 
-// Enable import button only when a file is selected
+// File picker triggers: click hidden input
+importBookmarksTrigger.addEventListener('click', () => importBookmarksFile.click());
+importSettingsTrigger.addEventListener('click', () => importSettingsFile.click());
+
+// Enable import button and show filename when file is selected
 importBookmarksFile.addEventListener('change', () => {
-  importBookmarksBtn.disabled = !importBookmarksFile.files.length;
+  const hasFile = !!importBookmarksFile.files.length;
+  importBookmarksBtn.disabled = !hasFile;
+  importBookmarksFilename.textContent = hasFile ? importBookmarksFile.files[0].name : '';
 });
 
 importSettingsFile.addEventListener('change', () => {
-  importSettingsBtn.disabled = !importSettingsFile.files.length;
+  const hasFile = !!importSettingsFile.files.length;
+  importSettingsBtn.disabled = !hasFile;
+  importSettingsFilename.textContent = hasFile ? importSettingsFile.files[0].name : '';
 });
 
 /**
@@ -366,6 +396,7 @@ importBookmarksBtn.addEventListener('click', async () => {
     showResult(importBookmarksResult, getMessage('options_importSuccess'), 'success');
     importBookmarksFile.value = '';
     importBookmarksBtn.disabled = true;
+    importBookmarksFilename.textContent = '';
   } catch (err) {
     showResult(importBookmarksResult, getMessage('options_importError', [err.message]), 'error');
   }
@@ -427,6 +458,9 @@ importSettingsBtn.addEventListener('click', async () => {
     await chrome.runtime.sendMessage({ action: 'settingsChanged' });
 
     showResult(importSettingsResult, getMessage('options_importSuccess'), 'success');
+    importSettingsFile.value = '';
+    importSettingsBtn.disabled = true;
+    importSettingsFilename.textContent = '';
 
     // Reload after a short delay so the user sees the success message
     setTimeout(() => { location.reload(); }, 1000);
