@@ -12,6 +12,7 @@ const statusBox = document.getElementById('status-box');
 const statusIcon = document.getElementById('status-icon');
 const statusMessage = document.getElementById('status-message');
 const lastSyncEl = document.getElementById('last-sync');
+const lastChangeEl = document.getElementById('last-change');
 const conflictBox = document.getElementById('conflict-box');
 const autoSyncStatus = document.getElementById('auto-sync-status');
 const autoSyncDot = document.getElementById('auto-sync-dot');
@@ -26,6 +27,10 @@ const forcePushBtn = document.getElementById('force-push-btn');
 const forcePullBtn = document.getElementById('force-pull-btn');
 const openSettingsBtn = document.getElementById('open-settings-btn');
 const settingsLink = document.getElementById('settings-link');
+const nextSyncCountdownEl = document.getElementById('next-sync-countdown');
+
+const ALARM_NAME = 'bookmarkSyncPull';
+let countdownInterval = null;
 
 let isSyncing = false;
 
@@ -69,19 +74,70 @@ function updateUI(status) {
 
   // Last sync time
   if (status.lastSyncTime) {
-    const date = new Date(status.lastSyncTime);
-    lastSyncEl.textContent = getMessage('popup_lastSync', [formatRelativeTime(date)]);
+    const syncDate = new Date(status.lastSyncTime);
+    lastSyncEl.textContent = getMessage('popup_lastSync', [formatRelativeTime(syncDate)]);
+    lastSyncEl.style.display = '';
   } else {
     lastSyncEl.textContent = '';
+    lastSyncEl.style.display = 'none';
+  }
+
+  // Last data change (only when different from last sync)
+  if (status.lastSyncWithChangesTime && status.lastSyncTime &&
+      status.lastSyncWithChangesTime !== status.lastSyncTime) {
+    const changeDate = new Date(status.lastSyncWithChangesTime);
+    lastChangeEl.textContent = getMessage('popup_lastDataChange', [formatRelativeTime(changeDate)]);
+    lastChangeEl.style.display = '';
+  } else {
+    lastChangeEl.style.display = 'none';
   }
 
   // Auto-sync status
   if (status.autoSync) {
     autoSyncDot.className = 'dot dot-active';
     autoSyncText.textContent = getMessage('popup_autoSyncActive');
+    startCountdown();
   } else {
     autoSyncDot.className = 'dot dot-inactive';
     autoSyncText.textContent = getMessage('popup_autoSyncDisabled');
+    stopCountdown();
+    nextSyncCountdownEl.style.display = 'none';
+  }
+}
+
+function formatCountdown(ms) {
+  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+async function updateCountdown() {
+  const alarm = await chrome.alarms.get(ALARM_NAME);
+  if (!alarm || !alarm.scheduledTime) {
+    nextSyncCountdownEl.style.display = 'none';
+    return;
+  }
+  const remaining = alarm.scheduledTime - Date.now();
+  if (remaining <= 0) {
+    nextSyncCountdownEl.textContent = getMessage('popup_nextSyncIn', [formatCountdown(0)]);
+    nextSyncCountdownEl.style.display = 'block';
+    return;
+  }
+  nextSyncCountdownEl.textContent = getMessage('popup_nextSyncIn', [formatCountdown(remaining)]);
+  nextSyncCountdownEl.style.display = 'block';
+}
+
+function startCountdown() {
+  stopCountdown();
+  updateCountdown();
+  countdownInterval = setInterval(updateCountdown, 1000);
+}
+
+function stopCountdown() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
   }
 }
 
@@ -133,9 +189,9 @@ async function handleAction(action) {
     const result = await chrome.runtime.sendMessage({ action });
 
     if (result.success) {
+      await loadStatus();
       setStatus('✅', result.message, 'status-ok');
       conflictBox.style.display = 'none';
-      lastSyncEl.textContent = getMessage('popup_lastSync', [getMessage('popup_justNow')]);
     } else {
       if (result.message.includes('Conflict') || result.message.includes('Konflikt')) {
         setStatus('⚠️', result.message, 'status-warning');

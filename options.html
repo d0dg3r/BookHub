@@ -87,9 +87,43 @@
         </div>
 
         <div class="form-group">
-          <label for="sync-interval" data-i18n="options_syncInterval">Sync Interval (minutes)</label>
-          <input type="number" id="sync-interval" min="1" max="120" value="15">
-          <small data-i18n="options_syncIntervalHint">How often to check for remote changes.</small>
+          <label for="sync-profile" data-i18n="options_syncProfile">Sync profile</label>
+          <select id="sync-profile">
+            <option value="realtime" data-i18n="options_syncProfileRealtime">Real-time</option>
+            <option value="frequent" data-i18n="options_syncProfileFrequent">Frequent</option>
+            <option value="normal" data-i18n="options_syncProfileNormal">Normal</option>
+            <option value="powersave" data-i18n="options_syncProfilePowersave">Power save</option>
+            <option value="custom" data-i18n="options_syncProfileCustom">Custom</option>
+          </select>
+        </div>
+
+        <div id="sync-custom-fields" style="display: none;">
+          <div class="form-group">
+            <label for="sync-interval" data-i18n="options_syncInterval">Sync Interval (minutes)</label>
+            <input type="number" id="sync-interval" min="1" max="120" value="15">
+            <small data-i18n="options_syncIntervalHint">How often to check for remote changes.</small>
+          </div>
+          <div class="form-group">
+            <label for="debounce-delay" data-i18n="options_debounceDelay">Debounce delay (seconds)</label>
+            <input type="number" id="debounce-delay" min="1" max="60" value="5">
+            <small data-i18n="options_debounceDelayHint">Wait time before syncing after bookmark changes.</small>
+          </div>
+        </div>
+
+        <div class="form-group toggle-group">
+          <label for="sync-on-startup" class="toggle-label">
+            <span data-i18n="options_syncOnStartup">Sync on browser start</span>
+            <input type="checkbox" id="sync-on-startup">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="form-group toggle-group">
+          <label for="sync-on-focus" class="toggle-label">
+            <span data-i18n="options_syncOnFocus">Sync when browser gains focus</span>
+            <input type="checkbox" id="sync-on-focus">
+            <span class="toggle-slider"></span>
+          </label>
         </div>
       </section>
 

@@ -7,7 +7,7 @@
 import { GitHubAPI } from './lib/github-api.js';
 import { initI18n, applyI18n, getMessage, reloadI18n, getLanguage, SUPPORTED_LANGUAGES } from './lib/i18n.js';
 import { serializeToJson, deserializeFromJson } from './lib/bookmark-serializer.js';
-import { replaceLocalBookmarks } from './lib/sync-engine.js';
+import { replaceLocalBookmarks, SYNC_PRESETS } from './lib/sync-engine.js';
 import { encryptToken, decryptToken, migrateTokenIfNeeded } from './lib/crypto.js';
 
 const STORAGE_KEYS = {
@@ -18,6 +18,10 @@ const STORAGE_KEYS = {
   FILE_PATH: 'filePath',
   AUTO_SYNC: 'autoSync',
   SYNC_INTERVAL: 'syncInterval',
+  SYNC_ON_STARTUP: 'syncOnStartup',
+  SYNC_ON_FOCUS: 'syncOnFocus',
+  SYNC_PROFILE: 'syncProfile',
+  DEBOUNCE_DELAY: 'debounceDelay',
   LANGUAGE: 'language',
 };
 
@@ -29,7 +33,12 @@ const repoInput = document.getElementById('repo');
 const branchInput = document.getElementById('branch');
 const filepathInput = document.getElementById('filepath');
 const autoSyncInput = document.getElementById('auto-sync');
+const syncProfileSelect = document.getElementById('sync-profile');
+const syncCustomFields = document.getElementById('sync-custom-fields');
 const syncIntervalInput = document.getElementById('sync-interval');
+const debounceDelayInput = document.getElementById('debounce-delay');
+const syncOnStartupInput = document.getElementById('sync-on-startup');
+const syncOnFocusInput = document.getElementById('sync-on-focus');
 const validateBtn = document.getElementById('validate-btn');
 const validationResult = document.getElementById('validation-result');
 const saveBtn = document.getElementById('save-btn');
@@ -87,6 +96,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Settings Tab: Language
 // ==============================
 
+function detectSyncProfile(interval, debounceMs) {
+  const intervalNum = parseInt(interval, 10) || 15;
+  const debounceNum = debounceMs ?? 5000;
+  for (const [key, preset] of Object.entries(SYNC_PRESETS)) {
+    if (key === 'custom') continue;
+    if (preset.interval === intervalNum && preset.debounceMs === debounceNum) return key;
+  }
+  return 'custom';
+}
+
+function getEffectiveSyncInterval() {
+  const profile = syncProfileSelect.value;
+  if (profile === 'custom') return parseInt(syncIntervalInput.value, 10) || 15;
+  const preset = SYNC_PRESETS[profile];
+  return preset?.interval ?? 15;
+}
+
+function getEffectiveDebounceMs() {
+  const profile = syncProfileSelect.value;
+  if (profile === 'custom') return (parseInt(debounceDelayInput.value, 10) || 5) * 1000;
+  const preset = SYNC_PRESETS[profile];
+  return preset?.debounceMs ?? 5000;
+}
+
 function populateLanguageDropdown() {
   languageSelect.innerHTML = '';
 
@@ -114,6 +147,10 @@ async function loadSettings() {
     [STORAGE_KEYS.FILE_PATH]: 'bookmarks',
     [STORAGE_KEYS.AUTO_SYNC]: true,
     [STORAGE_KEYS.SYNC_INTERVAL]: 15,
+    [STORAGE_KEYS.SYNC_ON_STARTUP]: false,
+    [STORAGE_KEYS.SYNC_ON_FOCUS]: false,
+    [STORAGE_KEYS.SYNC_PROFILE]: 'normal',
+    [STORAGE_KEYS.DEBOUNCE_DELAY]: 5000,
     [STORAGE_KEYS.LANGUAGE]: 'auto',
   };
 
@@ -130,8 +167,29 @@ async function loadSettings() {
   filepathInput.value = settings[STORAGE_KEYS.FILE_PATH];
   autoSyncInput.checked = settings[STORAGE_KEYS.AUTO_SYNC];
   syncIntervalInput.value = settings[STORAGE_KEYS.SYNC_INTERVAL];
+  debounceDelayInput.value = Math.round((settings[STORAGE_KEYS.DEBOUNCE_DELAY] ?? 5000) / 1000);
+  const profile = detectSyncProfile(
+    settings[STORAGE_KEYS.SYNC_INTERVAL],
+    settings[STORAGE_KEYS.DEBOUNCE_DELAY]
+  );
+  syncProfileSelect.value = profile;
+  syncCustomFields.style.display = profile === 'custom' ? 'block' : 'none';
+  syncOnStartupInput.checked = settings[STORAGE_KEYS.SYNC_ON_STARTUP] === true;
+  syncOnFocusInput.checked = settings[STORAGE_KEYS.SYNC_ON_FOCUS] === true;
   languageSelect.value = settings[STORAGE_KEYS.LANGUAGE];
 }
+
+syncProfileSelect.addEventListener('change', () => {
+  const isCustom = syncProfileSelect.value === 'custom';
+  syncCustomFields.style.display = isCustom ? 'block' : 'none';
+  if (!isCustom) {
+    const preset = SYNC_PRESETS[syncProfileSelect.value];
+    if (preset) {
+      syncIntervalInput.value = preset.interval;
+      debounceDelayInput.value = Math.round(preset.debounceMs / 1000);
+    }
+  }
+});
 
 languageSelect.addEventListener('change', async () => {
   const newLang = languageSelect.value;
@@ -209,7 +267,11 @@ saveBtn.addEventListener('click', async () => {
     [STORAGE_KEYS.BRANCH]: branchInput.value.trim() || 'main',
     [STORAGE_KEYS.FILE_PATH]: filepathInput.value.trim() || 'bookmarks',
     [STORAGE_KEYS.AUTO_SYNC]: autoSyncInput.checked,
-    [STORAGE_KEYS.SYNC_INTERVAL]: parseInt(syncIntervalInput.value, 10) || 15,
+    [STORAGE_KEYS.SYNC_INTERVAL]: getEffectiveSyncInterval(),
+    [STORAGE_KEYS.DEBOUNCE_DELAY]: getEffectiveDebounceMs(),
+    [STORAGE_KEYS.SYNC_PROFILE]: syncProfileSelect.value,
+    [STORAGE_KEYS.SYNC_ON_STARTUP]: syncOnStartupInput.checked,
+    [STORAGE_KEYS.SYNC_ON_FOCUS]: syncOnFocusInput.checked,
     [STORAGE_KEYS.LANGUAGE]: languageSelect.value,
   };
 

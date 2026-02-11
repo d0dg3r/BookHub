@@ -252,6 +252,12 @@ body {
   background: #ccc;
 }
 
+.next-sync-countdown {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  padding: 2px 0 4px 0;
+}
+
 /* Footer */
 
 .popup-footer {
