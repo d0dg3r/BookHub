@@ -30,7 +30,7 @@ The version is declared in `manifest.json` → `"version"`. It must match `manif
 | `1.5.0` | Token encryption at rest (AES-256-GCM), token moved to local storage |
 | `2.0.0` | Per-file bookmark storage, three-way merge sync, Firefox support, automation (GitHub Actions), cross-browser build system |
 | `2.0.1` | Fix: false merge conflicts when two devices edit the same folder concurrently (`_order.json` content-level merge); harden GitHub Action inputs; update Firefox manifest and i18n; update store screenshots |
-| `2.1.0` | Sync profiles, sync on startup/focus, tabbed options (GitHub/Sync/Backup), commit link in popup, pre-release workflow — see [CHANGELOG.md](../CHANGELOG.md) |
+| `2.1.0` | Sync profiles, sync on startup/focus, theme (light/dark/auto), redesigned Backup tab, tabbed options (GitHub/Sync/Backup), commit link in popup, pre-release workflow — see [CHANGELOG.md](../CHANGELOG.md) |
 
 ## How to Create a New Release
 

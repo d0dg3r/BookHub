@@ -18,6 +18,11 @@
         <select id="language-select">
           <!-- Populated dynamically -->
         </select>
+        <div class="theme-icons" role="group" aria-label="Theme">
+          <button type="button" class="theme-icon-btn" id="theme-auto" data-theme="auto" data-i18n-title="options_themeAuto">A</button>
+          <button type="button" class="theme-icon-btn" id="theme-light" data-theme="light" data-i18n-title="options_themeLight">☀</button>
+          <button type="button" class="theme-icon-btn" id="theme-dark" data-theme="dark" data-i18n-title="options_themeDark">☽</button>
+        </div>
       </div>
     </header>
 
@@ -148,19 +153,24 @@
       <section class="card">
         <h2 data-i18n="options_bookmarksCard">Bookmarks</h2>
 
-        <div class="ie-section">
-          <button id="export-bookmarks-btn" class="btn btn-secondary" data-i18n="options_exportBookmarks">Export Bookmarks</button>
-          <span id="export-bookmarks-result" class="ie-result"></span>
+        <div class="backup-block">
+          <h3 class="backup-block-title" data-i18n="options_exportBookmarks">Export Bookmarks</h3>
+          <p class="backup-block-desc" data-i18n="options_exportBookmarksDesc">Save your bookmarks as a JSON file.</p>
+          <div class="backup-actions">
+            <button id="export-bookmarks-btn" class="btn btn-secondary" data-i18n="options_exportBtn">Export</button>
+            <span id="export-bookmarks-result" class="ie-result"></span>
+          </div>
         </div>
 
-        <hr class="ie-divider">
-
-        <div class="ie-section">
+        <div class="backup-block backup-block-import">
+          <h3 class="backup-block-title" data-i18n="options_importBookmarks">Import Bookmarks</h3>
           <div class="ie-warning" data-i18n="options_importBookmarksWarning">Importing will replace all your current bookmarks. This cannot be undone.</div>
-          <div class="ie-file-row">
-            <input type="file" id="import-bookmarks-file" accept=".json" class="ie-file-input">
-            <button id="import-bookmarks-btn" class="btn btn-secondary" data-i18n="options_importBookmarks" disabled>Import Bookmarks</button>
+          <div class="backup-file-picker">
+            <input type="file" id="import-bookmarks-file" accept=".json" class="backup-file-input">
+            <button type="button" class="btn btn-secondary backup-file-trigger" id="import-bookmarks-trigger" data-i18n="options_chooseFile">Choose file</button>
+            <span class="backup-file-name" id="import-bookmarks-filename"></span>
           </div>
+          <button id="import-bookmarks-btn" class="btn btn-primary" data-i18n="options_importBtn" disabled>Import</button>
           <span id="import-bookmarks-result" class="ie-result"></span>
         </div>
       </section>
@@ -168,19 +178,24 @@
       <section class="card">
         <h2 data-i18n="options_settingsCard">Settings</h2>
 
-        <div class="ie-section">
-          <button id="export-settings-btn" class="btn btn-secondary" data-i18n="options_exportSettings">Export Settings</button>
-          <span id="export-settings-result" class="ie-result"></span>
+        <div class="backup-block">
+          <h3 class="backup-block-title" data-i18n="options_exportSettings">Export Settings</h3>
+          <p class="backup-block-desc" data-i18n="options_exportSettingsDesc">Backup GitHub connection and sync settings.</p>
+          <div class="backup-actions">
+            <button id="export-settings-btn" class="btn btn-secondary" data-i18n="options_exportBtn">Export</button>
+            <span id="export-settings-result" class="ie-result"></span>
+          </div>
         </div>
 
-        <hr class="ie-divider">
-
-        <div class="ie-section">
+        <div class="backup-block backup-block-import">
+          <h3 class="backup-block-title" data-i18n="options_importSettings">Import Settings</h3>
           <div class="ie-warning" data-i18n="options_importSettingsWarning">Importing will replace all current settings. The page will reload afterwards.</div>
-          <div class="ie-file-row">
-            <input type="file" id="import-settings-file" accept=".json" class="ie-file-input">
-            <button id="import-settings-btn" class="btn btn-secondary" data-i18n="options_importSettings" disabled>Import Settings</button>
+          <div class="backup-file-picker">
+            <input type="file" id="import-settings-file" accept=".json" class="backup-file-input">
+            <button type="button" class="btn btn-secondary backup-file-trigger" id="import-settings-trigger" data-i18n="options_chooseFile">Choose file</button>
+            <span class="backup-file-name" id="import-settings-filename"></span>
           </div>
+          <button id="import-settings-btn" class="btn btn-primary" data-i18n="options_importBtn" disabled>Import</button>
           <span id="import-settings-result" class="ie-result"></span>
         </div>
       </section>

@@ -160,6 +160,18 @@
   "options_saveSettings": {
     "message": "Einstellungen speichern"
   },
+  "options_theme": {
+    "message": "Design"
+  },
+  "options_themeAuto": {
+    "message": "A Auto (System)"
+  },
+  "options_themeLight": {
+    "message": "☀ Hell"
+  },
+  "options_themeDark": {
+    "message": "☽ Dunkel"
+  },
   "options_language": {
     "message": "Sprache"
   },
@@ -322,11 +334,26 @@
   "options_exportBookmarks": {
     "message": "Lesezeichen exportieren"
   },
+  "options_exportBookmarksDesc": {
+    "message": "Lesezeichen als JSON-Datei sichern."
+  },
+  "options_exportBtn": {
+    "message": "Export"
+  },
+  "options_importBtn": {
+    "message": "Import"
+  },
+  "options_chooseFile": {
+    "message": "Datei wählen"
+  },
   "options_importBookmarks": {
     "message": "Lesezeichen importieren"
   },
   "options_exportSettings": {
     "message": "Einstellungen exportieren"
+  },
+  "options_exportSettingsDesc": {
+    "message": "GitHub-Verbindung und Sync-Einstellungen sichern."
   },
   "options_importSettings": {
     "message": "Einstellungen importieren"

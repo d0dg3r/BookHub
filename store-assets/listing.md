@@ -19,13 +19,15 @@ Features:
 • Per-file storage: each bookmark is an individual JSON file — human-readable and diff-friendly
 • Three-way merge: automatic conflict-free sync when changes happen on both sides
 • Cross-browser: works with Chrome, Chromium, Brave, Edge, and Firefox
-• Auto-sync on every bookmark change (with 5-second debounce)
-• Periodic sync every 15 minutes to detect remote changes (configurable)
+• Sync profiles: real-time, frequent, normal, or power-save (preset intervals and debounce)
+• Auto-sync on every bookmark change (debounce configurable per profile)
+• Periodic sync to detect remote changes (1–120 minutes, configurable)
 • Manual Push, Pull, and full Sync via the popup
 • Conflict detection when automatic merge is not possible
 • A README.md with all bookmarks is generated in the repo for easy browsing
 • Automation: add bookmarks via Git, CLI, or GitHub Actions — no browser needed
-• Import/Export: back up and restore bookmarks or settings as JSON files
+• Import/Export: back up and restore bookmarks or settings as JSON files (clear UI with file picker)
+• Theme: light, dark, or auto (system) for options and popup
 • Multilanguage: English and German with manual language selection
 • No external server — communicates directly with the GitHub API using your Personal Access Token
 
@@ -69,13 +71,15 @@ Funktionen:
 • Einzeldatei-Speicherung: Jedes Lesezeichen ist eine eigene JSON-Datei — lesbar und diff-freundlich
 • Drei-Wege-Merge: automatische konfliktfreie Synchronisierung bei Änderungen auf beiden Seiten
 • Cross-Browser: funktioniert mit Chrome, Chromium, Brave, Edge und Firefox
-• Auto-Sync bei jeder Lesezeichen-Änderung (mit 5 Sekunden Verzögerung)
-• Periodischer Sync alle 15 Minuten zur Erkennung von Remote-Änderungen (konfigurierbar)
+• Sync-Profile: Echtzeit, häufig, normal oder Stromsparen (vorkonfigurierte Intervalle)
+• Auto-Sync bei jeder Lesezeichen-Änderung (Verzögerung pro Profil konfigurierbar)
+• Periodischer Sync zur Erkennung von Remote-Änderungen (1–120 Min., konfigurierbar)
 • Manuelles Push, Pull und Sync über das Popup
 • Konflikterkennung, wenn automatisches Mergen nicht möglich ist
 • Eine README.md mit allen Lesezeichen wird im Repository generiert
 • Automatisierung: Lesezeichen über Git, CLI oder GitHub Actions hinzufügen — ohne Browser
-• Import/Export: Lesezeichen oder Einstellungen als JSON-Dateien sichern und wiederherstellen
+• Import/Export: Lesezeichen oder Einstellungen als JSON-Dateien sichern und wiederherstellen (klare UI mit Dateiauswahl)
+• Design: Hell, Dunkel oder Auto (System) für Einstellungen und Popup
 • Mehrsprachig: Englisch und Deutsch mit manueller Sprachauswahl
 • Kein externer Server — kommuniziert direkt mit der GitHub API über deinen Personal Access Token
 
@@ -119,13 +123,15 @@ Features:
 • Per-file storage: each bookmark is an individual JSON file — human-readable and diff-friendly
 • Three-way merge: automatic conflict-free sync when changes happen on both sides
 • Full Firefox support including the Bookmarks Menu folder
-• Auto-sync on every bookmark change (with 5-second debounce)
-• Periodic sync every 15 minutes to detect remote changes (configurable)
+• Sync profiles: real-time, frequent, normal, or power-save
+• Auto-sync on every bookmark change (debounce configurable per profile)
+• Periodic sync to detect remote changes (1–120 minutes, configurable)
 • Manual Push, Pull, and full Sync via the popup
 • Conflict detection when automatic merge is not possible
 • A README.md with all bookmarks is generated in the repo for easy browsing
 • Automation: add bookmarks via Git, CLI, or GitHub Actions — no browser needed
-• Import/Export: back up and restore bookmarks or settings as JSON files
+• Import/Export: back up and restore bookmarks or settings as JSON files (clear UI with file picker)
+• Theme: light, dark, or auto (system) for options and popup
 • Multilanguage: English and German with manual language selection
 • No external server — communicates directly with the GitHub API using your Personal Access Token
 
@@ -218,20 +224,20 @@ All regions
 - [ ] `store-assets/icon128-store.png` — 128x128px store icon
 - [ ] `store-assets/promo-small.png` — 440x280px small promo tile
 - [x] `store-assets/screenshot-chrome-settings.png` — "Settings: GitHub connection, sync options"
-- [x] `store-assets/screenshot-chrome-import-export.png` — "Import/Export: backup and restore bookmarks/settings"
+- [x] `store-assets/screenshot-chrome-import-export.png` — "Backup: export/import bookmarks and settings"
 - [x] `store-assets/screenshot-chrome-automation.png` — "Automation: Git file format, GitHub Action, CLI usage"
 - [x] `store-assets/screenshot-chrome-about.png` — "About: version, links, license"
 - [x] `store-assets/screenshot-chrome-dialog.png` — "Popup: browser toolbar popup dialog"
 
 ### Chrome Web Store (German / Deutsch)
 - [x] `store-assets/screenshot-chrome-de-settings.png` — "Einstellungen: GitHub-Verbindung, Sync-Optionen"
-- [x] `store-assets/screenshot-chrome-de-import-export.png` — "Import/Export: Lesezeichen und Einstellungen sichern/wiederherstellen"
+- [x] `store-assets/screenshot-chrome-de-import-export.png` — "Backup: Lesezeichen und Einstellungen exportieren/importieren"
 - [x] `store-assets/screenshot-chrome-de-automation.png` — "Automatisierung: Git-Dateiformat, GitHub Action, CLI-Nutzung"
 - [x] `store-assets/screenshot-chrome-de-about.png` — "Über: Version, Links, Lizenz"
 - [x] `store-assets/screenshot-chrome-de-dialog.png` — "Popup: Browser-Toolbar Popup-Dialog"
 
 ### Firefox AMO
 - [x] `store-assets/screenshot-firefox-settings.png` — "Settings: Configure your GitHub connection, Personal Access Token, repository, branch, and sync interval."
-- [x] `store-assets/screenshot-firefox-import-export.png` — "Import/Export: Back up and restore your bookmarks or extension settings as JSON files."
+- [x] `store-assets/screenshot-firefox-import-export.png` — "Backup: Export/import bookmarks and extension settings as JSON files."
 - [x] `store-assets/screenshot-firefox-automation.png` — "Automation: Add bookmarks via Git, CLI, or GitHub Actions. Includes file format reference and CLI examples."
 - [x] `store-assets/screenshot-firefox-about.png` — "About: Version info, links to repository, documentation, bug tracker, and privacy policy."

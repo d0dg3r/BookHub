@@ -4,6 +4,7 @@
  */
 
 import { initI18n, applyI18n, getMessage } from './lib/i18n.js';
+import { initTheme } from './lib/theme.js';
 
 // DOM elements
 const notConfiguredEl = document.getElementById('not-configured');
@@ -36,6 +37,7 @@ let isSyncing = false;
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', async () => {
+  await initTheme();
   await initI18n();
   applyI18n();
   await loadStatus();
