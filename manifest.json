@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "short_name": "BookHub",
-  "version": "2.0.1",
+  "version": "2.1.0-pre.1",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "homepage_url": "https://github.com/d0dg3r/BookHub",
