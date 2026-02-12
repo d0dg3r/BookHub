@@ -1,11 +1,18 @@
 # Changelog
 
-All notable changes to BookHub are documented in this file.
+All notable changes to GitSyncMarks are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.1.1] - TBD
+
+### Changed
+
+- **Project renamed**: BookHub → GitSyncMarks
+- **Firefox**: New extension ID `gitsyncmarks@d0dg3r` — existing Firefox users must uninstall the old extension and install the new one
 
 ## [2.1.0] - 2025-02-10
 
@@ -90,13 +97,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release: bookmark sync with GitHub
 
-[Unreleased]: https://github.com/d0dg3r/BookHub/compare/v2.1.0...HEAD
-[2.1.0]: https://github.com/d0dg3r/BookHub/compare/v2.0.1...v2.1.0
-[2.0.1]: https://github.com/d0dg3r/BookHub/compare/v2.0.0...v2.0.1
-[2.0.0]: https://github.com/d0dg3r/BookHub/compare/v1.5.0...v2.0.0
-[1.5.0]: https://github.com/d0dg3r/BookHub/compare/v1.4.0...v1.5.0
-[1.4.0]: https://github.com/d0dg3r/BookHub/compare/v1.3.0...v1.4.0
-[1.3.0]: https://github.com/d0dg3r/BookHub/compare/v1.2.0...v1.3.0
-[1.2.0]: https://github.com/d0dg3r/BookHub/compare/v1.1.0...v1.2.0
-[1.1.0]: https://github.com/d0dg3r/BookHub/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/d0dg3r/BookHub/releases/tag/v1.0.0
+[Unreleased]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.1.1...HEAD
+[2.1.1]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.1.0...v2.1.1
+[2.1.0]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.0.1...v2.1.0
+[2.0.1]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.0.0...v2.0.1
+[2.0.0]: https://github.com/d0dg3r/GitSyncMarks/compare/v1.5.0...v2.0.0
+[1.5.0]: https://github.com/d0dg3r/GitSyncMarks/compare/v1.4.0...v1.5.0
+[1.4.0]: https://github.com/d0dg3r/GitSyncMarks/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/d0dg3r/GitSyncMarks/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/d0dg3r/GitSyncMarks/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/d0dg3r/GitSyncMarks/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/d0dg3r/GitSyncMarks/releases/tag/v1.0.0

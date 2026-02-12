@@ -1,4 +1,4 @@
-# Store Listings — BookHub
+# Store Listings — GitSyncMarks
 
 Reference file for both the **Chrome Web Store** and **Firefox Add-ons (AMO)** listings.
 
@@ -7,13 +7,13 @@ Reference file for both the **Chrome Web Store** and **Firefox Add-ons (AMO)** l
 ## Chrome Web Store
 
 ### Name
-BookHub
+GitSyncMarks
 
 ### Summary (max 132 characters)
 Your bookmarks, safe on GitHub — per-file storage, three-way merge sync, works on Chrome & Firefox. No server needed.
 
 ### Detailed Description
-BookHub syncs your browser bookmarks with a GitHub repository — bidirectionally, automatically, and without any external server.
+GitSyncMarks syncs your browser bookmarks with a GitHub repository — bidirectionally, automatically, and without any external server.
 
 Features:
 • Per-file storage: each bookmark is an individual JSON file — human-readable and diff-friendly
@@ -34,19 +34,19 @@ Features:
 How it works:
 1. Create a GitHub repository for your bookmarks
 2. Generate a Personal Access Token with the "repo" scope
-3. Configure BookHub with your token and repository
+3. Configure GitSyncMarks with your token and repository
 4. Click "Sync Now" — done!
 
 Each bookmark is stored as an individual JSON file in your repository, organized into folders that mirror your bookmark hierarchy. A README.md gives you a clean overview directly on GitHub.
 
 Automation:
-You can add bookmarks without even opening the browser. BookHub includes a GitHub Actions workflow (add-bookmark.yml) that lets you add bookmarks via the GitHub web UI or the command line:
+You can add bookmarks without even opening the browser. GitSyncMarks includes a GitHub Actions workflow (add-bookmark.yml) that lets you add bookmarks via the GitHub web UI or the command line:
 
   gh workflow run add-bookmark.yml -f url="https://example.com" -f title="Example" -f folder="toolbar"
 
 You can also create bookmark files directly in the repository — just add a JSON file with "title" and "url" to any bookmark folder. The extension detects new files automatically on the next sync and normalizes them into its canonical format.
 
-BookHub is fully open source: https://github.com/d0dg3r/BookHub
+GitSyncMarks is fully open source: https://github.com/d0dg3r/GitSyncMarks
 
 ### Category
 Productivity
@@ -59,13 +59,13 @@ English
 ## Chrome Web Store (German / Deutsch)
 
 ### Name
-BookHub
+GitSyncMarks
 
 ### Summary (max 132 characters)
 Deine Lesezeichen, sicher auf GitHub — Einzeldatei-Speicherung, Drei-Wege-Merge, funktioniert mit Chrome & Firefox. Kein Server nötig.
 
 ### Detailed Description
-BookHub synchronisiert deine Browser-Lesezeichen mit einem GitHub-Repository — bidirektional, automatisch und ohne externen Server.
+GitSyncMarks synchronisiert deine Browser-Lesezeichen mit einem GitHub-Repository — bidirektional, automatisch und ohne externen Server.
 
 Funktionen:
 • Einzeldatei-Speicherung: Jedes Lesezeichen ist eine eigene JSON-Datei — lesbar und diff-freundlich
@@ -86,19 +86,19 @@ Funktionen:
 So funktioniert es:
 1. Erstelle ein GitHub-Repository für deine Lesezeichen
 2. Generiere einen Personal Access Token mit dem Scope „repo"
-3. Konfiguriere BookHub mit deinem Token und Repository
+3. Konfiguriere GitSyncMarks mit deinem Token und Repository
 4. Klicke auf „Jetzt synchronisieren" — fertig!
 
 Jedes Lesezeichen wird als einzelne JSON-Datei in deinem Repository gespeichert, organisiert in Ordnern, die deine Lesezeichen-Hierarchie widerspiegeln. Eine README.md bietet dir eine übersichtliche Darstellung direkt auf GitHub.
 
 Automatisierung:
-Du kannst Lesezeichen hinzufügen, ohne den Browser zu öffnen. BookHub enthält einen GitHub Actions Workflow (add-bookmark.yml), mit dem du Lesezeichen über die GitHub-Oberfläche oder die Kommandozeile hinzufügen kannst:
+Du kannst Lesezeichen hinzufügen, ohne den Browser zu öffnen. GitSyncMarks enthält einen GitHub Actions Workflow (add-bookmark.yml), mit dem du Lesezeichen über die GitHub-Oberfläche oder die Kommandozeile hinzufügen kannst:
 
   gh workflow run add-bookmark.yml -f url="https://example.com" -f title="Beispiel" -f folder="toolbar"
 
 Du kannst auch Lesezeichen-Dateien direkt im Repository erstellen — füge einfach eine JSON-Datei mit „title" und „url" in einen Lesezeichen-Ordner ein. Die Extension erkennt neue Dateien beim nächsten Sync automatisch und normalisiert sie in das kanonische Format.
 
-BookHub ist vollständig Open Source: https://github.com/d0dg3r/BookHub
+GitSyncMarks ist vollständig Open Source: https://github.com/d0dg3r/GitSyncMarks
 
 ### Category
 Produktivität
@@ -111,13 +111,13 @@ Deutsch
 ## Firefox AMO
 
 ### Name
-BookHub
+GitSyncMarks
 
 ### Summary (max 250 characters)
 Sync your bookmarks with GitHub — per-file storage, three-way merge, auto-sync. Add bookmarks via Git, CLI, or GitHub Actions. Open source, no server needed.
 
 ### Detailed Description
-BookHub syncs your Firefox bookmarks with a GitHub repository — bidirectionally, automatically, and without any external server.
+GitSyncMarks syncs your Firefox bookmarks with a GitHub repository — bidirectionally, automatically, and without any external server.
 
 Features:
 • Per-file storage: each bookmark is an individual JSON file — human-readable and diff-friendly
@@ -138,19 +138,19 @@ Features:
 How it works:
 1. Create a GitHub repository for your bookmarks
 2. Generate a Personal Access Token with the "repo" scope
-3. Configure BookHub with your token and repository
+3. Configure GitSyncMarks with your token and repository
 4. Click "Sync Now" — done!
 
 Each bookmark is stored as an individual JSON file in your repository, organized into folders that mirror your Firefox bookmark hierarchy (Bookmarks Toolbar, Bookmarks Menu, Other Bookmarks, Mobile Bookmarks). A README.md gives you a clean overview directly on GitHub.
 
 Automation:
-You can add bookmarks without even opening Firefox. BookHub includes a GitHub Actions workflow (add-bookmark.yml) that lets you add bookmarks via the GitHub web UI or the command line:
+You can add bookmarks without even opening Firefox. GitSyncMarks includes a GitHub Actions workflow (add-bookmark.yml) that lets you add bookmarks via the GitHub web UI or the command line:
 
   gh workflow run add-bookmark.yml -f url="https://example.com" -f title="Example" -f folder="toolbar"
 
 You can also create bookmark files directly in the repository — just add a JSON file with "title" and "url" to any bookmark folder. The extension detects new files automatically on the next sync.
 
-BookHub is fully open source: https://github.com/d0dg3r/BookHub
+GitSyncMarks is fully open source: https://github.com/d0dg3r/GitSyncMarks
 
 ### Categories
 Bookmarks
@@ -166,7 +166,7 @@ bookmarks, sync, github, backup, automation
 Sync browser bookmarks with a GitHub repository.
 
 ### Privacy Policy URL
-https://github.com/d0dg3r/BookHub/blob/main/PRIVACY.md
+https://github.com/d0dg3r/GitSyncMarks/blob/main/PRIVACY.md
 
 ### Permission Justifications
 
@@ -223,17 +223,17 @@ All regions
 ### Chrome Web Store
 - [ ] `store-assets/icon128-store.png` — 128x128px store icon
 - [ ] `store-assets/promo-small.png` — 440x280px small promo tile
-- [x] `store-assets/screenshot-chrome-settings.png` — "Settings: GitHub connection, sync options"
+- [x] `store-assets/screenshot-chrome-github.png` — "GitHub: connection, token, repository"
+- [x] `store-assets/screenshot-chrome-settings.png` — "Synchronization: sync profile, auto-sync"
 - [x] `store-assets/screenshot-chrome-import-export.png` — "Backup: export/import bookmarks and settings"
 - [x] `store-assets/screenshot-chrome-automation.png` — "Automation: Git file format, GitHub Action, CLI usage"
-- [x] `store-assets/screenshot-chrome-about.png` — "About: version, links, license"
 - [x] `store-assets/screenshot-chrome-dialog.png` — "Popup: browser toolbar popup dialog"
 
 ### Chrome Web Store (German / Deutsch)
-- [x] `store-assets/screenshot-chrome-de-settings.png` — "Einstellungen: GitHub-Verbindung, Sync-Optionen"
+- [x] `store-assets/screenshot-chrome-de-github.png` — "GitHub: Verbindung, Token, Repository"
+- [x] `store-assets/screenshot-chrome-de-settings.png` — "Synchronisierung: Sync-Profil, Auto-Sync"
 - [x] `store-assets/screenshot-chrome-de-import-export.png` — "Backup: Lesezeichen und Einstellungen exportieren/importieren"
 - [x] `store-assets/screenshot-chrome-de-automation.png` — "Automatisierung: Git-Dateiformat, GitHub Action, CLI-Nutzung"
-- [x] `store-assets/screenshot-chrome-de-about.png` — "Über: Version, Links, Lizenz"
 - [x] `store-assets/screenshot-chrome-de-dialog.png` — "Popup: Browser-Toolbar Popup-Dialog"
 
 ### Firefox AMO

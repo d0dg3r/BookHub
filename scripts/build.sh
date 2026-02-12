@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Build script for BookHub browser extension.
+# Build script for GitSyncMarks browser extension.
 # Creates distributable ZIP packages for Chrome and Firefox.
 #
 # Usage:
@@ -71,7 +71,7 @@ copy_shared() {
 
 build_chrome() {
   local chrome_dir="$BUILD_DIR/chrome"
-  local zip_name="BookHub-v${VERSION}-chrome.zip"
+  local zip_name="GitSyncMarks-v${VERSION}-chrome.zip"
 
   log "Building Chrome extension v${VERSION}..."
 
@@ -94,7 +94,7 @@ build_chrome() {
 
 build_firefox() {
   local firefox_dir="$BUILD_DIR/firefox"
-  local zip_name="BookHub-v${VERSION}-firefox.zip"
+  local zip_name="GitSyncMarks-v${VERSION}-firefox.zip"
 
   log "Building Firefox extension v${VERSION}..."
 

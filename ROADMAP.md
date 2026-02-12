@@ -1,6 +1,6 @@
 # Roadmap
 
-Planned features and ideas for BookHub. See [CHANGELOG.md](CHANGELOG.md) for released changes.
+Planned features and ideas for GitSyncMarks. See [CHANGELOG.md](CHANGELOG.md) for released changes.
 
 Contributions and ideas welcome — open an issue or pull request.
 

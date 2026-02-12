@@ -1,8 +1,8 @@
-# BookHub — Data Formats and Data Flow
+# GitSyncMarks — Data Formats and Data Flow
 
 ## Overview
 
-BookHub stores each bookmark as an individual JSON file in a Git repository. The directory structure mirrors the bookmark folder hierarchy. Synchronization uses the GitHub Git Data API for atomic multi-file commits.
+GitSyncMarks stores each bookmark as an individual JSON file in a Git repository. The directory structure mirrors the bookmark folder hierarchy. Synchronization uses the GitHub Git Data API for atomic multi-file commits.
 
 ## Data Flow: Push
 

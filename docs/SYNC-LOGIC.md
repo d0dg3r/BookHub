@@ -1,8 +1,8 @@
-# BookHub — Sync Logic
+# GitSyncMarks — Sync Logic
 
 ## Overview
 
-BookHub implements **bidirectional bookmark synchronization** using a **three-way merge** algorithm. Each bookmark is stored as an individual JSON file. The sync engine compares three states — base (last sync), local (browser), and remote (GitHub) — to automatically merge non-conflicting changes.
+GitSyncMarks implements **bidirectional bookmark synchronization** using a **three-way merge** algorithm. Each bookmark is stored as an individual JSON file. The sync engine compares three states — base (last sync), local (browser), and remote (GitHub) — to automatically merge non-conflicting changes.
 
 ## Core Concept: Three-Way Merge
 

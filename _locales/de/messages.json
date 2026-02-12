@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "BookHub"
+    "message": "GitSyncMarks"
   },
   "extDescription": {
     "message": "Deine Lesezeichen, sicher auf GitHub – immer synchron, überall verfügbar. Auto-Sync, Import/Export und Konflikterkennung inklusive."
@@ -92,7 +92,7 @@
     "message": "Token anzeigen/verbergen"
   },
   "options_tokenHint": {
-    "message": "Benötigt den <code>repo</code>-Scope. <a href=\"https://github.com/settings/tokens/new?scopes=repo&description=BookHub\" target=\"_blank\" rel=\"noopener\">Token erstellen</a>"
+    "message": "Benötigt den <code>repo</code>-Scope. <a href=\"https://github.com/settings/tokens/new?scopes=repo&description=GitSyncMarks\" target=\"_blank\" rel=\"noopener\">Token erstellen</a>"
   },
   "options_repoOwner": {
     "message": "Repository-Besitzer"

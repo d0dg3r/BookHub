@@ -26,22 +26,22 @@ const ALARM_NAME = 'bookmarkSyncPull';
 // ---- Bookmark event listeners ----
 
 chrome.bookmarks.onCreated.addListener((id, bookmark) => {
-  console.log('[BookHub] Bookmark created:', bookmark.title);
+  console.log('[GitSyncMarks] Bookmark created:', bookmark.title);
   triggerAutoSync();
 });
 
 chrome.bookmarks.onRemoved.addListener((id, removeInfo) => {
-  console.log('[BookHub] Bookmark removed:', id);
+  console.log('[GitSyncMarks] Bookmark removed:', id);
   triggerAutoSync();
 });
 
 chrome.bookmarks.onChanged.addListener((id, changeInfo) => {
-  console.log('[BookHub] Bookmark changed:', id, changeInfo);
+  console.log('[GitSyncMarks] Bookmark changed:', id, changeInfo);
   triggerAutoSync();
 });
 
 chrome.bookmarks.onMoved.addListener((id, moveInfo) => {
-  console.log('[BookHub] Bookmark moved:', id);
+  console.log('[GitSyncMarks] Bookmark moved:', id);
   triggerAutoSync();
 });
 
@@ -64,11 +64,11 @@ async function triggerAutoSync() {
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === ALARM_NAME) {
-    console.log('[BookHub] Periodic sync triggered');
+    console.log('[GitSyncMarks] Periodic sync triggered');
     const settings = await getSettings();
     if (isConfigured(settings) && settings[STORAGE_KEYS.AUTO_SYNC]) {
       const result = await sync();
-      console.log('[BookHub] Periodic sync result:', result.message);
+      console.log('[GitSyncMarks] Periodic sync result:', result.message);
 
       if (!result.success) {
         chrome.action.setBadgeText({ text: '!' });
@@ -99,7 +99,7 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
 
   if (isSyncInProgress()) return;
 
-  console.log('[BookHub] Sync on focus triggered');
+  console.log('[GitSyncMarks] Sync on focus triggered');
   const result = await sync();
   if (!result.success) {
     chrome.action.setBadgeText({ text: '!' });
@@ -117,7 +117,7 @@ async function setupAlarm() {
 
   if (settings[STORAGE_KEYS.AUTO_SYNC] && isConfigured(settings)) {
     chrome.alarms.create(ALARM_NAME, { periodInMinutes: interval });
-    console.log(`[BookHub] Periodic sync alarm set: every ${interval} minutes`);
+    console.log(`[GitSyncMarks] Periodic sync alarm set: every ${interval} minutes`);
   }
 }
 
@@ -142,10 +142,10 @@ async function checkAndMigrate() {
 
     const migrated = await migrateFromLegacyFormat(api, basePath);
     if (migrated) {
-      console.log('[BookHub] Successfully migrated to per-file format');
+      console.log('[GitSyncMarks] Successfully migrated to per-file format');
     }
   } catch (err) {
-    console.warn('[BookHub] Migration check failed:', err);
+    console.warn('[GitSyncMarks] Migration check failed:', err);
   }
 }
 
@@ -177,7 +177,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // ---- Extension install/startup ----
 
 chrome.runtime.onInstalled.addListener(async (details) => {
-  console.log('[BookHub] Extension installed/updated:', details.reason);
+  console.log('[GitSyncMarks] Extension installed/updated:', details.reason);
   await migrateTokenIfNeeded();
   await initI18n();
   await setupAlarm();
@@ -185,7 +185,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 });
 
 chrome.runtime.onStartup.addListener(async () => {
-  console.log('[BookHub] Browser started');
+  console.log('[GitSyncMarks] Browser started');
   await migrateTokenIfNeeded();
   await initI18n();
   await setupAlarm();

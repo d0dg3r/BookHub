@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extName__",
-  "short_name": "BookHub",
-  "version": "2.1.0",
+  "short_name": "GitSyncMarks",
+  "version": "2.1.1",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
-  "homepage_url": "https://github.com/d0dg3r/BookHub",
+  "homepage_url": "https://github.com/d0dg3r/GitSyncMarks",
   "permissions": [
     "bookmarks",
     "storage",

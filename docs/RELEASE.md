@@ -1,10 +1,10 @@
-# BookHub — Release Process
+# GitSyncMarks — Release Process
 
 For a detailed list of changes per version, see [CHANGELOG.md](../CHANGELOG.md).
 
 ## Versioning Strategy
 
-BookHub follows **Semantic Versioning** (SemVer):
+GitSyncMarks follows **Semantic Versioning** (SemVer):
 
 ```
 MAJOR.MINOR.PATCH
@@ -65,15 +65,15 @@ This triggers the **GitHub Actions workflow** automatically.
 
 The GitHub Actions workflow will:
 1. Check out the code
-2. Create a ZIP file (`BookHub-v1.4.0.zip`) containing all extension files
+2. Create a ZIP file (`GitSyncMarks-v1.4.0.zip`) containing all extension files
 3. Create a GitHub Release with the ZIP as a download asset
 
-You can monitor progress at: `https://github.com/d0dg3r/BookHub/actions`
+You can monitor progress at: `https://github.com/d0dg3r/GitSyncMarks/actions`
 
 ### 5. Verify the release
 
-Go to `https://github.com/d0dg3r/BookHub/releases` and verify:
-- The release name is correct (e.g., "BookHub v1.4.0")
+Go to `https://github.com/d0dg3r/GitSyncMarks/releases` and verify:
+- The release name is correct (e.g., "GitSyncMarks v1.4.0")
 - The ZIP file is attached and downloadable
 - Installation instructions are included in the release notes
 
@@ -113,8 +113,8 @@ The build script (`scripts/build.sh`) generates **separate packages** for Chrome
 flowchart LR
     Tag["Push tag v*"] --> Checkout["Checkout code"]
     Checkout --> Build["Run build.sh"]
-    Build --> ChromeZIP["BookHub-vX.Y.Z-chrome.zip"]
-    Build --> FirefoxZIP["BookHub-vX.Y.Z-firefox.zip"]
+    Build --> ChromeZIP["GitSyncMarks-vX.Y.Z-chrome.zip"]
+    Build --> FirefoxZIP["GitSyncMarks-vX.Y.Z-firefox.zip"]
     ChromeZIP --> Release["Create GitHub Release\nwith both ZIPs"]
     FirefoxZIP --> Release
 ```
@@ -166,7 +166,7 @@ When publishing or updating the extension on the Chrome Web Store:
 
 1. Create a new release (follow the steps above)
 2. Download the ZIP from the GitHub release
-3. Go to the Developer Dashboard → BookHub → Package
+3. Go to the Developer Dashboard → GitSyncMarks → Package
 4. Upload the new ZIP
 5. Update the version description if needed
 6. Submit for review

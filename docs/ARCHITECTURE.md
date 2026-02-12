@@ -1,8 +1,8 @@
-# BookHub — Architecture Overview
+# GitSyncMarks — Architecture Overview
 
 ## High-Level Architecture
 
-BookHub is a browser extension (Manifest V3, Chrome + Firefox) that bidirectionally synchronizes bookmarks with a GitHub repository. It stores each bookmark as an individual JSON file and uses a three-way merge algorithm for conflict-free synchronization.
+GitSyncMarks is a browser extension (Manifest V3, Chrome + Firefox) that bidirectionally synchronizes bookmarks with a GitHub repository. It stores each bookmark as an individual JSON file and uses a three-way merge algorithm for conflict-free synchronization.
 
 ```mermaid
 flowchart TB
@@ -12,7 +12,7 @@ flowchart TB
         Alarms["chrome.alarms"]
     end
 
-    subgraph Extension["BookHub Extension"]
+    subgraph Extension["GitSyncMarks Extension"]
         BG["background.js"]
         Popup["popup.html / popup.js"]
         Options["options.html / options.js"]
@@ -150,7 +150,7 @@ Minimal shim: `isFirefox`, `isChrome`, `getBrowserName()`.
 ## File Structure
 
 ```
-BookHub/
+GitSyncMarks/
 ├── manifest.json                 # Chrome manifest
 ├── manifest.firefox.json         # Firefox manifest
 ├── background.js                 # Background script

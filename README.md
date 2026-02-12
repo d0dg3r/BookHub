@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="icons/icon128.png" alt="BookHub Logo" width="128" height="128">
+  <img src="icons/icon128.png" alt="GitSyncMarks Logo" width="128" height="128">
 </p>
 
-<h1 align="center">BookHub</h1>
+<h1 align="center">GitSyncMarks</h1>
 
 <p align="center">
   A browser extension that bidirectionally syncs your bookmarks with a GitHub repository.<br>
@@ -32,22 +32,22 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and release notes. See [ROA
 
 ### Chrome / Chromium
 
-1. Go to the [Releases page](https://github.com/d0dg3r/BookHub/releases)
-2. Download `BookHub-vX.X.X-chrome.zip` (or a pre-release build for testing)
+1. Go to the [Releases page](https://github.com/d0dg3r/GitSyncMarks/releases)
+2. Download `GitSyncMarks-vX.X.X-chrome.zip` (or a pre-release build for testing)
 3. Extract the ZIP to a folder
 4. Open `chrome://extensions/`, enable **Developer mode**
 5. Click **Load unpacked** and select the extracted folder
 
 ### Firefox
 
-1. Go to the [Releases page](https://github.com/d0dg3r/BookHub/releases)
-2. Download `BookHub-vX.X.X-firefox.zip` (or a pre-release build for testing)
+1. Go to the [Releases page](https://github.com/d0dg3r/GitSyncMarks/releases)
+2. Download `GitSyncMarks-vX.X.X-firefox.zip` (or a pre-release build for testing)
 3. Open `about:debugging#/runtime/this-firefox`
 4. Click **Load Temporary Add-on** and select the ZIP file
 
 ### Create a GitHub Personal Access Token
 
-1. Go to [GitHub Settings > Tokens](https://github.com/settings/tokens/new?scopes=repo&description=BookHub+Sync)
+1. Go to [GitHub Settings > Tokens](https://github.com/settings/tokens/new?scopes=repo&description=GitSyncMarks+Sync)
 2. Create a token with the **`repo`** scope
 3. Copy the token
 

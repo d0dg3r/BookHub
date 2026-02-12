@@ -1,8 +1,8 @@
 {
-  "name": "bookhub",
-  "version": "2.1.0",
+  "name": "gitsyncmarks",
+  "version": "2.1.1",
   "private": true,
-  "description": "BookHub – Sync your bookmarks with GitHub",
+  "description": "GitSyncMarks – Sync your bookmarks with GitHub",
   "scripts": {
     "build": "bash scripts/build.sh",
     "build:chrome": "bash scripts/build.sh chrome",

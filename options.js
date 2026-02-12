@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initI18n();
   populateLanguageDropdown();
   applyI18n();
-  document.title = `BookHub – ${getMessage('options_subtitle')}`;
+  document.title = `GitSyncMarks – ${getMessage('options_subtitle')}`;
   await loadSettings();
 
   // Show version from manifest
@@ -223,7 +223,7 @@ languageSelect.addEventListener('change', async () => {
   populateLanguageDropdown();
   languageSelect.value = newLang;
   applyI18n();
-  document.title = `BookHub – ${getMessage('options_subtitle')}`;
+  document.title = `GitSyncMarks – ${getMessage('options_subtitle')}`;
 });
 
 // ==============================

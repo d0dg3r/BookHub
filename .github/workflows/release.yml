@@ -35,14 +35,14 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "BookHub ${{ steps.version.outputs.VERSION }}"
+          name: "GitSyncMarks ${{ steps.version.outputs.VERSION }}"
           prerelease: ${{ steps.prerelease.outputs.prerelease }}
           body: |
-            ## BookHub ${{ steps.version.outputs.VERSION }}
+            ## GitSyncMarks ${{ steps.version.outputs.VERSION }}
 
             ### Chrome / Chromium / Edge / Brave
 
-            1. Download `BookHub-${{ steps.version.outputs.VERSION }}-chrome.zip`
+            1. Download `GitSyncMarks-${{ steps.version.outputs.VERSION }}-chrome.zip`
             2. Extract the ZIP
             3. Open `chrome://extensions/`
             4. Enable **Developer mode** (toggle in the top right)
@@ -51,13 +51,13 @@ jobs:
 
             ### Firefox
 
-            1. Download `BookHub-${{ steps.version.outputs.VERSION }}-firefox.zip`
+            1. Download `GitSyncMarks-${{ steps.version.outputs.VERSION }}-firefox.zip`
             2. Open `about:debugging#/runtime/this-firefox`
             3. Click **Load Temporary Add-on...**
             4. Select the ZIP file or the `manifest.json` inside the extracted folder
 
             More info: [README](https://github.com/${{ github.repository }}/blob/main/README.md)
           files: |
-            build/BookHub-${{ steps.version.outputs.VERSION }}-chrome.zip
-            build/BookHub-${{ steps.version.outputs.VERSION }}-firefox.zip
+            build/GitSyncMarks-${{ steps.version.outputs.VERSION }}-chrome.zip
+            build/GitSyncMarks-${{ steps.version.outputs.VERSION }}-firefox.zip
           draft: false
