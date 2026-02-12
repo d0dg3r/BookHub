@@ -422,7 +422,7 @@ exportSettingsBtn.addEventListener('click', async () => {
     const json = JSON.stringify(syncSettings, null, 2);
 
     const date = new Date().toISOString().slice(0, 10);
-    downloadFile(`bookhub-settings-${date}.json`, json, 'application/json');
+    downloadFile(`gitsyncmarks-settings-${date}.json`, json, 'application/json');
 
     showResult(exportSettingsResult, getMessage('options_exportSuccess'), 'success');
   } catch (err) {

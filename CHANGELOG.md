@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Project renamed**: BookHub → GitSyncMarks
 - **Firefox**: New extension ID `gitsyncmarks@d0dg3r` — existing Firefox users must uninstall the old extension and install the new one
+- **IndexedDB migration**: Automatic migration from `bookhub-keys` to `gitsyncmarks-keys` — existing users keep their token without re-entering it
 - **Options tabs**: Reorganized into GitHub, Synchronization, Backup, Automation, About
 - **Backup tab**: Redesigned with clearer block layout, descriptions per action, file picker with chosen filename display
 - **Last data change**: Popup shows "Last data change" instead of "Last sync" when changes were pushed

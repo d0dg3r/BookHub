@@ -85,7 +85,7 @@ jobs:
           INPUT_URL: ${{ inputs.url }}
         run: |
           git config user.name "GitSyncMarks Bot"
-          git config user.email "bookhub-bot@users.noreply.github.com"
+          git config user.email "gitsyncmarks-bot@users.noreply.github.com"
           git add -A
           COMMIT_LABEL="${INPUT_TITLE:-$INPUT_URL}"
           git commit -m "Add bookmark: ${COMMIT_LABEL}"
