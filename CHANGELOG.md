@@ -7,13 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.1.1] - TBD
-
-### Changed
-
-- **Project renamed**: BookHub → GitSyncMarks
-- **Firefox**: New extension ID `gitsyncmarks@d0dg3r` — existing Firefox users must uninstall the old extension and install the new one
-
 ## [2.1.0] - 2025-02-10
 
 ### Added
@@ -30,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Project renamed**: BookHub → GitSyncMarks
+- **Firefox**: New extension ID `gitsyncmarks@d0dg3r` — existing Firefox users must uninstall the old extension and install the new one
 - **Options tabs**: Reorganized into GitHub, Synchronization, Backup, Automation, About
 - **Backup tab**: Redesigned with clearer block layout, descriptions per action, file picker with chosen filename display
 - **Last data change**: Popup shows "Last data change" instead of "Last sync" when changes were pushed
@@ -97,8 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release: bookmark sync with GitHub
 
-[Unreleased]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.1.1...HEAD
-[2.1.1]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.1.0...v2.1.1
+[Unreleased]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.1.0...HEAD
 [2.1.0]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/d0dg3r/GitSyncMarks/compare/v1.5.0...v2.0.0
