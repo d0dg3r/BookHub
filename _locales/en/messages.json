@@ -3,7 +3,7 @@
     "message": "GitSyncMarks"
   },
   "extDescription": {
-    "message": "Your bookmarks, safe on GitHub — always in sync, available everywhere. Auto-sync, import/export, and conflict detection included."
+    "message": "Your bookmarks, safe on GitHub — per-file storage, three-way merge sync, works on Chrome & Firefox. No server needed."
   },
 
   "popup_configureFirst": {

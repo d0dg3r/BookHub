@@ -3,7 +3,7 @@
     "message": "GitSyncMarks"
   },
   "extDescription": {
-    "message": "Deine Lesezeichen, sicher auf GitHub – immer synchron, überall verfügbar. Auto-Sync, Import/Export und Konflikterkennung inklusive."
+    "message": "Deine Lesezeichen, sicher auf GitHub — Einzeldatei-Speicherung, Drei-Wege-Merge, funktioniert mit Chrome & Firefox. Kein Server nötig."
   },
 
   "popup_configureFirst": {

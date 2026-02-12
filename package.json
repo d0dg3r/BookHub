@@ -2,7 +2,7 @@
   "name": "gitsyncmarks",
   "version": "2.1.0",
   "private": true,
-  "description": "GitSyncMarks – Sync your bookmarks with GitHub",
+  "description": "Your bookmarks, safe on GitHub — per-file storage, three-way merge sync, works on Chrome & Firefox. No server needed.",
   "scripts": {
     "build": "bash scripts/build.sh",
     "build:chrome": "bash scripts/build.sh chrome",

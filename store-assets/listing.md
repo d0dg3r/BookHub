@@ -114,7 +114,7 @@ Deutsch
 GitSyncMarks
 
 ### Summary (max 250 characters)
-Sync your bookmarks with GitHub — per-file storage, three-way merge, auto-sync. Add bookmarks via Git, CLI, or GitHub Actions. Open source, no server needed.
+Sync your Firefox bookmarks with GitHub — bidirectionally, conflict-free. Per-file JSON storage, three-way merge, auto-sync. Full support for Bookmarks Toolbar, Menu, and Mobile. Add bookmarks via Git, CLI, or GitHub Actions. Open source, no external server.
 
 ### Detailed Description
 GitSyncMarks syncs your Firefox bookmarks with a GitHub repository — bidirectionally, automatically, and without any external server.
