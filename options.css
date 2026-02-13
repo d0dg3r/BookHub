@@ -564,3 +564,60 @@ input[type="checkbox"]:checked + .toggle-slider::after {
   border-radius: 3px;
   font-size: 13px;
 }
+
+/* Mobile / small screens (Firefox Android, narrow viewports) */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px 16px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .page-header h1 {
+    font-size: 22px;
+  }
+
+  .header-actions select {
+    min-width: 120px;
+  }
+
+  .tab-bar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-btn {
+    padding: 10px 14px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  input[type="number"] {
+    width: 100%;
+    max-width: 120px;
+  }
+
+  .info-table td:first-child {
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .code-block {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+}
