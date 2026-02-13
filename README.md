@@ -5,6 +5,10 @@
 <h1 align="center">GitSyncMarks</h1>
 
 <p align="center">
+  <a href="https://github.com/d0dg3r/GitSyncMarks/releases"><img src="https://img.shields.io/github/v/release/d0dg3r/GitSyncMarks" alt="Release"></a>
+</p>
+
+<p align="center">
   A browser extension that bidirectionally syncs your bookmarks with a GitHub repository.<br>
   Supports Chrome and Firefox.
 </p>
