@@ -1,6 +1,6 @@
 {
   "name": "gitsyncmarks",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "private": true,
   "description": "Your bookmarks, safe on GitHub — per-file storage, three-way merge sync, works on Chrome & Firefox. No server needed.",
   "scripts": {
