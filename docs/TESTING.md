@@ -4,6 +4,26 @@ This document describes how to test the extension on Chrome and Firefox (desktop
 
 ---
 
+## Store Screenshots
+
+Screenshots for Chrome Web Store and Firefox AMO are generated automatically. Run after building the Chrome extension:
+
+```bash
+npm run build:chrome && npm run generate-screenshots
+```
+
+Or use the combined command:
+
+```bash
+npm run screenshots
+```
+
+Output: `store-assets/screenshot-chrome-*.png`, `screenshot-chrome-de-*.png`, and `screenshot-firefox-*.png` (Firefox assets are copied from Chrome; UI is identical).
+
+**Prerequisites:** Playwright with Chromium (`npx playwright install chromium` — run once).
+
+---
+
 ## Chrome (Desktop)
 
 ### Build

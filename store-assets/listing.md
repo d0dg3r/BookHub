@@ -220,6 +220,8 @@ All regions
 
 ## Store Assets Checklist
 
+**Screenshots** are auto-generated. Run `npm run screenshots` (see [docs/TESTING.md](../docs/TESTING.md#store-screenshots)). Manually update only if the script fails or you need custom captures.
+
 ### Chrome Web Store
 - [ ] `store-assets/icon128-store.png` — 128x128px store icon
 - [ ] `store-assets/promo-small.png` — 440x280px small promo tile

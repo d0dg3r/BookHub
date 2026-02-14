@@ -36,11 +36,20 @@ let countdownInterval = null;
 
 let isSyncing = false;
 
+// Demo mode: show configured UI for screenshots without real storage (?demo=1)
+const isDemoMode = () =>
+  typeof location !== 'undefined' &&
+  new URLSearchParams(location.search || '').get('demo') === '1';
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', async () => {
   await initTheme();
   await initI18n();
   applyI18n();
+  if (isDemoMode()) {
+    showDemoUI();
+    return;
+  }
   await loadStatus();
 });
 
@@ -163,6 +172,31 @@ function stopCountdown() {
 function showNotConfigured() {
   notConfiguredEl.style.display = 'block';
   configuredEl.style.display = 'none';
+}
+
+function showDemoUI() {
+  notConfiguredEl.style.display = 'none';
+  configuredEl.style.display = 'block';
+  profileBadge.style.display = 'none';
+  setStatus('✅', getMessage('popup_synced'), 'status-ok');
+  conflictBox.style.display = 'none';
+  lastDataChangeEl.textContent = getMessage('popup_lastDataChange', [
+    getMessage('popup_minAgo', [5]),
+  ]);
+  lastDataChangeEl.style.display = '';
+  lastCommitWrap.innerHTML = '';
+  lastCommitWrap.appendChild(document.createTextNode(getMessage('popup_lastCommit') + ' '));
+  const a = document.createElement('a');
+  a.href = 'https://github.com/example/repo/commit/abc1234';
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.className = 'commit-link';
+  a.textContent = 'abc1234';
+  lastCommitWrap.appendChild(a);
+  lastCommitWrap.style.display = '';
+  autoSyncDot.className = 'dot dot-active';
+  autoSyncText.textContent = getMessage('popup_autoSyncActive');
+  nextSyncCountdownEl.style.display = 'none';
 }
 
 function setStatus(icon, message, boxClass) {

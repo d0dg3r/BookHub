@@ -7,10 +7,13 @@
     "build": "bash scripts/build.sh",
     "build:chrome": "bash scripts/build.sh chrome",
     "build:firefox": "bash scripts/build.sh firefox",
-    "generate-icons": "node scripts/generate-icons.js"
+    "generate-icons": "node scripts/generate-icons.js",
+    "generate-screenshots": "node scripts/generate-screenshots.js",
+    "screenshots": "npm run build:chrome && npm run generate-screenshots"
   },
   "devDependencies": {
-    "sharp": "^0.33.0",
-    "png-to-ico": "^2.1.0"
+    "playwright": "^1.58.2",
+    "png-to-ico": "^2.1.0",
+    "sharp": "^0.33.0"
   }
 }
