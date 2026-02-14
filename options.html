@@ -138,6 +138,16 @@
             <span class="toggle-slider"></span>
           </label>
         </div>
+
+        <div class="form-group">
+          <label for="notifications-mode" data-i18n="options_notifications">Sync notifications</label>
+          <select id="notifications-mode">
+            <option value="off" data-i18n="options_notificationsOff">Off</option>
+            <option value="all" data-i18n="options_notificationsAll">All (success and failure)</option>
+            <option value="errorsOnly" data-i18n="options_notificationsErrorsOnly">Errors only</option>
+          </select>
+          <small data-i18n="options_notificationsHint">Choose when to show notifications.</small>
+        </div>
       </section>
 
       <div class="actions">

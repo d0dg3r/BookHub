@@ -157,6 +157,27 @@
   "options_syncOnFocus": {
     "message": "Sync when browser gains focus"
   },
+  "options_notifications": {
+    "message": "Sync notifications"
+  },
+  "options_notificationsOff": {
+    "message": "Off"
+  },
+  "options_notificationsAll": {
+    "message": "All (success and failure)"
+  },
+  "options_notificationsErrorsOnly": {
+    "message": "Errors only"
+  },
+  "options_notificationsHint": {
+    "message": "Choose when to show notifications."
+  },
+  "notification_titleSuccess": {
+    "message": "Sync successful"
+  },
+  "notification_titleFailure": {
+    "message": "Sync failed"
+  },
   "options_saveSettings": {
     "message": "Save Settings"
   },

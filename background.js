@@ -4,7 +4,7 @@
  * handles messages from popup/options pages, and triggers migration on first run.
  */
 
-import { initI18n } from './lib/i18n.js';
+import { initI18n, getMessage } from './lib/i18n.js';
 import {
   debouncedSync,
   sync,
@@ -22,6 +22,25 @@ import { GitHubAPI } from './lib/github-api.js';
 import { migrateTokenIfNeeded } from './lib/crypto.js';
 
 const ALARM_NAME = 'bookmarkSyncPull';
+const NOTIFICATION_ID = 'gitsyncmarks-sync';
+
+async function showNotificationIfEnabled(result) {
+  try {
+    const settings = await getSettings();
+    const mode = settings[STORAGE_KEYS.NOTIFICATIONS_MODE] ?? 'all';
+    if (mode === 'off') return;
+    if (mode === 'errorsOnly' && result.success) return;
+    const title = result.success ? getMessage('notification_titleSuccess') : getMessage('notification_titleFailure');
+    await chrome.notifications.create(NOTIFICATION_ID, {
+      type: 'basic',
+      iconUrl: chrome.runtime.getURL('icons/icon128.png'),
+      title,
+      message: result.message || '',
+    });
+  } catch (err) {
+    console.warn('[GitSyncMarks] Failed to show notification:', err);
+  }
+}
 
 // ---- Bookmark event listeners ----
 
@@ -56,7 +75,7 @@ async function triggerAutoSync() {
   const settings = await getSettings();
   if (settings[STORAGE_KEYS.AUTO_SYNC] && isConfigured(settings)) {
     const delayMs = settings[STORAGE_KEYS.DEBOUNCE_DELAY] ?? 5000;
-    debouncedSync(delayMs);
+    debouncedSync(delayMs, showNotificationIfEnabled);
   }
 }
 
@@ -76,6 +95,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
       } else {
         chrome.action.setBadgeText({ text: '' });
       }
+      await showNotificationIfEnabled(result);
     }
   }
 });
@@ -107,6 +127,7 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
   } else {
     chrome.action.setBadgeText({ text: '' });
   }
+  await showNotificationIfEnabled(result);
 });
 
 async function setupAlarm() {
@@ -153,15 +174,24 @@ async function checkAndMigrate() {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'sync') {
-    sync().then(sendResponse);
+    sync().then(async (result) => {
+      await showNotificationIfEnabled(result);
+      sendResponse(result);
+    });
     return true;
   }
   if (message.action === 'push') {
-    push().then(sendResponse);
+    push().then(async (result) => {
+      await showNotificationIfEnabled(result);
+      sendResponse(result);
+    });
     return true;
   }
   if (message.action === 'pull') {
-    pull().then(sendResponse);
+    pull().then(async (result) => {
+      await showNotificationIfEnabled(result);
+      sendResponse(result);
+    });
     return true;
   }
   if (message.action === 'getStatus') {
@@ -194,11 +224,12 @@ chrome.runtime.onStartup.addListener(async () => {
   const settings = await getSettings();
   if (settings[STORAGE_KEYS.SYNC_ON_STARTUP] && isConfigured(settings)) {
     setTimeout(() => {
-      sync().then((result) => {
+      sync().then(async (result) => {
         if (!result.success) {
           chrome.action.setBadgeText({ text: '!' });
           chrome.action.setBadgeBackgroundColor({ color: '#F44336' });
         }
+        await showNotificationIfEnabled(result);
       });
     }, 2000);
   }

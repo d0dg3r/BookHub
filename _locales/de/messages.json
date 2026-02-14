@@ -157,6 +157,27 @@
   "options_syncOnFocus": {
     "message": "Sync bei Browser-Fokus"
   },
+  "options_notifications": {
+    "message": "Sync-Benachrichtigungen"
+  },
+  "options_notificationsOff": {
+    "message": "Aus"
+  },
+  "options_notificationsAll": {
+    "message": "Alle (Erfolg und Fehler)"
+  },
+  "options_notificationsErrorsOnly": {
+    "message": "Nur Fehler"
+  },
+  "options_notificationsHint": {
+    "message": "Wähle, wann Benachrichtigungen angezeigt werden."
+  },
+  "notification_titleSuccess": {
+    "message": "Sync erfolgreich"
+  },
+  "notification_titleFailure": {
+    "message": "Sync fehlgeschlagen"
+  },
   "options_saveSettings": {
     "message": "Einstellungen speichern"
   },

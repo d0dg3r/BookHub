@@ -22,6 +22,8 @@ const STORAGE_KEYS = {
   SYNC_ON_STARTUP: 'syncOnStartup',
   SYNC_ON_FOCUS: 'syncOnFocus',
   SYNC_PROFILE: 'syncProfile',
+  NOTIFICATIONS_MODE: 'notificationsMode',
+  NOTIFICATIONS_ENABLED: 'notificationsEnabled', // legacy, for migration
   DEBOUNCE_DELAY: 'debounceDelay',
   LANGUAGE: 'language',
   THEME: 'theme',
@@ -41,6 +43,7 @@ const syncIntervalInput = document.getElementById('sync-interval');
 const debounceDelayInput = document.getElementById('debounce-delay');
 const syncOnStartupInput = document.getElementById('sync-on-startup');
 const syncOnFocusInput = document.getElementById('sync-on-focus');
+const notificationsModeSelect = document.getElementById('notifications-mode');
 const validateBtn = document.getElementById('validate-btn');
 const validationResult = document.getElementById('validation-result');
 const saveGitHubBtn = document.getElementById('save-github-btn');
@@ -161,7 +164,9 @@ async function loadSettings() {
     [STORAGE_KEYS.SYNC_ON_STARTUP]: false,
     [STORAGE_KEYS.SYNC_ON_FOCUS]: false,
     [STORAGE_KEYS.SYNC_PROFILE]: 'normal',
+    [STORAGE_KEYS.NOTIFICATIONS_MODE]: 'all',
     [STORAGE_KEYS.DEBOUNCE_DELAY]: 5000,
+    [STORAGE_KEYS.NOTIFICATIONS_ENABLED]: undefined, // legacy, for migration
     [STORAGE_KEYS.LANGUAGE]: 'auto',
     [STORAGE_KEYS.THEME]: 'auto',
   };
@@ -188,6 +193,16 @@ async function loadSettings() {
   syncCustomFields.style.display = profile === 'custom' ? 'block' : 'none';
   syncOnStartupInput.checked = settings[STORAGE_KEYS.SYNC_ON_STARTUP] === true;
   syncOnFocusInput.checked = settings[STORAGE_KEYS.SYNC_ON_FOCUS] === true;
+  const mode = settings[STORAGE_KEYS.NOTIFICATIONS_MODE];
+  const oldEnabled = settings[STORAGE_KEYS.NOTIFICATIONS_ENABLED];
+  const displayMode = (mode && ['off', 'all', 'errorsOnly'].includes(mode))
+    ? mode
+    : (oldEnabled === false ? 'off' : 'all');
+  notificationsModeSelect.value = displayMode;
+  if (!mode && oldEnabled !== undefined) {
+    await chrome.storage.sync.set({ [STORAGE_KEYS.NOTIFICATIONS_MODE]: displayMode });
+    await chrome.storage.sync.remove(STORAGE_KEYS.NOTIFICATIONS_ENABLED);
+  }
   languageSelect.value = settings[STORAGE_KEYS.LANGUAGE];
   const theme = settings[STORAGE_KEYS.THEME] || 'auto';
   themeButtons.forEach(btn => {
@@ -297,6 +312,7 @@ async function saveSettings() {
     [STORAGE_KEYS.SYNC_PROFILE]: syncProfileSelect.value,
     [STORAGE_KEYS.SYNC_ON_STARTUP]: syncOnStartupInput.checked,
     [STORAGE_KEYS.SYNC_ON_FOCUS]: syncOnFocusInput.checked,
+    [STORAGE_KEYS.NOTIFICATIONS_MODE]: notificationsModeSelect.value,
     [STORAGE_KEYS.LANGUAGE]: languageSelect.value,
   };
 
