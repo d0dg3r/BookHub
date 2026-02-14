@@ -22,10 +22,17 @@ Open items and next steps for further development. Updated each session.
   - Possible improvements: UI hint, manual setup instructions, or automatic creation on first push.
   - To decide: Should the extension create the folder automatically, or provide the user with clear instructions?
 
+### Backup (Import/Export)
+
+The Backup tab behavior changes with multiple profiles. Needs review and possibly adjustment:
+
+- **Settings export/import:** Already includes profiles with decrypted tokens (see [options.js](../options.js) lines 516–636). Verify migration from legacy format and round-trip export/import.
+- **Bookmark export/import:** Exports all browser bookmarks; import replaces local bookmarks. Clarify whether per-profile export (e.g. "export current profile only") is needed, and how import interacts with multiple profiles.
+- **UI:** Consider indicating which profile's data is affected when importing bookmarks.
+
 ### Other (optional)
 
 - **Profile limit:** Currently 10 profiles. Consider displaying in options.
-- **Import/Export:** Verify that settings import/export works correctly with multiple profiles.
 
 ---
 
