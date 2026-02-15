@@ -30,13 +30,17 @@ const test = base.extend({
       require('os').tmpdir(),
       `gitsyncmarks-e2e-${Date.now()}`
     );
+    const args = [
+      `--disable-extensions-except=${EXTENSION_PATH}`,
+      `--load-extension=${EXTENSION_PATH}`,
+    ];
+    if (process.env.CI) {
+      args.push('--no-sandbox', '--disable-dev-shm-usage');
+    }
     const context = await chromium.launchPersistentContext(userDataDir, {
       channel: 'chromium',
       headless: true,
-      args: [
-        `--disable-extensions-except=${EXTENSION_PATH}`,
-        `--load-extension=${EXTENSION_PATH}`,
-      ],
+      args,
     });
     await use(context);
     await context.close();
@@ -44,7 +48,7 @@ const test = base.extend({
   extensionId: async ({ context }, use) => {
     let serviceWorker = context.serviceWorkers()[0];
     if (!serviceWorker) {
-      serviceWorker = await context.waitForEvent('serviceworker');
+      serviceWorker = await context.waitForEvent('serviceworker', { timeout: 60000 });
     }
     const extensionId = serviceWorker.url().split('/')[2];
     await use(extensionId);
