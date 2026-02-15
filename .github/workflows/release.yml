@@ -48,6 +48,7 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Generate screenshots
+        if: steps.prerelease.outputs.prerelease != 'true'
         run: npm run generate-screenshots
 
       - name: Determine target branch
@@ -56,7 +57,7 @@ jobs:
           TAG="${{ steps.version.outputs.VERSION }}"
           DEFAULT="${{ github.event.repository.default_branch }}"
           if [[ "${{ steps.prerelease.outputs.prerelease }}" == "true" ]]; then
-            BRANCH=$(git branch -r --contains "$TAG" 2>/dev/null | grep -E 'origin/(release|develop)/' | head -1 | sed 's|origin/||;s/^[[:space:]]*//')
+            BRANCH=$(git branch -r --contains "$TAG" 2>/dev/null | grep -E 'origin/(release|develop)/' || true | head -1 | sed 's|origin/||;s/^[[:space:]]*//')
           fi
           BRANCH=${BRANCH:-$DEFAULT}
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT

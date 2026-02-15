@@ -53,18 +53,22 @@ async function main() {
   await ensureDir(STORE_ASSETS);
 
   const userDataDir = path.join(os.tmpdir(), 'gitsyncmarks-screenshots-' + Date.now());
+  const launchArgs = [
+    `--disable-extensions-except=${EXTENSION_PATH}`,
+    `--load-extension=${EXTENSION_PATH}`,
+  ];
+  if (process.env.CI) {
+    launchArgs.push('--no-sandbox', '--disable-dev-shm-usage');
+  }
   const context = await chromium.launchPersistentContext(userDataDir, {
     channel: 'chromium',
     headless: true,
-    args: [
-      `--disable-extensions-except=${EXTENSION_PATH}`,
-      `--load-extension=${EXTENSION_PATH}`,
-    ],
+    args: launchArgs,
   });
 
   let serviceWorker = context.serviceWorkers()[0];
   if (!serviceWorker) {
-    serviceWorker = await context.waitForEvent('serviceworker');
+    serviceWorker = await context.waitForEvent('serviceworker', { timeout: 90000 });
   }
   const extensionId = serviceWorker.url().split('/')[2];
   console.log('Extension ID:', extensionId);
@@ -81,6 +85,7 @@ async function main() {
     await page.goto(optionsUrl);
     await page.setViewportSize(VIEWPORT);
     await page.waitForLoadState('networkidle');
+    await page.locator('#language-select option[value="' + code + '"]').waitFor({ state: 'attached', timeout: 10000 });
 
     await page.locator('#language-select').selectOption(code);
     await page.waitForTimeout(600);
