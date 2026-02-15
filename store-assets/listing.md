@@ -30,7 +30,7 @@ Features:
 • Automation: add bookmarks via Git, CLI, or GitHub Actions — no browser needed
 • Import/Export: back up and restore bookmarks or settings as JSON files (clear UI with file picker)
 • Theme: light, dark, or auto (system) for options and popup
-• Multilanguage: English and German with manual language selection
+• Multilanguage: English, German, French, and Spanish with manual language selection
 • No external server — communicates directly with the GitHub API using your Personal Access Token
 
 How it works:
@@ -84,7 +84,7 @@ Funktionen:
 • Automatisierung: Lesezeichen über Git, CLI oder GitHub Actions hinzufügen — ohne Browser
 • Import/Export: Lesezeichen oder Einstellungen als JSON-Dateien sichern und wiederherstellen (klare UI mit Dateiauswahl)
 • Design: Hell, Dunkel oder Auto (System) für Einstellungen und Popup
-• Mehrsprachig: Englisch und Deutsch mit manueller Sprachauswahl
+• Mehrsprachig: Englisch, Deutsch, Französisch und Spanisch mit manueller Sprachauswahl
 • Kein externer Server — kommuniziert direkt mit der GitHub API über deinen Personal Access Token
 
 So funktioniert es:
@@ -138,7 +138,7 @@ Features:
 • Automation: add bookmarks via Git, CLI, or GitHub Actions — no browser needed
 • Import/Export: back up and restore bookmarks or settings as JSON files (clear UI with file picker)
 • Theme: light, dark, or auto (system) for options and popup
-• Multilanguage: English and German with manual language selection
+• Multilanguage: English, German, French, and Spanish with manual language selection
 • No external server — communicates directly with the GitHub API using your Personal Access Token
 
 How it works:

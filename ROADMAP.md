@@ -24,6 +24,7 @@ Contributions and ideas welcome — open an issue or pull request.
 
 - **Keyboard shortcuts** (v2.2.0) — Quick sync (Ctrl+Shift+.), open options (Ctrl+Shift+,); customizable in extension settings
 - **Multiple sync profiles** (v2.2.0) — Work/personal bookmark sets with separate GitHub repos; switch replaces local bookmarks; onboarding (create folder / pull on first config)
+- **French and Spanish** (v2.2.0) — New languages: Français, Español
 
 ## Backlog / ideas (No timeline)
 
@@ -36,5 +37,4 @@ Contributions and ideas welcome — open an issue or pull request.
 | Selective folder sync | Sync only specific bookmark folders instead of all | Medium |
 | Sync history / rollback | Restore previous sync states (requires storing commit history) | Medium |
 | Conflict resolution UI | Diff view for merge conflicts instead of force push/pull only | Medium |
-| More languages | Extend i18n (e.g. French, Spanish) | Small |
 | Self-hosted Git (Gitea, Forgejo) | Broader provider support beyond GitHub/GitLab | Large |

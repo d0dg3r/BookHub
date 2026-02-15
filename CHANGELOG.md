@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Spinner**: Loading indicators during profile switch and Test Connection
 - **Keyboard shortcuts**: Quick sync (Ctrl+Shift+.), open options (Ctrl+Shift+,); customizable in browser extension settings
 - **Help tab**: New tab in options with keyboard shortcuts and main features overview (popup, profiles, auto-sync, conflicts)
+- **French and Spanish**: New languages (Français, Español) in the language selector
 
 ### Changed
 

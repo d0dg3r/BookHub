@@ -33,7 +33,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and release notes. See [ROA
 - **Readable overview**: A `README.md` with all bookmarks is generated in the repo for easy browsing on GitHub
 - **Automation**: Add bookmarks via Git, CLI, or GitHub Actions — the extension picks them up automatically
 - **Import/Export**: Export and import bookmarks or extension settings as JSON files
-- **Multilanguage**: English and German, with manual language selection
+- **Multilanguage**: English, German, French, and Spanish, with manual language selection
 - **No server needed**: Communicates directly with the GitHub API using your Personal Access Token
 
 ## Installation

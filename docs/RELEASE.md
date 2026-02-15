@@ -31,7 +31,7 @@ The version is declared in `manifest.json` → `"version"`. It must match `manif
 | `2.0.0` | Per-file bookmark storage, three-way merge sync, Firefox support, automation (GitHub Actions), cross-browser build system |
 | `2.0.1` | Fix: false merge conflicts when two devices edit the same folder concurrently (`_order.json` content-level merge); harden GitHub Action inputs; update Firefox manifest and i18n; update store screenshots |
 | `2.1.2` | Store buttons in README, responsive mobile layout for Firefox Android, testing guide (docs/TESTING.md) |
-| `2.2.0` | Multiple profiles, onboarding, profile add auto-switch, spinner, profile switch UX, popup redesign, shorter pull message, keyboard shortcuts, Help tab, options header (language dropdown only) |
+| `2.2.0` | Multiple profiles, onboarding, profile add auto-switch, spinner, profile switch UX, popup redesign, shorter pull message, keyboard shortcuts, Help tab, options header (language dropdown only), French and Spanish |
 | `2.1.1` | New icon (blue bookmark + green sync arrow) for extension, store assets, and favicons |
 | `2.1.0` | Sync profiles, sync on startup/focus, theme (light/dark/auto), redesigned Backup tab, tabbed options (GitHub/Sync/Backup), commit link in popup, pre-release workflow — see [CHANGELOG.md](../CHANGELOG.md) |
 
