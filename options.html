@@ -316,21 +316,46 @@
         <p data-i18n="help_whyAtomic">All changes are written in a single atomic commit: either everything succeeds or nothing does. This prevents partial or corrupted state if the sync is interrupted. One commit instead of many also avoids hitting API rate limits and keeps the Git history clean.</p>
       </section>
 
+      <section class="card">
+        <h2 data-i18n="help_links">Links</h2>
+        <ul class="help-links">
+          <li><a href="https://github.com/d0dg3r/GitSyncMarks/tree/main/docs" target="_blank" rel="noopener" data-i18n="options_documentation">Documentation</a></li>
+          <li><a href="https://github.com/d0dg3r/GitSyncMarks/discussions" target="_blank" rel="noopener" data-i18n="help_discussions">Discussions</a></li>
+          <li><a href="https://github.com/d0dg3r/GitSyncMarks/issues" target="_blank" rel="noopener" data-i18n="options_reportBug">Report a Bug / Feature Request</a></li>
+        </ul>
+      </section>
+
     </div>
 
     <!-- ==================== About Tab ==================== -->
     <div class="tab-content" id="tab-about">
 
-      <section class="card">
-        <h2 data-i18n="options_about">About</h2>
-        <p class="about-version"><span data-i18n="options_version">Version</span> <span id="app-version"></span></p>
-        <ul class="about-links">
-          <li><a href="https://github.com/d0dg3r/GitSyncMarks" target="_blank" rel="noopener" data-i18n="options_githubRepo">GitHub Repository</a></li>
-          <li><a href="https://github.com/d0dg3r/GitSyncMarks/tree/main/docs" target="_blank" rel="noopener" data-i18n="options_documentation">Documentation</a></li>
-          <li><a href="https://github.com/d0dg3r/GitSyncMarks/issues" target="_blank" rel="noopener" data-i18n="options_reportBug">Report a Bug / Feature Request</a></li>
-          <li><a href="https://github.com/d0dg3r/GitSyncMarks/blob/main/PRIVACY.md" target="_blank" rel="noopener" data-i18n="options_privacyPolicy">Privacy Policy</a></li>
-          <li><a href="https://github.com/d0dg3r/GitSyncMarks/blob/main/LICENSE" target="_blank" rel="noopener" data-i18n="options_license">License (MIT)</a></li>
-        </ul>
+      <section class="card about-card">
+        <div class="about-header">
+          <img src="icons/icon48.png" alt="" class="about-logo">
+          <div class="about-brand">
+            <h2>GitSyncMarks</h2>
+            <p class="about-version"><span data-i18n="options_version">Version</span> <span id="app-version"></span></p>
+          </div>
+        </div>
+        <div class="about-meta">
+          <p class="about-author"><span data-i18n="options_by">By</span> <a href="https://github.com/d0dg3r" target="_blank" rel="noopener">Joe Mild (d0dg3r)</a></p>
+          <div class="about-contributors-block">
+            <h3 data-i18n="options_specialThanks">Special Thanks</h3>
+            <ul class="about-contributors">
+              <li><span class="contributor-name">Patrick</span></li>
+              <li><span class="contributor-name">Gernot</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="about-links-block">
+          <h3 data-i18n="options_links">Links</h3>
+          <ul class="about-links">
+            <li><a href="https://github.com/d0dg3r/GitSyncMarks" target="_blank" rel="noopener" data-i18n="options_githubRepo">GitHub Repository</a></li>
+            <li><a href="https://github.com/d0dg3r/GitSyncMarks/blob/main/PRIVACY.md" target="_blank" rel="noopener" data-i18n="options_privacyPolicy">Privacy Policy</a></li>
+            <li><a href="https://github.com/d0dg3r/GitSyncMarks/blob/main/LICENSE" target="_blank" rel="noopener" data-i18n="options_license">License (MIT)</a></li>
+          </ul>
+        </div>
       </section>
 
     </div>

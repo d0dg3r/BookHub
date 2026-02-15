@@ -366,6 +366,15 @@
   "options_version": {
     "message": "Version"
   },
+  "options_by": {
+    "message": "By"
+  },
+  "options_specialThanks": {
+    "message": "Special Thanks"
+  },
+  "options_links": {
+    "message": "Links"
+  },
   "options_githubRepo": {
     "message": "GitHub Repository"
   },
@@ -444,6 +453,12 @@
   },
   "help_whyAtomic": {
     "message": "All changes are written in a single atomic commit: either everything succeeds or nothing does. This prevents partial or corrupted state if the sync is interrupted. One commit instead of many also avoids hitting API rate limits and keeps the Git history clean."
+  },
+  "help_links": {
+    "message": "Links"
+  },
+  "help_discussions": {
+    "message": "Discussions"
   },
 
   "options_bookmarksCard": {

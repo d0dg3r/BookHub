@@ -366,6 +366,15 @@
   "options_version": {
     "message": "Version"
   },
+  "options_by": {
+    "message": "Von"
+  },
+  "options_specialThanks": {
+    "message": "Besonderen Dank"
+  },
+  "options_links": {
+    "message": "Links"
+  },
   "options_githubRepo": {
     "message": "GitHub-Repository"
   },
@@ -444,6 +453,12 @@
   },
   "help_whyAtomic": {
     "message": "Alle Änderungen werden in einem atomaren Commit geschrieben: Entweder alles gelingt oder nichts. So wird ein teilweiser oder beschädigter Zustand bei Unterbrechung vermieden. Ein Commit statt vieler vermeidet außerdem API-Ratelimits und hält die Git-Historie überschaubar."
+  },
+  "help_links": {
+    "message": "Links"
+  },
+  "help_discussions": {
+    "message": "Diskussionen"
   },
 
   "options_bookmarksCard": {

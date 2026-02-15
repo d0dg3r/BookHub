@@ -641,10 +641,102 @@ input[type="checkbox"]:checked + .toggle-slider::after {
 
 /* About Section */
 
+.about-card .card h2,
+.about-card h2 {
+  border-bottom: none;
+  margin-bottom: 4px;
+  padding-bottom: 0;
+}
+
+.about-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.about-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.about-brand h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
 .about-version {
   font-size: 14px;
   color: var(--color-text-secondary);
+  margin: 4px 0 0;
+}
+
+.about-meta {
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.about-author {
+  font-size: 14px;
+  color: var(--color-text-secondary);
   margin-bottom: 16px;
+}
+
+.about-author a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.about-author a:hover {
+  text-decoration: underline;
+}
+
+.about-contributors-block {
+  margin-bottom: 20px;
+}
+
+.about-contributors-block h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+}
+
+.about-contributors {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.about-contributors .contributor-name {
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.about-contributors a.contributor-name,
+.about-contributors a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.about-contributors a.contributor-name:hover,
+.about-contributors a:hover {
+  text-decoration: underline;
+}
+
+.about-links-block {
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.about-links-block h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
 }
 
 .about-links {
@@ -733,6 +825,23 @@ input[type="checkbox"]:checked + .toggle-slider::after {
   font-size: 12px;
   color: var(--color-text-secondary);
   margin: 4px 0 0;
+}
+
+.help-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.help-links a {
+  font-size: 14px;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.help-links a:hover {
+  text-decoration: underline;
 }
 
 .help-dl {
