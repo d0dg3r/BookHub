@@ -34,7 +34,11 @@ E2E tests run on push/PR to main and develop. To enable full sync tests in CI:
 1. Create the test repo (once, locally):  
    `GITSYNCMARKS_TEST_PAT=ghp_xxx node scripts/create-test-repo.js`
 
-2. In **Settings → Secrets and variables → Actions**:
+2. **PAT must have `repo` scope.** Without it, Connection and Sync tests fail with "missing repo scope".
+   - Classic token: [Create with repo scope](https://github.com/settings/tokens/new?scopes=repo)
+   - Fine-grained: Contents read/write, Metadata read
+
+3. In **Settings → Secrets and variables → Actions**:
 
    | Type     | Name                         | Description                    |
    |----------|------------------------------|--------------------------------|

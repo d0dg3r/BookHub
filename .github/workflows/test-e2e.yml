@@ -24,8 +24,14 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install chromium --with-deps
 
+      - name: Set git user for resetTestRepo
+        run: |
+          git config --global user.name "GitSyncMarks CI"
+          git config --global user.email "ci@gitsyncmarks.local"
+
       - name: Run E2E tests
         env:
+          # PAT must have repo scope (Classic) or Contents read/write (Fine-grained)
           GITSYNCMARKS_TEST_PAT: ${{ secrets.GITSYNCMARKS_TEST_PAT }}
           GITSYNCMARKS_TEST_REPO_OWNER: ${{ vars.GITSYNCMARKS_TEST_REPO_OWNER }}
           GITSYNCMARKS_TEST_REPO: ${{ vars.GITSYNCMARKS_TEST_REPO }}
