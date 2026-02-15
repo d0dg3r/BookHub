@@ -18,7 +18,7 @@ Or use the combined command:
 npm run screenshots
 ```
 
-Output: `store-assets/screenshot-chrome-*.png`, `screenshot-chrome-de-*.png`, and `screenshot-firefox-*.png` (Firefox assets are copied from Chrome; UI is identical).
+Output: `store-assets/en/`, `store-assets/de/`, `store-assets/fr/`, `store-assets/es/` — each with `chrome-*.png`; `en/` also has `firefox-*.png` (copied from Chrome EN; UI is identical).
 
 **Prerequisites:** Playwright with Chromium (`npx playwright install chromium` — run once).
 

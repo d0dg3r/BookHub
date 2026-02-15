@@ -4,6 +4,8 @@
  * Requires: npm run build:chrome first (build/chrome/ must exist).
  * Uses Playwright to launch Chromium with the extension loaded.
  *
+ * Output: store-assets/{en,de,fr,es}/chrome-*.png and en/firefox-*.png
+ *
  * Usage: node scripts/generate-screenshots.js
  */
 
@@ -16,6 +18,8 @@ const ROOT = path.resolve(__dirname, '..');
 const EXTENSION_PATH = path.join(ROOT, 'build', 'chrome');
 const STORE_ASSETS = path.join(ROOT, 'store-assets');
 const VIEWPORT = { width: 1280, height: 800 };
+
+const LANGUAGES = [{ code: 'en' }, { code: 'de' }, { code: 'fr' }, { code: 'es' }];
 
 const OPTIONS_TABS = [
   { id: 'github', file: 'github' },
@@ -68,82 +72,55 @@ async function main() {
   const optionsUrl = `chrome-extension://${extensionId}/options.html`;
   const popupUrl = `chrome-extension://${extensionId}/popup.html?demo=1`;
 
-  // ---- Chrome EN: Options tabs ----
-  console.log('\nChrome (EN) options:');
-  const page = await context.newPage();
-  await page.goto(optionsUrl);
-  await page.setViewportSize(VIEWPORT);
-  await page.waitForLoadState('networkidle');
+  for (const { code } of LANGUAGES) {
+    const langDir = path.join(STORE_ASSETS, code);
+    await ensureDir(langDir);
 
-  for (const { id, file } of OPTIONS_TABS) {
-    const tabBtn = page.locator(`.tab-btn[data-tab="${id}"]`);
-    await tabBtn.click();
-    await page.waitForTimeout(300);
-    const outPath = path.join(STORE_ASSETS, `screenshot-chrome-${file}.png`);
-    await page.screenshot({ path: outPath });
-    console.log('  ', `screenshot-chrome-${file}.png`);
+    console.log(`\nChrome (${code.toUpperCase()}) options:`);
+    const page = await context.newPage();
+    await page.goto(optionsUrl);
+    await page.setViewportSize(VIEWPORT);
+    await page.waitForLoadState('networkidle');
+
+    await page.locator('#language-select').selectOption(code);
+    await page.waitForTimeout(600);
+
+    for (const { id, file } of OPTIONS_TABS) {
+      const tabBtn = page.locator(`.tab-btn[data-tab="${id}"]`);
+      await tabBtn.click();
+      await page.waitForTimeout(300);
+      const outPath = path.join(langDir, `chrome-${file}.png`);
+      await page.screenshot({ path: outPath });
+      console.log('  ', `${code}/chrome-${file}.png`);
+    }
+    await page.close();
+
+    console.log(`\nChrome (${code.toUpperCase()}) popup:`);
+    const popupPage = await context.newPage();
+    await popupPage.goto(popupUrl);
+    await popupPage.setViewportSize(VIEWPORT);
+    await popupPage.waitForLoadState('networkidle');
+    await popupPage.waitForTimeout(code === 'en' ? 300 : 500);
+    const dialogPath = path.join(langDir, 'chrome-dialog.png');
+    await popupPage.screenshot({ path: dialogPath });
+    console.log('  ', `${code}/chrome-dialog.png`);
+    await popupPage.close();
   }
-  await page.close();
 
-  // ---- Chrome EN: Popup ----
-  console.log('\nChrome (EN) popup:');
-  const popupPage = await context.newPage();
-  await popupPage.goto(popupUrl);
-  await popupPage.setViewportSize(VIEWPORT);
-  await popupPage.waitForLoadState('networkidle');
-  await popupPage.waitForTimeout(300);
-  await popupPage.screenshot({
-    path: path.join(STORE_ASSETS, 'screenshot-chrome-dialog.png'),
-  });
-  console.log('  ', 'screenshot-chrome-dialog.png');
-  await popupPage.close();
-
-  // ---- Chrome DE: Options tabs (switch language first) ----
-  console.log('\nChrome (DE) options:');
-  const pageDe = await context.newPage();
-  await pageDe.goto(optionsUrl);
-  await pageDe.setViewportSize(VIEWPORT);
-  await pageDe.waitForLoadState('networkidle');
-
-  await pageDe.locator('#language-select').selectOption('de');
-  await pageDe.waitForTimeout(600);
-
-  for (const { id, file } of OPTIONS_TABS) {
-    const tabBtn = pageDe.locator(`.tab-btn[data-tab="${id}"]`);
-    await tabBtn.click();
-    await pageDe.waitForTimeout(300);
-    const outPath = path.join(STORE_ASSETS, `screenshot-chrome-de-${file}.png`);
-    await pageDe.screenshot({ path: outPath });
-    console.log('  ', `screenshot-chrome-de-${file}.png`);
-  }
-  await pageDe.close();
-
-  // ---- Chrome DE: Popup (uses lang from storage set above) ----
-  console.log('\nChrome (DE) popup:');
-  const popupDe = await context.newPage();
-  await popupDe.goto(popupUrl);
-  await popupDe.setViewportSize(VIEWPORT);
-  await popupDe.waitForLoadState('networkidle');
-  await popupDe.waitForTimeout(500);
-  await popupDe.screenshot({
-    path: path.join(STORE_ASSETS, 'screenshot-chrome-de-dialog.png'),
-  });
-  console.log('  ', 'screenshot-chrome-de-dialog.png');
-  await popupDe.close();
-
-  // ---- Firefox: copy from Chrome (UI is identical) ----
-  console.log('\nFirefox (copy from Chrome):');
+  // ---- Firefox: copy from Chrome EN (UI is identical) ----
+  const enDir = path.join(STORE_ASSETS, 'en');
+  console.log('\nFirefox (copy from Chrome EN):');
   for (const { src, dst } of FIREFOX_MAPPING) {
-    const srcPath = path.join(STORE_ASSETS, `screenshot-chrome-${src}.png`);
-    const dstPath = path.join(STORE_ASSETS, `screenshot-firefox-${dst}.png`);
+    const srcPath = path.join(enDir, `chrome-${src}.png`);
+    const dstPath = path.join(enDir, `firefox-${dst}.png`);
     if (fs.existsSync(srcPath)) {
       fs.copyFileSync(srcPath, dstPath);
-      console.log('  ', `screenshot-firefox-${dst}.png`);
+      console.log('  ', `en/firefox-${dst}.png`);
     }
   }
 
   await context.close();
-  console.log('\nDone. Screenshots in store-assets/');
+  console.log('\nDone. Screenshots in store-assets/en/, de/, fr/, es/');
 }
 
 main().catch((err) => {

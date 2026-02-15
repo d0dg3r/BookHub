@@ -190,7 +190,7 @@ When publishing or updating the extension on the Chrome Web Store:
 1. Register as a Chrome Web Store developer ($5 one-time fee)
 2. Go to [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole)
 3. Create a new item and upload the ZIP
-4. Fill in listing details (see `store-assets/listing.md` for prepared texts)
+4. Fill in listing details (see `store-assets/chrome-store.md` for prepared texts)
 5. Upload screenshots and promo images from `store-assets/`
 6. Submit for review
 
@@ -210,11 +210,16 @@ All Chrome Web Store assets are in `store-assets/`:
 | File | Purpose | Dimensions |
 |---|---|---|
 | `icon128-store.png` | Store listing icon | 128 x 128 |
-| `screenshot-1.png` | Popup screenshot | 1280 x 800 |
-| `screenshot-2.png` | Settings screenshot | 1280 x 800 |
+| `en/chrome-*.png` | Options tabs and popup (EN) | 1280 x 800 |
+| `de/chrome-*.png` | Options tabs and popup (DE) | 1280 x 800 |
+| `fr/chrome-*.png` | Options tabs and popup (FR) | 1280 x 800 |
+| `es/chrome-*.png` | Options tabs and popup (ES) | 1280 x 800 |
+| `en/firefox-*.png` | Firefox (copied from Chrome EN) | 1280 x 800 |
 | `promo-small.png` | Small promo tile | 440 x 280 |
 | `promo-marquee.png` | Marquee promo tile | 1400 x 560 |
-| `listing.md` | All listing texts | — |
+| `chrome-store.md` | Chrome listing texts (EN, DE, FR, ES) | — |
+| `firefox-store.md` | Firefox listing texts (EN, DE, FR, ES) | — |
+| `listing.md` | Index with links to both | — |
 
 ## Troubleshooting
 
