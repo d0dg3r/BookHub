@@ -19,6 +19,8 @@ Features:
 • Per-file storage: each bookmark is an individual JSON file — human-readable and diff-friendly
 • Three-way merge: automatic conflict-free sync when changes happen on both sides
 • Cross-browser: works with Chrome, Chromium, Brave, Edge, and Firefox
+• Multiple bookmark profiles: work and personal sets with separate GitHub repos; switch replaces local bookmarks
+• Onboarding: create folder or pull bookmarks when configuring a new profile
 • Sync profiles: real-time, frequent, normal, or power-save (preset intervals and debounce)
 • Auto-sync on every bookmark change (debounce configurable per profile)
 • Periodic sync to detect remote changes (1–120 minutes, configurable)
@@ -71,6 +73,8 @@ Funktionen:
 • Einzeldatei-Speicherung: Jedes Lesezeichen ist eine eigene JSON-Datei — lesbar und diff-freundlich
 • Drei-Wege-Merge: automatische konfliktfreie Synchronisierung bei Änderungen auf beiden Seiten
 • Cross-Browser: funktioniert mit Chrome, Chromium, Brave, Edge und Firefox
+• Mehrere Lesezeichen-Profile: Arbeit und Privat mit getrennten GitHub-Repos; Wechsel ersetzt lokale Lesezeichen
+• Onboarding: Ordner anlegen oder Lesezeichen laden beim Konfigurieren eines neuen Profils
 • Sync-Profile: Echtzeit, häufig, normal oder Stromsparen (vorkonfigurierte Intervalle)
 • Auto-Sync bei jeder Lesezeichen-Änderung (Verzögerung pro Profil konfigurierbar)
 • Periodischer Sync zur Erkennung von Remote-Änderungen (1–120 Min., konfigurierbar)
@@ -123,6 +127,8 @@ Features:
 • Per-file storage: each bookmark is an individual JSON file — human-readable and diff-friendly
 • Three-way merge: automatic conflict-free sync when changes happen on both sides
 • Full Firefox support including the Bookmarks Menu folder
+• Multiple bookmark profiles: work and personal sets with separate GitHub repos; switch replaces local bookmarks
+• Onboarding: create folder or pull bookmarks when configuring a new profile
 • Sync profiles: real-time, frequent, normal, or power-save
 • Auto-sync on every bookmark change (debounce configurable per profile)
 • Periodic sync to detect remote changes (1–120 minutes, configurable)

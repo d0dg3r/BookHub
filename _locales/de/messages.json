@@ -66,6 +66,9 @@
   "popup_syncing": {
     "message": "Synchronisiere..."
   },
+  "popup_profileSwitching": {
+    "message": "Profil wird gewechselt..."
+  },
   "popup_error": {
     "message": "Fehler: $1"
   },
@@ -319,7 +322,7 @@
     "message": "Lesezeichen sind bereits aktuell."
   },
   "sync_pullSuccess": {
-    "message": "Lesezeichen erfolgreich von GitHub geladen."
+    "message": "Von GitHub geladen."
   },
   "sync_pullFailed": {
     "message": "Pull fehlgeschlagen: $1"

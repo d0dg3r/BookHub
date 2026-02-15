@@ -23,6 +23,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and release notes. See [ROA
 - **Three-way merge**: Automatic conflict-free sync when changes happen on both sides simultaneously
 - **Cross-browser**: Works with Chrome, Chromium, Brave, Edge, and Firefox
 - **Auto-sync**: Automatically syncs on every bookmark change (configurable debounce)
+- **Multiple profiles**: Work and personal bookmark sets with separate GitHub repos; switch between profiles; each profile has its own sync state
 - **Sync profiles**: Real-time, frequent, normal, or power-save presets; optional sync on browser start or focus
 - **Theme**: Light, dark, or auto (follow system) in options and popup
 - **Periodic sync**: Checks for remote changes at configurable intervals (1–120 minutes)
@@ -61,9 +62,10 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and release notes. See [ROA
 
 1. Click the extension icon in the toolbar
 2. Go to **Settings** (GitHub tab)
-3. Enter your **Personal Access Token**, **Repository Owner**, and **Repository Name**
-4. Click **Test Connection** to verify
-5. Save the settings
+3. Select a **Profile** (or add one with + Add)
+4. Enter your **Personal Access Token**, **Repository Owner**, and **Repository Name**
+5. Click **Test Connection** to verify. If the folder does not exist yet, you can create it; if bookmarks are already in the repo, you can pull them
+6. Save the settings
 
 ### First sync
 
@@ -118,6 +120,7 @@ See the **Automation** tab in the extension settings for details.
 
 | Setting | Default | Description |
 |---------|---------|-------------|
+| Profile | Default | Active bookmark profile (each has its own GitHub repo config) |
 | Personal Access Token | – | GitHub PAT with `repo` scope |
 | Repository Owner | – | Your GitHub username or organization |
 | Repository Name | – | Name of the target repository |
@@ -128,6 +131,7 @@ See the **Automation** tab in the extension settings for details.
 | Sync Interval | 15 min | How often to check for remote changes (custom profile) |
 | Sync on Start | Off | Sync when the browser starts |
 | Sync on Focus | Off | Sync when the browser gains focus |
+| Switch without confirmation | Off | Skip confirmation when changing profiles |
 
 ## Conflict Resolution
 

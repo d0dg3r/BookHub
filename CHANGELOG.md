@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Multiple profiles**: Work and personal bookmark sets with separate GitHub repos; up to 10 profiles; switching replaces local bookmarks with the selected profile's data
+- **Onboarding**: Test Connection checks the target path; offers to create the folder structure when empty, or to pull existing bookmarks when found
+- **Profile Add**: When adding a new profile, automatically switch to it for immediate configuration
+- **Spinner**: Loading indicators during profile switch and Test Connection
+
+### Changed
+
+- **Profile switch**: Inline confirmation instead of `confirm()`; optional toggle "Switch without confirmation"
+- **Profile layout**: Redesigned Profile card (label, dropdown, actions, toggle, inline confirmation)
+- **Popup**: Restructured layout — profile dropdown in header; simplified status area (status line + meta); theme-aware spinner; compact footer; auto-sync and countdown on one line
+- **Pull success message**: Shortened to "Loaded from GitHub." / "Von GitHub geladen."
+
 ## [2.1.2] - 2025-02-13
 
 ### Added
@@ -110,7 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release: bookmark sync with GitHub
 
-[Unreleased]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.1.1...HEAD
+[Unreleased]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.1.2...HEAD
 [2.1.1]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/d0dg3r/GitSyncMarks/compare/v2.0.0...v2.0.1

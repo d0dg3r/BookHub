@@ -9,8 +9,11 @@
 <body>
   <div class="popup">
     <header class="popup-header">
-      <img src="icons/icon48.png" alt="Icon" class="popup-icon">
-      <h1>GitSyncMarks</h1>
+      <div class="popup-header-left">
+        <img src="icons/icon48.png" alt="Icon" class="popup-icon">
+        <h1>GitSyncMarks</h1>
+      </div>
+      <select id="profile-select" class="profile-select header-profile" style="display: none;"></select>
     </header>
 
     <!-- Not configured state -->
@@ -24,16 +27,14 @@
 
     <!-- Configured / main state -->
     <div id="configured" class="state" style="display: none;">
-      <!-- Status -->
-      <div id="status-box" class="status-box status-ok">
-        <span id="status-icon" class="status-icon">✅</span>
-        <div class="status-text">
-          <span class="status-header">
-            <span id="profile-badge" class="profile-badge" style="display: none;"></span>
-            <span id="status-message" data-i18n="popup_ready">Ready</span>
-          </span>
-          <span id="last-data-change" class="last-sync" style="display: none;"></span>
-          <span id="last-commit-wrap" class="last-sync last-commit-wrap" style="display: none;"></span>
+      <!-- Status area (replaces status-box for cleaner hierarchy) -->
+      <div id="status-area" class="status-area">
+        <div class="status-line">
+          <span id="status-message" data-i18n="popup_ready">Ready</span>
+        </div>
+        <div class="status-meta">
+          <span id="last-data-change" class="status-meta-item" style="display: none;"></span>
+          <span id="last-commit-wrap" class="status-meta-item last-commit-wrap" style="display: none;"></span>
         </div>
       </div>
 
@@ -64,12 +65,12 @@
         </div>
       </div>
 
-      <!-- Auto-sync indicator -->
+      <!-- Auto-sync indicator (compact: dot + text or countdown) -->
       <div id="auto-sync-status" class="auto-sync-status">
         <span id="auto-sync-dot" class="dot dot-active"></span>
         <span id="auto-sync-text" data-i18n="popup_autoSyncActive">Auto-sync active</span>
+        <span id="next-sync-countdown" class="next-sync-countdown" style="display: none;"></span>
       </div>
-      <div id="next-sync-countdown" class="next-sync-countdown" style="display: none;"></div>
     </div>
 
     <footer class="popup-footer">

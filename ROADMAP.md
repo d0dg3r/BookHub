@@ -10,8 +10,6 @@ Contributions and ideas welcome — open an issue or pull request.
 
 - **Browser notifications** - Notifications on sync success/failure.
 
-- **Multiple sync profiles** - Work/personal repos, switch between different GitHub targets.
-
 ---
 
 ## Planned for v3.0 (Larger milestones)
@@ -22,11 +20,14 @@ Contributions and ideas welcome — open an issue or pull request.
 
 ---
 
+## Recently completed
+
+- **Multiple sync profiles** (v2.2.0) — Work/personal bookmark sets with separate GitHub repos; switch replaces local bookmarks; onboarding (create folder / pull on first config)
+
 ## Backlog / ideas (No timeline)
 
 | Idea | Description | Effort |
 |------|-------------|--------|
-| Multiple sync profiles | Work/personal repos, switch between different GitHub/GitLab targets | Medium |
 | Additional sync sources (read-only) | Add extra folders from centrally maintained repos (e.g. team bookmarks). Your personal bookmarks stay in your repo; the shared folder is merged in read-only. Assemble bookmarks from multiple sources in one place | Medium |
 | Selective folder sync | Sync only specific bookmark folders instead of all | Medium |
 | Sync history / rollback | Restore previous sync states (requires storing commit history) | Medium |

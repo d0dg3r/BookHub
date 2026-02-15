@@ -20,7 +20,7 @@ import {
 } from './lib/sync-engine.js';
 import { GitHubAPI } from './lib/github-api.js';
 import { migrateTokenIfNeeded } from './lib/crypto.js';
-import { migrateToProfiles, getActiveProfileId, getActiveProfile, getSyncState } from './lib/profile-manager.js';
+import { migrateToProfiles, getActiveProfileId, getActiveProfile, getProfiles, switchProfile, getSyncState } from './lib/profile-manager.js';
 
 const ALARM_NAME = 'bookmarkSyncPull';
 const NOTIFICATION_ID = 'gitsyncmarks-sync';
@@ -200,13 +200,33 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
   if (message.action === 'getStatus') {
-    Promise.all([getSyncStatus(), getActiveProfile()])
-      .then(([status, profile]) => {
-        sendResponse({ ...status, profileName: profile?.name || null });
+    Promise.all([getSyncStatus(), getActiveProfile(), getProfiles(), getActiveProfileId()])
+      .then(([status, profile, profiles, activeProfileId]) => {
+        const profileList = Object.entries(profiles || {}).map(([id, p]) => ({ id, name: p.name || id }));
+        sendResponse({
+          ...status,
+          profileName: profile?.name || null,
+          profiles: profileList,
+          activeProfileId: activeProfileId || null,
+        });
       })
       .catch((err) => {
         console.error('[GitSyncMarks] getStatus failed:', err);
-        sendResponse({ configured: false, hasConflict: false, profileName: null });
+        sendResponse({ configured: false, hasConflict: false, profileName: null, profiles: [], activeProfileId: null });
+      });
+    return true;
+  }
+  if (message.action === 'switchProfile') {
+    const { targetId } = message;
+    if (!targetId) {
+      sendResponse({ success: false, message: 'Missing targetId' });
+      return false;
+    }
+    switchProfile(targetId)
+      .then(() => sendResponse({ success: true, message: getMessage('sync_pullSuccess') }))
+      .catch((err) => {
+        console.error('[GitSyncMarks] switchProfile failed:', err);
+        sendResponse({ success: false, message: err.message || 'Switch failed' });
       });
     return true;
   }

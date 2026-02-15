@@ -63,10 +63,17 @@ body {
 .popup-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--color-border);
+}
+
+.popup-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .popup-icon {
@@ -79,7 +86,12 @@ body {
   font-weight: 600;
 }
 
-/* Status Box */
+.profile-select.header-profile {
+  margin-right: 0;
+  flex-shrink: 0;
+}
+
+/* Status Box (kept for not-configured state) */
 
 .status-box {
   display: flex;
@@ -122,13 +134,50 @@ body {
   gap: 6px;
 }
 
-.profile-badge {
-  font-size: 0.75rem;
+/* Status area (configured state – light, no box in normal state) */
+
+.status-area {
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.status-area.status-error {
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  background: var(--color-error-bg);
+}
+
+.status-line {
+  font-weight: 500;
+}
+
+.status-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  margin-top: 4px;
+}
+
+.status-meta-item {
+  font-size: 11px;
   color: var(--color-text-secondary);
-  background: var(--color-btn-secondary);
+}
+
+.profile-select {
+  font-size: 0.75rem;
   padding: 2px 6px;
   border-radius: 4px;
-  font-weight: 500;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  max-width: 120px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+.profile-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
 }
 
 .last-sync {
@@ -145,6 +194,7 @@ body {
   padding: 12px;
   margin-bottom: 12px;
   font-size: 12px;
+  margin-top: 4px;
 }
 
 .conflict-header {
@@ -249,14 +299,14 @@ body {
   gap: 8px;
 }
 
-/* Spinner */
+/* Spinner (theme-tauglich wie Options-Seite) */
 
 .spinner {
   display: inline-block;
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border: 2px solid color-mix(in currentColor 30%, transparent);
+  border-top-color: currentColor;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }
@@ -294,7 +344,6 @@ body {
 .next-sync-countdown {
   font-size: 11px;
   color: var(--color-text-secondary);
-  padding: 2px 0 4px 0;
 }
 
 .last-commit-wrap {
@@ -310,14 +359,15 @@ body {
 /* Footer */
 
 .popup-footer {
-  margin-top: 12px;
-  padding-top: 10px;
+  margin-top: 8px;
+  padding-top: 8px;
   border-top: 1px solid var(--color-border);
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  flex-wrap: wrap;
 }
 
 .popup-footer a {

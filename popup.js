@@ -9,9 +9,8 @@ import { initTheme } from './lib/theme.js';
 // DOM elements
 const notConfiguredEl = document.getElementById('not-configured');
 const configuredEl = document.getElementById('configured');
-const statusBox = document.getElementById('status-box');
-const statusIcon = document.getElementById('status-icon');
-const profileBadge = document.getElementById('profile-badge');
+const statusArea = document.getElementById('status-area');
+const profileSelect = document.getElementById('profile-select');
 const statusMessage = document.getElementById('status-message');
 const lastDataChangeEl = document.getElementById('last-data-change');
 const lastCommitWrap = document.getElementById('last-commit-wrap');
@@ -72,12 +71,22 @@ function updateUI(status) {
   notConfiguredEl.style.display = 'none';
   configuredEl.style.display = 'block';
 
-  // Active profile badge
-  if (status.profileName) {
-    profileBadge.textContent = status.profileName;
-    profileBadge.style.display = '';
+  // Profile selector (only when 2+ profiles)
+  const profiles = status.profiles || [];
+  const activeProfileId = status.activeProfileId;
+  if (profiles.length >= 2) {
+    profileSelect.innerHTML = '';
+    for (const p of profiles) {
+      const opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = p.name || p.id;
+      if (p.id === activeProfileId) opt.selected = true;
+      profileSelect.appendChild(opt);
+    }
+    profileSelect.style.display = '';
   } else {
-    profileBadge.style.display = 'none';
+    profileSelect.style.display = 'none';
+    profileSelect.innerHTML = '';
   }
 
   // Status message
@@ -128,6 +137,7 @@ function updateUI(status) {
   } else {
     autoSyncDot.className = 'dot dot-inactive';
     autoSyncText.textContent = getMessage('popup_autoSyncDisabled');
+    autoSyncText.style.display = '';
     stopCountdown();
     nextSyncCountdownEl.style.display = 'none';
   }
@@ -144,16 +154,17 @@ async function updateCountdown() {
   const alarm = await chrome.alarms.get(ALARM_NAME);
   if (!alarm || !alarm.scheduledTime) {
     nextSyncCountdownEl.style.display = 'none';
+    autoSyncText.style.display = '';
     return;
   }
   const remaining = alarm.scheduledTime - Date.now();
   if (remaining <= 0) {
     nextSyncCountdownEl.textContent = getMessage('popup_nextSyncIn', [formatCountdown(0)]);
-    nextSyncCountdownEl.style.display = 'block';
-    return;
+  } else {
+    nextSyncCountdownEl.textContent = getMessage('popup_nextSyncIn', [formatCountdown(remaining)]);
   }
-  nextSyncCountdownEl.textContent = getMessage('popup_nextSyncIn', [formatCountdown(remaining)]);
-  nextSyncCountdownEl.style.display = 'block';
+  nextSyncCountdownEl.style.display = '';
+  autoSyncText.style.display = 'none';
 }
 
 function startCountdown() {
@@ -162,11 +173,17 @@ function startCountdown() {
   countdownInterval = setInterval(updateCountdown, 1000);
 }
 
+function stopCountdownUi() {
+  nextSyncCountdownEl.style.display = 'none';
+  autoSyncText.style.display = '';
+}
+
 function stopCountdown() {
   if (countdownInterval) {
     clearInterval(countdownInterval);
     countdownInterval = null;
   }
+  stopCountdownUi();
 }
 
 function showNotConfigured() {
@@ -177,7 +194,7 @@ function showNotConfigured() {
 function showDemoUI() {
   notConfiguredEl.style.display = 'none';
   configuredEl.style.display = 'block';
-  profileBadge.style.display = 'none';
+  profileSelect.style.display = 'none';
   setStatus('✅', getMessage('popup_synced'), 'status-ok');
   conflictBox.style.display = 'none';
   lastDataChangeEl.textContent = getMessage('popup_lastDataChange', [
@@ -199,10 +216,9 @@ function showDemoUI() {
   nextSyncCountdownEl.style.display = 'none';
 }
 
-function setStatus(icon, message, boxClass) {
-  statusIcon.textContent = icon;
+function setStatus(_icon, message, boxClass) {
   statusMessage.textContent = message;
-  statusBox.className = `status-box ${boxClass}`;
+  statusArea.className = 'status-area' + (boxClass === 'status-error' ? ' status-error' : '');
 }
 
 function formatRelativeTime(date) {
@@ -230,6 +246,7 @@ function setLoading(loading) {
   syncBtn.disabled = loading;
   pushBtn.disabled = loading;
   pullBtn.disabled = loading;
+  profileSelect.disabled = loading;
   syncSpinner.style.display = loading ? 'inline-block' : 'none';
   syncText.textContent = loading ? getMessage('popup_syncing') : getMessage('popup_syncNow');
 }
@@ -263,6 +280,36 @@ async function handleAction(action) {
 syncBtn.addEventListener('click', () => handleAction('sync'));
 pushBtn.addEventListener('click', () => handleAction('push'));
 pullBtn.addEventListener('click', () => handleAction('pull'));
+
+// Profile switch
+profileSelect.addEventListener('change', async (e) => {
+  const targetId = e.target.value;
+  const status = await chrome.runtime.sendMessage({ action: 'getStatus' }).catch(() => null);
+  const activeId = status?.activeProfileId;
+  if (!activeId || targetId === activeId) return;
+  if (isSyncing) {
+    profileSelect.value = activeId;
+    return;
+  }
+  setLoading(true);
+  syncText.textContent = getMessage('popup_profileSwitching');
+  try {
+    const result = await chrome.runtime.sendMessage({ action: 'switchProfile', targetId });
+    if (result?.success) {
+      await loadStatus();
+      setStatus('✅', result.message, 'status-ok');
+      conflictBox.style.display = 'none';
+    } else {
+      setStatus('❌', result?.message || getMessage('popup_error', ['Switch failed']), 'status-error');
+      profileSelect.value = activeId;
+    }
+  } catch (err) {
+    setStatus('❌', getMessage('popup_error', [err.message]), 'status-error');
+    profileSelect.value = activeId;
+  } finally {
+    setLoading(false);
+  }
+});
 forcePushBtn.addEventListener('click', () => handleAction('push'));
 forcePullBtn.addEventListener('click', () => handleAction('pull'));
 

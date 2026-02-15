@@ -66,6 +66,9 @@
   "popup_syncing": {
     "message": "Syncing..."
   },
+  "popup_profileSwitching": {
+    "message": "Switching profile..."
+  },
   "popup_error": {
     "message": "Error: $1"
   },
@@ -319,7 +322,7 @@
     "message": "Bookmarks are already up to date."
   },
   "sync_pullSuccess": {
-    "message": "Bookmarks successfully loaded from GitHub."
+    "message": "Loaded from GitHub."
   },
   "sync_pullFailed": {
     "message": "Pull failed: $1"
