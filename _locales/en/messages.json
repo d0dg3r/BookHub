@@ -436,6 +436,15 @@
   "help_conflictDesc": {
     "message": "When both local and remote changed, choose Push (local wins) or Pull (remote wins) in the popup."
   },
+  "help_whySlowTitle": {
+    "message": "Why does sync sometimes take long?"
+  },
+  "help_whySlowIntro": {
+    "message": "GitSyncMarks uses GitHub's Git Data API for atomic commits. Each changed or new bookmark file requires an API call. With many changes, this adds up."
+  },
+  "help_whyAtomic": {
+    "message": "All changes are written in a single atomic commit: either everything succeeds or nothing does. This prevents partial or corrupted state if the sync is interrupted. One commit instead of many also avoids hitting API rate limits and keeps the Git history clean."
+  },
 
   "options_bookmarksCard": {
     "message": "Bookmarks"

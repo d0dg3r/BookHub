@@ -436,6 +436,15 @@
   "help_conflictDesc": {
     "message": "Wenn lokal und remote geändert wurden, wähle im Popup Push (lokal gewinnt) oder Pull (remote gewinnt)."
   },
+  "help_whySlowTitle": {
+    "message": "Warum dauert der Sync manchmal lange?"
+  },
+  "help_whySlowIntro": {
+    "message": "GitSyncMarks nutzt die GitHub Git Data API für atomare Commits. Jede geänderte oder neue Lesezeichen-Datei erfordert einen API-Aufruf. Bei vielen Änderungen summiert sich das."
+  },
+  "help_whyAtomic": {
+    "message": "Alle Änderungen werden in einem atomaren Commit geschrieben: Entweder alles gelingt oder nichts. So wird ein teilweiser oder beschädigter Zustand bei Unterbrechung vermieden. Ein Commit statt vieler vermeidet außerdem API-Ratelimits und hält die Git-Historie überschaubar."
+  },
 
   "options_bookmarksCard": {
     "message": "Lesezeichen"
