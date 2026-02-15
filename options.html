@@ -31,6 +31,7 @@
       <button class="tab-btn" data-tab="sync" data-i18n="options_tabSynchronization">Synchronization</button>
       <button class="tab-btn" data-tab="backup" data-i18n="options_tabBackup">Backup</button>
       <button class="tab-btn" data-tab="automation" data-i18n="options_tabAutomation">Automation</button>
+      <button class="tab-btn" data-tab="help" data-i18n="options_tabHelp">Help</button>
       <button class="tab-btn" data-tab="about" data-i18n="options_tabAbout">About</button>
     </nav>
 
@@ -280,6 +281,34 @@
 
         <h3 data-i18n="options_automationGithubActionWeb">Usage via GitHub Web UI</h3>
         <p data-i18n="options_automationGithubActionWebDesc">Go to your repository → Actions → "Add Bookmark" → Run workflow. Fill in the URL, title, and target folder.</p>
+      </section>
+
+    </div>
+
+    <!-- ==================== Help Tab ==================== -->
+    <div class="tab-content" id="tab-help">
+
+      <section class="card">
+        <h2 data-i18n="help_shortcuts">Keyboard Shortcuts</h2>
+        <table class="help-table">
+          <tr><td><kbd>Ctrl+Shift+.</kbd></td><td data-i18n="help_quickSync">Quick sync bookmarks</td></tr>
+          <tr><td><kbd>Ctrl+Shift+,</kbd></td><td data-i18n="help_openOptions">Open extension settings</td></tr>
+        </table>
+        <p class="help-note" data-i18n="help_shortcutsNote">You can customize shortcuts in the browser's extension settings.</p>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="help_mainFeatures">Main Features</h2>
+        <dl class="help-dl">
+          <dt data-i18n="help_popupTitle">Popup (extension icon)</dt>
+          <dd data-i18n="help_popupDesc">Sync Now: full three-way sync. Push: upload local to GitHub. Pull: download from GitHub.</dd>
+          <dt data-i18n="help_profilesTitle">Profiles</dt>
+          <dd data-i18n="help_profilesDesc">Switch between bookmark sets (e.g. work/personal). Each profile has its own GitHub repo config.</dd>
+          <dt data-i18n="help_autoSyncTitle">Auto-sync</dt>
+          <dd data-i18n="help_autoSyncDesc">Syncs automatically when you add, edit, or remove bookmarks. Debounce delay prevents multiple syncs for rapid changes.</dd>
+          <dt data-i18n="help_conflictTitle">Conflicts</dt>
+          <dd data-i18n="help_conflictDesc">When both local and remote changed, choose Push (local wins) or Pull (remote wins) in the popup.</dd>
+        </dl>
       </section>
 
     </div>

@@ -707,6 +707,61 @@ input[type="checkbox"]:checked + .toggle-slider::after {
   font-size: 13px;
 }
 
+/* Help tab */
+.help-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 16px;
+}
+
+.help-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border-secondary);
+  font-size: 14px;
+}
+
+.help-table td:first-child {
+  white-space: nowrap;
+  width: 1%;
+}
+
+.help-table kbd {
+  display: inline-block;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.help-note {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin: 4px 0 0;
+}
+
+.help-dl {
+  margin: 0;
+}
+
+.help-dl dt {
+  font-weight: 600;
+  margin-top: 12px;
+  color: var(--color-text);
+}
+
+.help-dl dt:first-child {
+  margin-top: 0;
+}
+
+.help-dl dd {
+  margin: 4px 0 0;
+  padding-left: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
 /* Mobile / small screens (Firefox Android, narrow viewports) */
 @media (max-width: 600px) {
   .container {

@@ -235,6 +235,7 @@ All regions
 - [x] `store-assets/screenshot-chrome-settings.png` — "Synchronization tab: auto-sync toggle, sync profile (real-time/frequent/normal/power-save), sync on start, sync on focus"
 - [x] `store-assets/screenshot-chrome-import-export.png` — "Backup tab: export/import bookmarks, export/import settings (JSON), file picker"
 - [x] `store-assets/screenshot-chrome-automation.png` — "Automation tab: add bookmarks via Git, JSON file format, GitHub Action workflow, CLI examples"
+- [x] `store-assets/screenshot-chrome-help.png` — "Help tab: keyboard shortcuts, main features (popup, profiles, auto-sync, conflicts)"
 - [x] `store-assets/screenshot-chrome-dialog.png` — "Popup: sync status, Sync Now, Push, Pull, auto-sync indicator, links to Settings/GitHub/Report issue"
 
 ### Chrome Web Store (German / Deutsch)
@@ -242,10 +243,12 @@ All regions
 - [x] `store-assets/screenshot-chrome-de-settings.png` — "Synchronisierung-Tab: Auto-Sync, Sync-Profil (Echtzeit/häufig/normal/Stromsparen), Sync beim Start, Sync bei Fokus"
 - [x] `store-assets/screenshot-chrome-de-import-export.png` — "Backup-Tab: Lesezeichen exportieren/importieren, Einstellungen exportieren/importieren (JSON), Dateiauswahl"
 - [x] `store-assets/screenshot-chrome-de-automation.png` — "Automatisierung-Tab: Lesezeichen über Git hinzufügen, JSON-Dateiformat, GitHub Action Workflow, CLI-Beispiele"
+- [x] `store-assets/screenshot-chrome-de-help.png` — "Hilfe-Tab: Tastaturkürzel, wichtigste Funktionen (Popup, Profile, Auto-Sync, Konflikte)"
 - [x] `store-assets/screenshot-chrome-de-dialog.png` — "Popup: Sync-Status, Jetzt synchronisieren, Push, Pull, Auto-Sync-Anzeige, Links zu Einstellungen/GitHub/Problem melden"
 
 ### Firefox AMO
 - [x] `store-assets/screenshot-firefox-settings.png` — "GitHub tab: Personal Access Token, repository owner/name, branch, file path"
 - [x] `store-assets/screenshot-firefox-import-export.png` — "Backup tab: Export/import bookmarks and settings as JSON files, file picker"
 - [x] `store-assets/screenshot-firefox-automation.png` — "Automation tab: Add bookmarks via Git, JSON file format, GitHub Action, CLI examples"
+- [x] `store-assets/screenshot-firefox-help.png` — "Help tab: Keyboard shortcuts, main features (popup, profiles, auto-sync, conflicts)"
 - [x] `store-assets/screenshot-firefox-about.png` — "About tab: Version, links to GitHub repository, documentation, bug tracker, privacy policy, license"

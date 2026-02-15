@@ -5,6 +5,12 @@
   "extDescription": {
     "message": "Deine Lesezeichen, sicher auf GitHub — Einzeldatei-Speicherung, Drei-Wege-Merge, funktioniert mit Chrome & Firefox. Kein Server nötig."
   },
+  "commands_quickSync": {
+    "message": "Lesezeichen sofort synchronisieren"
+  },
+  "commands_openOptions": {
+    "message": "Einstellungen öffnen"
+  },
 
   "popup_configureFirst": {
     "message": "Bitte konfiguriere zuerst die Erweiterung."
@@ -388,6 +394,49 @@
   "options_tabAbout": {
     "message": "Über"
   },
+  "options_tabHelp": {
+    "message": "Hilfe"
+  },
+  "help_shortcuts": {
+    "message": "Tastaturkürzel"
+  },
+  "help_quickSync": {
+    "message": "Lesezeichen sofort synchronisieren"
+  },
+  "help_openOptions": {
+    "message": "Einstellungen öffnen"
+  },
+  "help_shortcutsNote": {
+    "message": "Die Kürzel können in den Erweiterungseinstellungen des Browsers angepasst werden."
+  },
+  "help_mainFeatures": {
+    "message": "Wichtigste Funktionen"
+  },
+  "help_popupTitle": {
+    "message": "Popup (Erweiterungssymbol)"
+  },
+  "help_popupDesc": {
+    "message": "Jetzt synchronisieren: vollständiger 3-Wege-Sync. Push: Lokal zu GitHub hochladen. Pull: Von GitHub herunterladen."
+  },
+  "help_profilesTitle": {
+    "message": "Profile"
+  },
+  "help_profilesDesc": {
+    "message": "Wechsel zwischen Lesezeichen-Sets (z. B. Arbeit/Privat). Jedes Profil hat seine eigene GitHub-Repo-Konfiguration."
+  },
+  "help_autoSyncTitle": {
+    "message": "Auto-Sync"
+  },
+  "help_autoSyncDesc": {
+    "message": "Synchronisiert automatisch bei Hinzufügen, Ändern oder Entfernen von Lesezeichen. Die Verzögerung verhindert mehrere Syncs bei schnellen Änderungen."
+  },
+  "help_conflictTitle": {
+    "message": "Konflikte"
+  },
+  "help_conflictDesc": {
+    "message": "Wenn lokal und remote geändert wurden, wähle im Popup Push (lokal gewinnt) oder Pull (remote gewinnt)."
+  },
+
   "options_bookmarksCard": {
     "message": "Lesezeichen"
   },

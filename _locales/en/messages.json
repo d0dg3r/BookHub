@@ -5,6 +5,12 @@
   "extDescription": {
     "message": "Your bookmarks, safe on GitHub — per-file storage, three-way merge sync, works on Chrome & Firefox. No server needed."
   },
+  "commands_quickSync": {
+    "message": "Quick sync bookmarks"
+  },
+  "commands_openOptions": {
+    "message": "Open extension settings"
+  },
 
   "popup_configureFirst": {
     "message": "Please configure the extension first."
@@ -388,6 +394,49 @@
   "options_tabAbout": {
     "message": "About"
   },
+  "options_tabHelp": {
+    "message": "Help"
+  },
+  "help_shortcuts": {
+    "message": "Keyboard Shortcuts"
+  },
+  "help_quickSync": {
+    "message": "Quick sync bookmarks"
+  },
+  "help_openOptions": {
+    "message": "Open extension settings"
+  },
+  "help_shortcutsNote": {
+    "message": "You can customize shortcuts in the browser's extension settings."
+  },
+  "help_mainFeatures": {
+    "message": "Main Features"
+  },
+  "help_popupTitle": {
+    "message": "Popup (extension icon)"
+  },
+  "help_popupDesc": {
+    "message": "Sync Now: full three-way sync. Push: upload local to GitHub. Pull: download from GitHub."
+  },
+  "help_profilesTitle": {
+    "message": "Profiles"
+  },
+  "help_profilesDesc": {
+    "message": "Switch between bookmark sets (e.g. work/personal). Each profile has its own GitHub repo config."
+  },
+  "help_autoSyncTitle": {
+    "message": "Auto-sync"
+  },
+  "help_autoSyncDesc": {
+    "message": "Syncs automatically when you add, edit, or remove bookmarks. Debounce delay prevents multiple syncs for rapid changes."
+  },
+  "help_conflictTitle": {
+    "message": "Conflicts"
+  },
+  "help_conflictDesc": {
+    "message": "When both local and remote changed, choose Push (local wins) or Pull (remote wins) in the popup."
+  },
+
   "options_bookmarksCard": {
     "message": "Bookmarks"
   },

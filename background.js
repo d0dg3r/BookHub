@@ -236,6 +236,26 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
+// ---- Keyboard shortcuts ----
+
+chrome.commands?.onCommand?.addListener?.((command) => {
+  if (command === 'quick-sync') {
+    if (!isSyncInProgress()) {
+      sync().then(async (result) => {
+        if (!result.success) {
+          chrome.action.setBadgeText({ text: '!' });
+          chrome.action.setBadgeBackgroundColor({ color: '#F44336' });
+        } else {
+          chrome.action.setBadgeText({ text: '' });
+        }
+        await showNotificationIfEnabled(result);
+      });
+    }
+  } else if (command === 'open-options') {
+    chrome.runtime.openOptionsPage();
+  }
+});
+
 // ---- Extension install/startup ----
 
 chrome.runtime.onInstalled.addListener(async (details) => {

@@ -22,6 +22,7 @@ const OPTIONS_TABS = [
   { id: 'sync', file: 'settings' },
   { id: 'backup', file: 'import-export' },
   { id: 'automation', file: 'automation' },
+  { id: 'help', file: 'help' },
   { id: 'about', file: 'about' },
 ];
 
@@ -29,6 +30,7 @@ const FIREFOX_MAPPING = [
   { src: 'github', dst: 'settings' },
   { src: 'import-export', dst: 'import-export' },
   { src: 'automation', dst: 'automation' },
+  { src: 'help', dst: 'help' },
   { src: 'about', dst: 'about' },
 ];
 
