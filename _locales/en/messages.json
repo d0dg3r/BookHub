@@ -241,6 +241,18 @@
   "options_error": {
     "message": "Error: $1"
   },
+  "options_onboardingCreateFolder": {
+    "message": "The folder $1 does not exist yet. Create it with the base structure (toolbar, other, menu, mobile)?"
+  },
+  "options_onboardingPullNow": {
+    "message": "Bookmarks found in the repository. Pull them to this browser now?"
+  },
+  "options_onboardingCreateSuccess": {
+    "message": "Folder created successfully."
+  },
+  "options_onboardingPullSuccess": {
+    "message": "Bookmarks pulled successfully."
+  },
   "options_settingsSaved": {
     "message": "Settings saved!"
   },

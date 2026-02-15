@@ -5,6 +5,7 @@
  */
 
 import { GitHubAPI } from './lib/github-api.js';
+import { checkPathSetup, initializeRemoteFolder } from './lib/onboarding.js';
 import { initI18n, applyI18n, getMessage, reloadI18n, getLanguage, SUPPORTED_LANGUAGES } from './lib/i18n.js';
 import { initTheme, applyTheme } from './lib/theme.js';
 import { serializeToJson, deserializeFromJson } from './lib/bookmark-serializer.js';
@@ -367,6 +368,37 @@ validateBtn.addEventListener('click', async () => {
       const repoExists = await api.checkRepo();
       if (!repoExists) {
         showValidation(getMessage('options_tokenValidRepoNotFound', [tokenResult.username, `${owner}/${repo}`]), 'error');
+        return;
+      }
+      const basePath = filepathInput.value.trim() || 'bookmarks';
+      const pathCheck = await checkPathSetup(api, basePath);
+      if (pathCheck.status === 'unreachable' || pathCheck.status === 'empty') {
+        const createFolder = confirm(getMessage('options_onboardingCreateFolder', [basePath]));
+        if (createFolder) {
+          try {
+            await initializeRemoteFolder(api, basePath);
+            showValidation(getMessage('options_onboardingCreateSuccess'), 'success');
+          } catch (createErr) {
+            showValidation(getMessage('options_error', [createErr.message]), 'error');
+          }
+        } else {
+          showValidation(getMessage('options_connectionOk', [tokenResult.username, `${owner}/${repo}`]), 'success');
+        }
+        return;
+      }
+      if (pathCheck.status === 'hasBookmarks') {
+        const pullNow = confirm(getMessage('options_onboardingPullNow'));
+        if (pullNow) {
+          try {
+            await saveSettings();
+            await chrome.runtime.sendMessage({ action: 'pull' });
+            showValidation(getMessage('options_onboardingPullSuccess'), 'success');
+          } catch (pullErr) {
+            showValidation(getMessage('options_error', [pullErr.message]), 'error');
+          }
+        } else {
+          showValidation(getMessage('options_connectionOk', [tokenResult.username, `${owner}/${repo}`]), 'success');
+        }
         return;
       }
       showValidation(getMessage('options_connectionOk', [tokenResult.username, `${owner}/${repo}`]), 'success');

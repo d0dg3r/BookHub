@@ -241,6 +241,18 @@
   "options_error": {
     "message": "Fehler: $1"
   },
+  "options_onboardingCreateFolder": {
+    "message": "Der Ordner $1 existiert noch nicht. Mit Basisstruktur (toolbar, other, menu, mobile) anlegen?"
+  },
+  "options_onboardingPullNow": {
+    "message": "Lesezeichen im Repository gefunden. Jetzt in diesen Browser laden?"
+  },
+  "options_onboardingCreateSuccess": {
+    "message": "Ordner erfolgreich erstellt."
+  },
+  "options_onboardingPullSuccess": {
+    "message": "Lesezeichen erfolgreich geladen."
+  },
   "options_settingsSaved": {
     "message": "Einstellungen gespeichert!"
   },
