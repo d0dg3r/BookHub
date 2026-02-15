@@ -30,6 +30,7 @@ Contributions and ideas welcome — open an issue or pull request.
 | Idea | Description | Effort |
 |------|-------------|--------|
 | **Folder browse/select** | Select or browse the sync folder in the Git repo instead of typing the path manually | Small |
+| **Browser import files** | Automatically generate import files for common browsers (e.g. Netscape HTML) alongside README.md. Enables importing directly from the repo without the extension. | Medium |
 | Additional sync sources (read-only) | Add extra folders from centrally maintained repos (e.g. team bookmarks). Your personal bookmarks stay in your repo; the shared folder is merged in read-only. Assemble bookmarks from multiple sources in one place | Medium |
 | Selective folder sync | Sync only specific bookmark folders instead of all | Medium |
 | Sync history / rollback | Restore previous sync states (requires storing commit history) | Medium |
